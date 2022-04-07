@@ -11,7 +11,7 @@ namespace hkrita_robot
     {
         static void Main(string[] args)
         {
-            SocketClient client = new SocketClient("192.168.56.101", 29999);
+            SocketClient client = new SocketClient("192.168.56.101", 30001);
             // continuously send bytes to UR from client
             while (true)
             {
