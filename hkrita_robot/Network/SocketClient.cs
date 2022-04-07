@@ -32,7 +32,6 @@ namespace hkrita_robot.Network
             byte[] bytes = new byte[1024];
             try
             {
-
                 Socket socket = new Socket(mAddress.AddressFamily,
                     SocketType.Stream, ProtocolType.Tcp);
 
