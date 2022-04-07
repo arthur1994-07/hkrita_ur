@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hkrita_robot", "hkrita_robot\hkrita_robot.csproj", "{2FC7ECE4-DC8D-4581-B525-D5938BBDFEBA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2FC7ECE4-DC8D-4581-B525-D5938BBDFEBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FC7ECE4-DC8D-4581-B525-D5938BBDFEBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FC7ECE4-DC8D-4581-B525-D5938BBDFEBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FC7ECE4-DC8D-4581-B525-D5938BBDFEBA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D69FD8A4-2EC1-470C-B260-C5E60632510B}
+	EndGlobalSection
+EndGlobal
