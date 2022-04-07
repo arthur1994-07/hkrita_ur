@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeTest\AsyncTest.cs" />
     <Compile Include="CodeTest\FunctionalInterface.cs" />
     <Compile Include="Extension\ArraysHelper.cs" />
     <Compile Include="Extension\StringHelper.cs" />
