@@ -1,5 +1,6 @@
 ﻿using java.io;
 using java.net;
+using java.nio;
 using java.nio.channels;
 using java.time;
 using System;
@@ -80,5 +81,33 @@ namespace hkrita_robot.Network
             return true;
         }
 
+        public bool WriteData(byte[] byteData, Func<Boolean> interrupted)
+        {
+            lock(this)
+            {
+                Selector selector = Selector.open();
+                try
+                {
+                    mSocket.register(selector, SelectionKey.OP_WRITE);
+                    ByteBuffer buffer = ByteBuffer.wrap(byteData);
+                    for (int i = 0; i < byteData.Length;)
+                    {
+                        if (interrupted.Invoke()) throw new InterruptedIOException();
+                        int num = selector.select((int)mSocketTimeOut.toMillis());
+                        if (num == 0) continue;
+                        i += mSocket.write(buffer);
+                    }
+                    return true;
+                }
+                catch (InterruptedIOException ex)
+                {
+                    throw ex;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+        }
     }
 }
