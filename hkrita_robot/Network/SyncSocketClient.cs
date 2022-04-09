@@ -83,16 +83,40 @@ namespace hkrita_robot.Network
         public void SendClientData(Socket socket, byte[] bytes)
         {
             byte[] scriptData = Encoding.ASCII.GetBytes(StringHelper.InputString());
-
+            Console.WriteLine("Converted String: " +BytesToStringConvert(scriptData));
+            
             int bytesSent = socket.Send(scriptData);
-           
-
             int bytesRec = socket.Receive(bytes);
-            Console.WriteLine(bytesRec);
-            Console.WriteLine("Respone from server = {0}",
-                Encoding.ASCII.GetString(bytes, 0, bytesRec));
+
+            //Console.WriteLine(bytesRec);
+            //Console.WriteLine("Respone from server = {0}",
+            //    Encoding.ASCII.GetString(bytes, 0, bytesRec));
         }
 
+        public static string WriteScript()
+        {
+            string start = "def test_program(): \n";
+            string end = "end \n";
+            string typeString = StringHelper.InputString() + "\n";
+            //string final = start + typeString + end;
+            //Console.WriteLine(final);
+            //return final;
+            return start + typeString + end;
+
+        }
+
+        public static string BytesToStringConvert(byte[] bytes)
+        {
+            Console.WriteLine(bytes.GetType());
+            using (var stream = new MemoryStream(bytes))
+            {
+                using (var streamReader = new StreamReader(stream))
+                {
+                   
+                    return streamReader.ReadToEnd();
+                }
+            }
+        }
       
 
     }
