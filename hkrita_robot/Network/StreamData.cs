@@ -28,27 +28,5 @@ namespace hkrita_robot.Network
             port = portNumber;
             timeStep = timestep;
         }
-
-        public static void WriteData(List<double> joint1, List<double> joint2, List<double> joint3,
-            List<double> joint4, List<double> joint5, List<double> joint6, string filePath)
-        {
-            try
-            {
-                using (StreamWriter file = new StreamWriter(@filePath, true))
-                {
-                    for (int i = 0; i < joint1.Count; i++)
-                    {
-                        file.WriteLine(joint1[i].ToString() + ", " + joint2[i].ToString() + ", " + joint3[i].ToString() + ", " +
-                            joint4[i].ToString() + ", " + joint5[i].ToString() + ", " + joint6[i].ToString());
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("Error: ", ex);
-            }
-        }
-
-
     }
 }

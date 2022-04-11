@@ -26,7 +26,6 @@ namespace hkrita_robot
 
             StreamData streamData = new StreamData("192.168.56.101", 30002, 8);
 
-
             ControlData controlData = new ControlData("192.168.56.101", 30002, 8);
 
             //Start Stream UR TCP IP
@@ -57,7 +56,9 @@ namespace hkrita_robot
                                    StreamData.C_Orientation[0], StreamData.C_Orientation[1], StreamData.C_Orientation[2]);
 
                 urStream.Destroy();
-                Environment.Exit(0);
+                urControl.Destroy();
+                Console.WriteLine("Application terminated");
+                Environment.Exit(0); 
             }
         }
     }

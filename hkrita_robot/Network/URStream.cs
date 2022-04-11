@@ -45,7 +45,7 @@ namespace hkrita_robot.Network
                 {
                     // get data from robot
                     if (mNetworkStream.Read(mPacket, 0, mFirstPacketSize) != 0)
-                        //Console.WriteLine(mNetworkStream.Read(mPacket, 0, mFirstPacketSize));
+                        
                     {
                         if (BitConverter.ToUInt32(mPacket, mFirstPacketSize - 4) == mTotalMsgLength)
                         {
