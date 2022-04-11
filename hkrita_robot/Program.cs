@@ -58,7 +58,7 @@ namespace hkrita_robot
                 urStream.Destroy();
                 urControl.Destroy();
                 Console.WriteLine("Application terminated");
-                Environment.Exit(0); 
+                Environment.Exit(0);
             }
         }
     }

@@ -37,48 +37,32 @@ namespace hkrita_robot.Network
                 {
                     // Instruction 1
                     // Get bytes from String 
-                    mBuffer = mEncoder.GetBytes("movej([" + ControlData.J_Orientation[0].ToString() + ", " + ControlData.J_Orientation[1].ToString() +
-                        ", " + ControlData.J_Orientation[2].ToString() + ", " + ControlData.J_Orientation[3].ToString().ToString() + ", " + ControlData.J_Orientation[4].ToString() +
-                        ", " + ControlData.J_Orientation[5].ToString() + "]," + "a=" + ControlData.acceleration + "v=" + ControlData.velocity + ")" + "\n");
-
-                    // send command to robot 
+                    mBuffer = mEncoder.GetBytes("movej([" + ControlData.J_Orientation[0].ToString() + "," + ControlData.J_Orientation[1].ToString() + "," + ControlData.J_Orientation[2].ToString() + ","
+                                                              + ControlData.J_Orientation[3].ToString() + "," + ControlData.J_Orientation[4].ToString() + "," + ControlData.J_Orientation[5].ToString() + "],"
+                                                              + "a=" + ControlData.acceleration + ", v=" + ControlData.velocity + ")" + "\n");
+                    //  Send command to the robot
                     mStream.Write(mBuffer, 0, mBuffer.Length);
+                    //  Wait Time (1 seconds)
+                    Thread.Sleep(1000);
 
-                    Thread.Sleep(5000);
-
-
-                    // Instruction 2 (Multiple Positions) : Cartesian Input command, Move Linear Interpolation
-                    // Get bytes from String
-                    mBuffer = mEncoder.GetBytes("[movel(p[" + ControlData.C_Position[0].ToString() + ", " + ControlData.C_Position[1].ToString() + ", " +
-                        (ControlData.C_Position[2] - 0.1).ToString() + ", " + ControlData.C_Orientation[0].ToString() + ", " + ControlData.C_Orientation[1].ToString() + ", " +
-                        ControlData.C_Orientation[2].ToString() + "], " + "a=" + ControlData.acceleration + ", " + "v=" + ControlData.velocity + ")" +
-                        "[movel(p[" + (ControlData.C_Position[0] - -0.1).ToString() + ", " + ControlData.C_Position[1].ToString() + ", " +
-                        (ControlData.C_Position[2] - 0.1).ToString() + ", " + ControlData.C_Orientation[0].ToString() + ", " + ControlData.C_Orientation[1].ToString() + ", " +
-                        (ControlData.C_Orientation[2] - 0.1).ToString() + "], " + "a=" + ControlData.acceleration + ", " + "v=" + ControlData.velocity + ")" +
-                        "[movel(p[" + ControlData.C_Position[0].ToString() + ", " + ControlData.C_Position[1].ToString() + ", " +
-                        (ControlData.C_Position[2] - 0.1).ToString() + ", " + ControlData.C_Orientation[0].ToString() + ", " + ControlData.C_Orientation[1].ToString() + ", " +
-                        ControlData.C_Orientation[2].ToString() + "], " + "a=" + ControlData.acceleration + ", " + "v=" + ControlData.velocity + ")" +
-                        "[movel(p[" + ControlData.C_Position[0].ToString() + ", " + ControlData.C_Position[1].ToString() + ", " +
-                        (ControlData.C_Position[2] - 0.1).ToString() + ", " + ControlData.C_Orientation[0].ToString() + ", " + ControlData.C_Orientation[1].ToString() + ", " +
-                        ControlData.C_Orientation[2].ToString() + "], " + "a=" + ControlData.acceleration + ", " + "v=" + ControlData.velocity + ")]" + "\n");
-
+                    // Instruction 2 (Multiple Positions): Cartesian Input Command, Move Linear Interpolation
+                    //  Get Bytes from String
+                    mBuffer = mEncoder.GetBytes("[movel(p[" + ControlData.C_Position[0].ToString() + "," + ControlData.C_Position[1].ToString() + "," + (ControlData.C_Position[2] - 0.1).ToString() + ","
+                                                           + ControlData.C_Orientation[0].ToString() + "," + ControlData.C_Orientation[1].ToString() + "," + ControlData.C_Orientation[2].ToString() + "],"
+                                                           + "a=" + ControlData.acceleration + ", v=" + ControlData.velocity + ")," +
+                                               "movel(p[" + (ControlData.C_Position[0] - 0.1).ToString() + ", " + ControlData.C_Position[1].ToString() + ", " + (ControlData.C_Position[2] - 0.1).ToString() + ", "
+                                                           + ControlData.C_Orientation[0].ToString() + "," + ControlData.C_Orientation[1].ToString() + "," + ControlData.C_Orientation[2].ToString() + "],"
+                                                           + "a=" + ControlData.acceleration + ", v=" + ControlData.velocity + ")," +
+                                               "movel(p[" + (ControlData.C_Position[0] - 0.1).ToString() + ", " + ControlData.C_Position[1].ToString() + ", " + ControlData.C_Position[2].ToString() + ", "
+                                                           + ControlData.C_Orientation[0].ToString() + "," + ControlData.C_Orientation[1].ToString() + "," + ControlData.C_Orientation[2].ToString() + "],"
+                                                           + "a=" + ControlData.acceleration + ", v=" + ControlData.velocity + ")," +
+                                               "movel(p[" + ControlData.C_Position[0].ToString() + ", " + ControlData.C_Position[1].ToString() + ", " + (ControlData.C_Position[2]).ToString() + ", "
+                                                           + ControlData.C_Orientation[0].ToString() + "," + ControlData.C_Orientation[1].ToString() + "," + ControlData.C_Orientation[2].ToString() + "],"
+                                                           + "a=" + ControlData.acceleration + ", v=" + ControlData.velocity + ")]" + "\n");
+                    //  Send command to the robot
                     mStream.Write(mBuffer, 0, mBuffer.Length);
-                    Thread.Sleep(5000);
-
-                    // Instructor 3 (Multiple Positions): Cartesian Input Command, Move Joint Interpolation
-                    // Get Bytes from String
-                    mBuffer = mEncoder.GetBytes("[movej(p[" + ControlData.C_Position[0].ToString() + ", " + ControlData.C_Position[1].ToString() + ", " +
-                       (ControlData.C_Position[2] - 0.1).ToString() + ", " + ControlData.C_Orientation[0].ToString() + ", " + ControlData.C_Orientation[1].ToString() + ", " +
-                       ControlData.C_Orientation[2].ToString() + "], " + "a=" + ControlData.acceleration + ", " + "v=" + ControlData.velocity + ")" +
-                       "[movej(p[" + (ControlData.C_Position[0] - -0.1).ToString() + ", " + ControlData.C_Position[1].ToString() + ", " +
-                       (ControlData.C_Position[2] - 0.1).ToString() + ", " + ControlData.C_Orientation[0].ToString() + ", " + ControlData.C_Orientation[1].ToString() + ", " +
-                       (ControlData.C_Orientation[2] - 0.1).ToString() + "], " + "a=" + ControlData.acceleration + ", " + "v=" + ControlData.velocity + ")" +
-                       "[movej(p[" + ControlData.C_Position[0].ToString() + ", " + ControlData.C_Position[1].ToString() + ", " +
-                       (ControlData.C_Position[2] - 0.1).ToString() + ", " + ControlData.C_Orientation[0].ToString() + ", " + ControlData.C_Orientation[1].ToString() + ", " +
-                       ControlData.C_Orientation[2].ToString() + "], " + "a=" + ControlData.acceleration + ", " + "v=" + ControlData.velocity + ")" +
-                       "[movej(p[" + ControlData.C_Position[0].ToString() + ", " + ControlData.C_Position[1].ToString() + ", " +
-                       (ControlData.C_Position[2] - 0.1).ToString() + ", " + ControlData.C_Orientation[0].ToString() + ", " + ControlData.C_Orientation[1].ToString() + ", " +
-                       ControlData.C_Orientation[2].ToString() + "], " + "a=" + ControlData.acceleration + ", " + "v=" + ControlData.velocity + ")]" + "\n");
+                    //  Wait Time (1 seconds)
+                    Thread.Sleep(1000);
 
                     mStream.Write(mBuffer, 0, mBuffer.Length);
                     Thread.Sleep(5000);
