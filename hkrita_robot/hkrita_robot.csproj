@@ -132,6 +132,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\ControlData.cs" />
+    <Compile Include="Network\URControl.cs" />
+    <Compile Include="Network\URStream.cs" />
+    <Compile Include="Network\StreamData.cs" />
+    <Compile Include="URTest.cs" />
     <Compile Include="CodeTest\AsyncTest.cs" />
     <Compile Include="CodeTest\FunctionalInterface.cs" />
     <Compile Include="Extension\ArraysHelper.cs" />
@@ -146,7 +151,6 @@
     <Compile Include="Network\AsyncSocketClient.cs" />
     <Compile Include="Network\BufferedData.cs" />
     <Compile Include="Network\SocketClient.cs" />
-    <Compile Include="Network\StateObject.cs" />
     <Compile Include="Network\TestClient.cs" />
     <Compile Include="Network\SocketServer.cs" />
     <Compile Include="Network\SyncSocketClient.cs" />
