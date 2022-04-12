@@ -18,7 +18,7 @@ namespace hkrita_robot.Network
         private NetworkStream mStream = null;
 
         // packet buffer
-        private byte[] mBuffer;
+        private byte[] mBuffer = new byte[4096];
 
         // Encoding 
         private UTF8Encoding mEncoder = new UTF8Encoding();
@@ -30,6 +30,7 @@ namespace hkrita_robot.Network
                 if (mClient.Connected == false)
                 {
                     mClient.Connect(ControlData.IpAddress, ControlData.port);
+
                 }
                 mStream = mClient.GetStream();
 
@@ -64,8 +65,9 @@ namespace hkrita_robot.Network
                     //  Wait Time (1 seconds)
                     Thread.Sleep(1000);
 
-                    mStream.Write(mBuffer, 0, mBuffer.Length);
-                    Thread.Sleep(5000);
+                    
+                    
+                    Thread.Sleep(2000);
                 }
             }
             catch (SocketException e)
@@ -87,6 +89,7 @@ namespace hkrita_robot.Network
         {
             mExitThread = true;
             // start a thread
+            // check buffer size
             if (mRobotThread.IsAlive == true)
             {
                 Thread.Sleep(100);

@@ -13,7 +13,7 @@ namespace hkrita_robot.Network
         public static ushort port; // 30002
         public static int communicationSpeed;
         public static int timeStep;
-        public bool saveData;
+        public static bool saveData;
 
         public static double[] J_Orientation = new double[6];
         public static double[] C_Position = new double[3];
