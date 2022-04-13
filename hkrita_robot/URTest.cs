@@ -40,9 +40,9 @@ namespace hkrita_robot
         public static double[] J_Orientation = new double[6] { -1.6, -1.7, -2.2, -0.8, 1.59, -0.03 };
         //  Cartesian Space:
         //      Position {X, Y, Z} (mm)
-        public static double[] C_Position = new double[3] { -0.11, -0.26, 0.15 };
+        public static double[] C_Position = new double[3] { 0, 0, 0 }; //{ -0.11, -0.26, 0.15 };
         //      Orientation {Euler Angles} (rad):
-        public static double[] C_Orientation = new double[3] { 0.0, 3.11, 0.0 };
+        public static double[] C_Orientation = new double[3] { 0, 0, 0 }; //{ 0.0, 3.11, 0.0 };
         // Move Parameters: Velocity, Acceleration
         public static string velocity = "1.0";
         public static string acceleration = "1.0";
@@ -139,50 +139,50 @@ namespace hkrita_robot
                 {
                     // Get the data from the robot
                     if (network_stream.Read(packet, 0, packet.Length) != 0)
-                        //Console.WriteLine(BitConverter.ToUInt32(packet, first_packet_size - 4));
+                    //Console.WriteLine(BitConverter.ToUInt32(packet, first_packet_size - 4));
                     {
                         //if (BitConverter.ToUInt32(packet, first_packet_size - 4) == total_msg_length)
                         //{
-                            // t_{0}: Timer start.
-                            t.Start();
+                        // t_{0}: Timer start.
+                        t.Start();
 
-                            // Reverses the order of elements in a one-dimensional array or part of an array.
-                            Array.Reverse(packet);
+                        // Reverses the order of elements in a one-dimensional array or part of an array.
+                        Array.Reverse(packet);
 
-                            // Note:
-                            //  For more information on values 32... 37, etc., see the UR Client Interface document.
-                            // Read Joint Values in radians
-                            //UR_Stream_Data.J_Orientation[0] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (32 * offset));
-                            //UR_Stream_Data.J_Orientation[1] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (33 * offset));
-                            //UR_Stream_Data.J_Orientation[2] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (34 * offset));
-                            //UR_Stream_Data.J_Orientation[3] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (35 * offset));
-                            //UR_Stream_Data.J_Orientation[4] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (36 * offset));
-                            //UR_Stream_Data.J_Orientation[5] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (37 * offset));
-                            // Read Cartesian (Positon) Values in metres
-                            
-                            UR_Stream_Data.C_Position[0] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (53 * offset));
-                            UR_Stream_Data.C_Position[1] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (54 * offset));
-                            UR_Stream_Data.C_Position[2] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (55 * offset));
-                            // Read Cartesian (Orientation) Values in metres 
-                            UR_Stream_Data.C_Orientation[0] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (56 * offset));
-                            UR_Stream_Data.C_Orientation[1] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (57 * offset));
-                            UR_Stream_Data.C_Orientation[2] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (58 * offset));
+                        // Note:
+                        //  For more information on values 32... 37, etc., see the UR Client Interface document.
+                        // Read Joint Values in radians
+                        //UR_Stream_Data.J_Orientation[0] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (32 * offset));
+                        //UR_Stream_Data.J_Orientation[1] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (33 * offset));
+                        //UR_Stream_Data.J_Orientation[2] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (34 * offset));
+                        //UR_Stream_Data.J_Orientation[3] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (35 * offset));
+                        //UR_Stream_Data.J_Orientation[4] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (36 * offset));
+                        //UR_Stream_Data.J_Orientation[5] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (37 * offset));
+                        // Read Cartesian (Positon) Values in metres
 
-                        Console.WriteLine(UR_Stream_Data.C_Orientation[0] + ", " + UR_Stream_Data.C_Orientation[1] + ", " + UR_Stream_Data.C_Orientation[2]);
+                        UR_Stream_Data.C_Position[0] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (56 * offset));
+                        UR_Stream_Data.C_Position[1] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (57 * offset));
+                        UR_Stream_Data.C_Position[2] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (58 * offset));
+                        // Read Cartesian (Orientation) Values in metres 
+                        UR_Stream_Data.C_Orientation[0] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (59 * offset));
+                        UR_Stream_Data.C_Orientation[1] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (60 * offset));
+                        UR_Stream_Data.C_Orientation[2] = BitConverter.ToDouble(packet, packet.Length - first_packet_size - (61 * offset));
+
+                        //Console.WriteLine("Position: "+ UR_Stream_Data.C_Position[0] + ", " + UR_Stream_Data.C_Position[1] + ", " + UR_Stream_Data.C_Position[2]);
+                        //Console.WriteLine("Orientation: " + UR_Stream_Data.C_Orientation[0] + ", " + UR_Stream_Data.C_Orientation[1] + ", " + UR_Control_Data.C_Orientation[2]);
 
                         // t_{1}: Timer stop.
                         t.Stop();
-
-                            // Recalculate the time: t = t_{1} - t_{0} -> Elapsed Time in milliseconds
-                            if (t.ElapsedMilliseconds < UR_Stream_Data.time_step)
-                            {
-                                Thread.Sleep(UR_Stream_Data.time_step - (int)t.ElapsedMilliseconds);
-                            }
-
-                            // Reset (Restart) timer.
-                            t.Restart();
+                        // Recalculate the time: t = t_{1} - t_{0} -> Elapsed Time in milliseconds
+                        if (t.ElapsedMilliseconds < UR_Stream_Data.time_step)
+                        {
+                            Thread.Sleep(UR_Stream_Data.time_step - (int)t.ElapsedMilliseconds);
                         }
+
+                        // Reset (Restart) timer.
+                        t.Restart();
                     }
+                }
                 //}
             }
             catch (SocketException e)
@@ -205,7 +205,6 @@ namespace hkrita_robot
             // Start a thread
             if (robot_thread.IsAlive == true)
             {
-                Console.WriteLine(UR_Stream_Data.C_Orientation[0] + ", " + UR_Stream_Data.C_Orientation[1] + ", " + UR_Stream_Data.C_Orientation[2]);
                 Thread.Sleep(100);
             }
         }
@@ -257,10 +256,10 @@ namespace hkrita_robot
                     // Instruction 1 (Home Position): Joint Input Command, Move Joint Interpolation
                     //  Get Bytes from String
                     packet_cmd = utf8.GetBytes("movej([" + UR_Control_Data.J_Orientation[0].ToString() + "," + UR_Control_Data.J_Orientation[1].ToString() + "," + UR_Control_Data.J_Orientation[2].ToString() + ","
-                                                         + UR_Control_Data.J_Orientation[3].ToString() + "," + UR_Control_Data.J_Orientation[4].ToString() + "," + UR_Control_Data.J_Orientation[5].ToString() + "],"
+                                                        + UR_Control_Data.J_Orientation[3].ToString() + "," + UR_Control_Data.J_Orientation[4].ToString() + "," + UR_Control_Data.J_Orientation[5].ToString() + "],"
                                                          + "a=" + UR_Control_Data.acceleration + ", v=" + UR_Control_Data.velocity + ")" + "\n");
                     //  Send command to the robot
-                    network_stream.Write(packet_cmd, 0, packet_cmd.Length);
+                    //network_stream.Write(packet_cmd, 0, packet_cmd.Length);
                     //  Wait Time (5 seconds)
                     Thread.Sleep(1000);
 
@@ -300,11 +299,7 @@ namespace hkrita_robot
                     ////  Send command to the robot
                     //network_stream.Write(packet_cmd, 0, packet_cmd.Length);
 
-
-
                     //  Wait Time (5 seconds)
-
-
                     Thread.Sleep(2000);
                 }
             }

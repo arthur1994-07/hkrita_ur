@@ -132,10 +132,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\ControlData.cs" />
-    <Compile Include="Network\URControl.cs" />
-    <Compile Include="Network\URStream.cs" />
-    <Compile Include="Network\StreamData.cs" />
     <Compile Include="URTest.cs" />
     <Compile Include="CodeTest\AsyncTest.cs" />
     <Compile Include="CodeTest\FunctionalInterface.cs" />
