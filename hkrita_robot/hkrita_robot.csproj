@@ -132,6 +132,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\URControl.cs" />
+    <Compile Include="Network\URStream.cs" />
+    <Compile Include="Network\URLauncher.cs" />
+    <Compile Include="Network\URData.cs" />
+    <Compile Include="Network\URControlData.cs" />
+    <Compile Include="Network\URStreamData.cs" />
     <Compile Include="URTest.cs" />
     <Compile Include="CodeTest\AsyncTest.cs" />
     <Compile Include="CodeTest\FunctionalInterface.cs" />
@@ -144,7 +150,6 @@
     <Compile Include="Maths\Point3D.cs" />
     <Compile Include="Maths\Matrix3D.cs" />
     <Compile Include="Maths\Coordinate3D.cs" />
-    <Compile Include="Network\AsyncSocketClient.cs" />
     <Compile Include="Network\BufferedData.cs" />
     <Compile Include="Network\SocketClient.cs" />
     <Compile Include="Network\TestClient.cs" />
