@@ -132,6 +132,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\NetworkClient.cs" />
     <Compile Include="Network\URControl.cs" />
     <Compile Include="Network\URStream.cs" />
     <Compile Include="Network\URLauncher.cs" />
