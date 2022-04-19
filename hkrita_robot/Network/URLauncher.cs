@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using hkrita_robot.Network;
 
 namespace hkrita_robot.Network
 {
@@ -10,10 +11,12 @@ namespace hkrita_robot.Network
     {
         public URLauncher()
         {
+
+
             URStream urStream = new URStream();
-            urStream.Start();
+            urStream.Connect();
             URControl urControl = new URControl();
-            urControl.Start();
+            urControl.Connect();
 
             Console.WriteLine("[INFO] Press Q to exit:");
             string stop = Convert.ToString(Console.ReadLine());

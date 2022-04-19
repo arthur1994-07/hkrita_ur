@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using hkrita_robot.Network;
 
 namespace hkrita_robot.Network
 {
@@ -20,13 +21,13 @@ namespace hkrita_robot.Network
 
         private UTF8Encoding mEncoder = new UTF8Encoding();
 
-        public void ControlThread()
+        public void InternalConnect()
         {
             try
             {
                 if (mClient.Connected == false)
                 {
-                    mClient.Connect(URData.IpAddress, URControlData.Port);
+                    mClient.Connect(URControlData.IpAddress, URControlData.Port);
                 }
 
                 mStream = mClient.GetStream();
@@ -39,6 +40,26 @@ namespace hkrita_robot.Network
                                                          + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")" + "\n");
                     mStream.Write(mPackedScript, 0, mPackedScript.Length);
                     Thread.Sleep(1000);
+
+
+                    mPackedScript = mEncoder.GetBytes("[movel(p[" + URControlData.C_Position[0].ToString() + "," + URControlData.C_Position[1].ToString() + "," + (URControlData.C_Position[2] - 0.1).ToString() + ","
+                                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")," +
+                           "movel(p[" + (URControlData.C_Position[0] - 0.1).ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + (URControlData.C_Position[2] - 0.1).ToString() + ", "
+                                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")," +
+                           "movel(p[" + (URControlData.C_Position[0] - 0.1).ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + URControlData.C_Position[2].ToString() + ", "
+                                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")," +
+                           "movel(p[" + URControlData.C_Position[0].ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + (URControlData.C_Position[2]).ToString() + ", "
+                                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")]" + "\n");
+
+
+                    //Send command to the robot
+                    mStream.Write(mPackedScript, 0, mPackedScript.Length);
+                    //Wait Time(5 seconds)
+                    Thread.Sleep(1000);
                 }
             }
             catch (SocketException e)
@@ -47,11 +68,11 @@ namespace hkrita_robot.Network
             }
         }
 
-        public void Start()
+        public void Connect()
         {
             mExitThread = false;
             // Start a thread to control UR
-            mThread = new Thread(new ThreadStart(ControlThread));
+            mThread = new Thread(new ThreadStart(InternalConnect));
             mThread.IsBackground = true;
             mThread.Start();
         }
