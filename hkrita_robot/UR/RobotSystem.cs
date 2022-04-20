@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hkrita_robot.Network;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,11 +17,70 @@ namespace hkrita_robot.UR
         private readonly string mAddress;
         private Thread mThread;
         private Boolean mClosed;
+        private NetworkClient mNetworkClient; 
+
 
         public RobotSystem(string ipAddress)
         {
             mAddress = ipAddress;
-
+            mNetworkClient = new NetworkClient(mAddress, STREAM_PORT);
         }
+
+        public bool Connect(bool withPoseReady)
+        {
+            try
+            {
+                bool success = InternalConnect(withPoseReady);
+                if (!success) Close();
+                return success;
+            }
+            catch(Exception e)
+            {
+                Close();
+                throw e;
+            }
+        }
+
+        public void Close()
+        {
+            CloseThread();
+        }
+
+        private bool InternalConnect(bool withPoseReady)
+        {
+            Close();
+            bool success;           
+            mThread = new Thread(() =>
+            {
+                Console.WriteLine("Robot Connection {0} is established: " , mAddress);
+                success = mNetworkClient.Connect();
+            });
+       
+            mClosed = false;
+
+
+            mThread.IsBackground = true;
+            mThread.Start();
+
+            if (!withPoseReady) return true;
+
+
+
+            return true;
+        }
+
+        private void CloseThread()
+        {
+            if (mThread == null) return;
+            try
+            {
+                mThread.Interrupt();
+                mThread.Join();
+            }
+            catch (Exception ex) { }
+            mThread = null;
+        }
+
+        
     }
 }

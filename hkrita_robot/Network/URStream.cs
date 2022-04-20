@@ -30,7 +30,7 @@ namespace hkrita_robot.Network
         // Total message length in bytes
         private const UInt32 mTotalMsg = 3288596480;
 
-        public void InternaConnect()
+        public void InternalConnect()
         {
             try
             {
@@ -94,7 +94,10 @@ namespace hkrita_robot.Network
         {
             mExitThread = false;
             // Start a thread to control UR
-            mThread = new Thread(new ThreadStart(InternaConnect));
+            mThread = new Thread(() => {
+                InternalConnect();
+            });
+            //mThread = new Thread(new ThreadStart(InternaConnect));
             mThread.IsBackground = true;
             mThread.Start();
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using hkrita_robot.Network;
+using hkrita_robot.UR;
 
 namespace hkrita_robot.Network
 {
@@ -12,6 +13,8 @@ namespace hkrita_robot.Network
         public URLauncher()
         {
 
+            //RobotSystem robot = new RobotSystem("192.168.56.101");
+            //robot.Connect(true);
 
             URStream urStream = new URStream();
             urStream.Connect();
@@ -29,6 +32,7 @@ namespace hkrita_robot.Network
                                    URStreamData.C_Orientation[0], URStreamData.C_Orientation[1], URStreamData.C_Orientation[2]);
                 // Destroy UR {Control / Stream}
                 urStream.Destroy();
+                //robot.Close();
                 urControl.Destroy();
 
                 // Application quit

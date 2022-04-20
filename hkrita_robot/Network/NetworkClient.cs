@@ -13,27 +13,40 @@ namespace hkrita_robot.Network
     {
         private static readonly int K_CONNECT_TIMEOUT = 3;
         private static readonly int K_SOCKET_TIMEOUT = 100;
-        private Thread mThread;
+        private const byte mFirstPacketSize = 4;
+        private const byte mOffset = 8;
+
+
         private bool mExitThread = false;
+        
         private TcpClient mClient = new TcpClient();
         private NetworkStream mStream = null; 
         private byte[] mBuffer = new byte[4096];
         private BufferedData mBufferData = new BufferedData();
-
+        private string mAddress;
+        private int mPort;
         public NetworkClient(String ipAddress, int port)
         {
-
+            mAddress = ipAddress;
+            mPort = port;
         }
 
 
-
+        public bool Connect()
+        {
+            lock (this)
+            {
+                return InternalConnect();
+            }
+        }
         private bool InternalConnect()
         {
             try
             {
                 if (mClient.Connected == false)
                 {
-                    mClient.Connect(URStreamData.IpAddress, URStreamData.Port);
+                    //mClient.Connect(URStreamData.IpAddress, URStreamData.Port);
+                    mClient.Connect(mAddress, mPort);
                     Console.WriteLine("Connected: " + mClient.Connected);
                 }
                 mStream = mClient.GetStream();
@@ -47,7 +60,7 @@ namespace hkrita_robot.Network
                         Array.Reverse(mBuffer);
 
                         // Read stream data 
-
+                        BufferedData.ReadPoseStreamInput(mBuffer, mFirstPacketSize, mOffset);
 
                         t.Stop();
                         if (t.ElapsedMilliseconds < URStreamData.timeStep)
@@ -66,6 +79,10 @@ namespace hkrita_robot.Network
             return true;
         }
         
+        private void InternalClose()
+        {
+            mBufferData.Clear();
+        }
 
 
 

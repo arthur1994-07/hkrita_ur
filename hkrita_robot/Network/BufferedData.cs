@@ -14,7 +14,8 @@ namespace hkrita_robot.Network
         private byte[] mBuffer = null;
         private int mCount = 0;
         private int mOffset = 0;
-
+        private bool mReadStream = false;
+        private bool mSendData = false;
 
         public void Clear()
         {
@@ -32,7 +33,7 @@ namespace hkrita_robot.Network
             return mBuffer;
         }
         
-        // read stream data 
+        // read input stream data 
         public static void ReadPoseStreamInput(byte[] buffer, byte packetSize, byte offset)
         {
             //Read Joint values in Radians
@@ -55,8 +56,9 @@ namespace hkrita_robot.Network
 
             Console.WriteLine("Position: " + URStreamData.C_Position[0] + ", " + URStreamData.C_Position[1] + ", " + URStreamData.C_Position[2]);
 
-
         }
+
+
 
 
     }

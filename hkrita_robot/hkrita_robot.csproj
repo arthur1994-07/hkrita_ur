@@ -132,6 +132,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extension\ObservableExtension.cs" />
     <Compile Include="URTest.cs" />
     <Compile Include="Network\URControlData.cs" />
     <Compile Include="Network\NetworkClient.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Network\SyncSocketClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UR\RobotData.cs" />
     <Compile Include="UR\RobotSystem.cs" />
     <Compile Include="UR\control\WriteScript.cs" />
     <Compile Include="UR\control\RobotController.cs" />
