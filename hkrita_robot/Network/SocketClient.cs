@@ -1,113 +1,124 @@
-﻿using java.io;
-using java.net;
-using java.nio;
-using java.nio.channels;
-using java.time;
+﻿using hkrita_robot.Extension;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace hkrita_robot.Network
 {
     public class SocketClient
+
+
     {
-        private static readonly int CONNECT_TIMEOUT = 3;
+        private static readonly int CONNECTION_TIMEOUT = 3;
         private static readonly int SOCKET_TIMEOUT = 100;
-        private SocketChannel mSocket;
-        private InetSocketAddress mAddress;
-        private Duration mConnectionTimeOut = Duration.ofSeconds(CONNECT_TIMEOUT);
-        private Duration mSocketTimeOut = Duration.ofSeconds(SOCKET_TIMEOUT);
+        private NetworkStream mStream;
+        private IPEndPoint mEndPoint;
+        private IPAddress mAddress;
+        private TimeSpan mConnectTimeOut = TimeSpan.FromSeconds(CONNECTION_TIMEOUT);
+        private TimeSpan mSocketTimeOut = TimeSpan.FromSeconds(SOCKET_TIMEOUT);
 
 
-        public void Close()
+        public SocketClient(string ipAddress, int port)
         {
-            lock(this)
-            {
-                LocalClose();  
-            }
+            mAddress = IPAddress.Parse(ipAddress);
+            mEndPoint = new IPEndPoint(mAddress, port);
         }
-        public bool Connect()
+
+        public void ConnectClient()
         {
-            lock (this)
-            {
-                return LocalConnect();
-            }
-        }
-        public void LocalClose()
-        {
-            if (mSocket != null) mSocket.close();
-            mSocket = null;
-            
-        }
-        private bool LocalConnect()
-        {
-            if (mSocket != null) return true;
+            byte[] bytes = new byte[4096];
             try
             {
-                LocalClose();
-            }
-            catch (Exception ex) { }
-
-            try
-            {
-                mSocket = SocketChannel.open();
-                mSocket.configureBlocking(false);
-                mSocket.connect(mAddress);
-
-                using (Selector selector = Selector.open())
-                {
-                    mSocket.register(selector, SelectionKey.OP_CONNECT);
-                    int num = selector.select((int)mConnectionTimeOut.toMillis());
-                    if (num == 0) throw new IOException();
-                }
-
-                if (mSocket.isConnectionPending())
-                {
-                    mSocket.finishConnect();
-                }
-            }
-            catch (Exception ex)
-            {
-                try { mSocket.close(); }    
-
-                catch (Exception e) { }
-                if (ex.GetType().IsInstanceOfType(new InterruptedIOException())) throw (InterruptedIOException)ex;
-                return false;
-            }
-            return true;
-        }
-
-        public bool WriteData(byte[] byteData, Func<Boolean> interrupted)
-        {
-            lock(this)
-            {
-                Selector selector = Selector.open();
+                Socket socket = new Socket(mAddress.AddressFamily,
+                    SocketType.Stream, ProtocolType.Tcp);
                 try
                 {
-                    mSocket.register(selector, SelectionKey.OP_WRITE);
-                    ByteBuffer buffer = ByteBuffer.wrap(byteData);
-                    for (int i = 0; i < byteData.Length;)
+                    socket.Connect(mEndPoint);
+                    
+                    if (socket.Connected)
                     {
-                        if (interrupted.Invoke()) throw new InterruptedIOException();
-                        int num = selector.select((int)mSocketTimeOut.toMillis());
-                        if (num == 0) continue;
-                        i += mSocket.write(buffer);
+                        Console.WriteLine("Socket connected to : {0} ",
+                            socket.RemoteEndPoint.ToString());
                     }
-                    return true;
+                    SendClientData(socket, bytes);
+                    Thread.Sleep(3000);
+                    // Release the socket.
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
                 }
-                catch (InterruptedIOException ex)
+                catch (ArgumentNullException ane)
                 {
-                    throw ex;
+                    Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
                 }
-                catch (Exception ex)
+                catch (SocketException se)
                 {
-                    return false;
+                    Console.WriteLine("SocketException : {0}", se.ToString());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        public void SetConnectTimeOut(TimeSpan timeSpan)
+        {
+            mConnectTimeOut = TimeSpan.FromMilliseconds(Math.Max(timeSpan.Milliseconds, 1));
+        }
+
+        public void SetSocketTimeOut(TimeSpan timeSpan)
+        {
+            mSocketTimeOut = TimeSpan.FromMilliseconds(Math.Max(timeSpan.Milliseconds, 1));
+        }
+
+        public void SendClientData(Socket socket, byte[] bytes)
+        {
+            byte[] scriptData = Encoding.ASCII.GetBytes(StringHelper.InputString());
+            Console.WriteLine("Converted String: " +BytesToStringConvert(scriptData));
+            
+            int bytesSent = socket.Send(scriptData);
+            int bytesRec = socket.Receive(bytes);
+
+            //Console.WriteLine(bytesRec);
+            //Console.WriteLine("Respone from server = {0}",
+            //    Encoding.ASCII.GetString(bytes, 0, bytesRec));
+        }
+
+        public static string WriteScript()
+        {
+            string start = "def test_program(): \n";
+            string end = "end \n";
+            string typeString = StringHelper.InputString() + "\n";
+            //string final = start + typeString + end;
+            //Console.WriteLine(final);
+            //return final;
+            return start + typeString + end;
+
+        }
+
+        public static string BytesToStringConvert(byte[] bytes)
+        {
+            Console.WriteLine(bytes.GetType());
+            using (var stream = new MemoryStream(bytes))
+            {
+                using (var streamReader = new StreamReader(stream))
+                {
+                   
+                    return streamReader.ReadToEnd();
                 }
             }
         }
+      
+
     }
 }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using hkrita_robot.Network;
+using hkrita_robot.Network.ur;
 
 namespace hkrita_robot.Network
 {

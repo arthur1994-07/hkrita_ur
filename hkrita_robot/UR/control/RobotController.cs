@@ -10,8 +10,6 @@ namespace hkrita_robot.UR.control
 {
     public class RobotController : IRobotInterface, ICloneable
     {
-
-
         private double robot_movel_acc;
         private double robot_movel_velo;
         private double robot_movej_acc;
@@ -20,6 +18,10 @@ namespace hkrita_robot.UR.control
         public double MOVEL_VELOCITY { get => robot_movel_velo; set => robot_movel_velo = 1.2; }
         public double MOVEJ_ACCELERATION { get => robot_movej_acc; set => robot_movej_acc = 0.3; }
         public double MOVEJ_VELOCITY { get => robot_movej_velo; set => robot_movej_velo = 1.2; }
+
+        private readonly string mRobotAddress;
+        private RobotSystem mRobot;
+
 
 
 

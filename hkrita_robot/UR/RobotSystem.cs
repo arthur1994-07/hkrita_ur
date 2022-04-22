@@ -1,4 +1,5 @@
 ﻿using hkrita_robot.Network;
+using hkrita_robot.Network.ur;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,6 @@ namespace hkrita_robot.UR
         private readonly static int NORMAL_PORT = 30003;
         private readonly static int STREAM_PORT = 30013;
             
-        private readonly static int DASHBOARD_PORT = 29999;
         private readonly string mAddress;
         private Thread mThread;
         private Boolean mClosed;
@@ -26,11 +26,11 @@ namespace hkrita_robot.UR
             mNetworkClient = new NetworkClient(mAddress, STREAM_PORT);
         }
 
-        public bool Connect(bool withPoseReady)
+        public bool Connect(bool streamData)
         {
             try
             {
-                bool success = InternalConnect(withPoseReady);
+                bool success = InternalConnect(streamData);
                 if (!success) Close();
                 return success;
             }
@@ -46,25 +46,20 @@ namespace hkrita_robot.UR
             CloseThread();
         }
 
-        private bool InternalConnect(bool withPoseReady)
+        private bool InternalConnect(bool streamData)
         {
             Close();
             bool success;           
             mThread = new Thread(() =>
             {
                 Console.WriteLine("Robot Connection {0} is established: " , mAddress);
-                success = mNetworkClient.Connect();
+                success = mNetworkClient.Connect(streamData);
             });
        
             mClosed = false;
 
-
             mThread.IsBackground = true;
             mThread.Start();
-
-            if (!withPoseReady) return true;
-
-
 
             return true;
         }

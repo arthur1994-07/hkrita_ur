@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hkrita_robot.UR
+namespace hkrita_robot.UR.accessor
 {
-    public interface RobotData
+    public class ReadAttribute<T> 
     {
 
     }

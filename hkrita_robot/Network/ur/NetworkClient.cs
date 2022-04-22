@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace hkrita_robot.Network
+namespace hkrita_robot.Network.ur
 {
     public class NetworkClient
     {
@@ -31,21 +31,19 @@ namespace hkrita_robot.Network
             mPort = port;
         }
 
-
-        public bool Connect()
+        public bool Connect(bool readStream)
         {
             lock (this)
             {
-                return InternalConnect();
+                return InternalConnect(readStream);
             }
         }
-        private bool InternalConnect()
+        private bool InternalConnect(bool readStream)
         {
             try
             {
                 if (mClient.Connected == false)
                 {
-                    //mClient.Connect(URStreamData.IpAddress, URStreamData.Port);
                     mClient.Connect(mAddress, mPort);
                     Console.WriteLine("Connected: " + mClient.Connected);
                 }
@@ -59,9 +57,9 @@ namespace hkrita_robot.Network
                         t.Start();
                         Array.Reverse(mBuffer);
 
-                        // Read stream data 
-                        BufferedData.ReadPoseStreamInput(mBuffer, mFirstPacketSize, mOffset);
-
+                        // Read stream data
+                        if (readStream) BufferedData.ReadPoseStreamInput(mBuffer, mFirstPacketSize, mOffset);
+                         
                         t.Stop();
                         if (t.ElapsedMilliseconds < URStreamData.timeStep)
                         {

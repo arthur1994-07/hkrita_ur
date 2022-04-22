@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hkrita_robot.Network
+namespace hkrita_robot.Network.ur
 {
     public class BufferedData
     {
