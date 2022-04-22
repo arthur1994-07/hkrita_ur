@@ -132,13 +132,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Container\Triplet.cs" />
     <Compile Include="Container\ReadContainer.cs" />
     <Compile Include="Container\Pair.cs" />
     <Compile Include="Extension\ObservableExtension.cs" />
     <Compile Include="Network\script\AbstractScript.cs" />
     <Compile Include="Network\ur\RealTimeRobotData.cs" />
     <Compile Include="Network\ur\RealTimeSystem.cs" />
-    <Compile Include="Network\ur\RealTimeClient.cs" />
     <Compile Include="URTest.cs" />
     <Compile Include="Network\URControlData.cs" />
     <Compile Include="Network\ur\NetworkClient.cs" />

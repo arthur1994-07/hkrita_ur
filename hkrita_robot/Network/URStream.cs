@@ -50,37 +50,13 @@ namespace hkrita_robot.Network
                     {
                         t.Start();
                         Array.Reverse(mBuffer);
-
-                        // Read Joint Values in radians
-                        //URStreamData.J_Orientation[0] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (32 * mOffset));
-                        //URStreamData.J_Orientation[1] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (33 * mOffset));
-                        //URStreamData.J_Orientation[2] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (34 * mOffset));
-                        //URStreamData.J_Orientation[3] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (35 * mOffset));
-                        //URStreamData.J_Orientation[4] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (36 * mOffset));
-                        //URStreamData.J_Orientation[5] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (37 * mOffset));
-                        //// Read Cartesian (Positon) Values in metres
-
-                        //URStreamData.C_Position[0] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (56 * mOffset));
-                        //URStreamData.C_Position[1] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (57 * mOffset));
-                        //URStreamData.C_Position[2] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (58 * mOffset));
-                        //// Read Cartesian (Orientation) Values in metres 
-                        //URStreamData.C_Orientation[0] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (59 * mOffset));
-                        //URStreamData.C_Orientation[1] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (60 * mOffset));
-                        //URStreamData.C_Orientation[2] = BitConverter.ToDouble(mBuffer, mBuffer.Length - mFirstPacketSize - (61 * mOffset));
-
-
-                        //Console.WriteLine("Position: " + URStreamData.C_Position[0] + ", " + URStreamData.C_Position[1] + ", " + URStreamData.C_Position[2]);
-                        //Console.WriteLine("Orientation: " + URStreamData.C_Orientation[0] + ", " + URStreamData.C_Orientation[1] + ", " + URStreamData.C_Orientation[2]);
                         BufferedData.ReadPoseStreamInput(mBuffer, mFirstPacketSize, mOffset);
-
-                        
 
                         t.Stop();
                         if (t.ElapsedMilliseconds < URStreamData.timeStep)
                         {
                             Thread.Sleep(URStreamData.timeStep - (int)t.ElapsedMilliseconds);
                         }
-
                         t.Restart();
                     }
                 }
@@ -98,7 +74,6 @@ namespace hkrita_robot.Network
             mThread = new Thread(() => {
                 InternalConnect();
             });
-            //mThread = new Thread(new ThreadStart(InternaConnect));
             mThread.IsBackground = true;
             mThread.Start();
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hkrita_robot.Container;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -25,20 +26,34 @@ namespace hkrita_robot.Network.ur
         private BufferedData mBufferData = new BufferedData();
         private string mAddress;
         private int mPort;
+
         public NetworkClient(String ipAddress, int port)
         {
             mAddress = ipAddress;
             mPort = port;
         }
 
-        public bool Connect(bool readStream)
+        public void Connect(bool readStream)
         {
             lock (this)
             {
-                return InternalConnect(readStream);
+                InternalConnect(readStream);
             }
         }
-        private bool InternalConnect(bool readStream)
+
+        public void CloseThread()
+        {
+            if (mClient.Connected == true)
+            {
+                mStream.Dispose();
+                mClient.Close();
+            }
+            Thread.Sleep(100);
+        }
+
+        // Client Connection 
+        // Connection requires TcpClient and NetworkStream 
+        private void InternalConnect(bool readStream)
         {
             try
             {
@@ -65,22 +80,23 @@ namespace hkrita_robot.Network.ur
                         {
                             Thread.Sleep(URStreamData.timeStep - (int)t.ElapsedMilliseconds);
                         }
-
                         t.Restart();
                     }
                 }
-            } 
+            }
             catch (Exception e)
             {
                 Console.WriteLine("SocketException: {0}", e);
-            }  
-            return true;
+            }
         }
-        
+
         private void InternalClose()
         {
             mBufferData.Clear();
         }
+        
+
+
 
 
 

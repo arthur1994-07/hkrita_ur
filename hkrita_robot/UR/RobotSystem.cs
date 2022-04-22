@@ -53,7 +53,7 @@ namespace hkrita_robot.UR
             mThread = new Thread(() =>
             {
                 Console.WriteLine("Robot Connection {0} is established: " , mAddress);
-                success = mNetworkClient.Connect(streamData);
+                mNetworkClient.Connect(streamData);
             });
        
             mClosed = false;
