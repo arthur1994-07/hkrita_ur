@@ -61,7 +61,7 @@ namespace hkrita_robot.Network
                     }
                 }
             }
-            catch (SocketException e)
+            catch (Exception e)
             {
                 Console.WriteLine("SocketException: {0}", e);
             }    
@@ -81,6 +81,7 @@ namespace hkrita_robot.Network
         public void Stop()
         {
             mExitThread = true;
+            Console.WriteLine(mThread.IsAlive);
             if (mThread.IsAlive == true)
             {
                 Thread.Sleep(100);
@@ -92,8 +93,11 @@ namespace hkrita_robot.Network
             Stop();
             if (mClient.Connected == true)
             {
-                mStream.Dispose();
+                Console.WriteLine("Still connected");
+
+                mStream.Close();
                 mClient.Close();
+                Console.WriteLine("Status:" + mClient.Connected);
             }
             Thread.Sleep(100);
         }

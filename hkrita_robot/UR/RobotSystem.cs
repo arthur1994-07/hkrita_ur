@@ -16,7 +16,8 @@ namespace hkrita_robot.UR
             
         private readonly string mAddress;
         private Thread mThread;
-        private Boolean mClosed;
+        private Boolean mExitThread;
+        private Boolean mClosed; 
         private NetworkClient mNetworkClient; 
 
 
@@ -75,6 +76,23 @@ namespace hkrita_robot.UR
             catch (Exception ex) { }
             mThread = null;
         }
+
+        private void Stop()
+        {
+            mExitThread = true;
+            Console.WriteLine(mThread.IsAlive);
+            if (mThread.IsAlive == true)
+            {
+                Thread.Sleep(100);
+            }
+        }
+
+        public void Destroy()
+        {
+            Stop();
+            mNetworkClient.CloseThread();
+        }
+
 
         
     }

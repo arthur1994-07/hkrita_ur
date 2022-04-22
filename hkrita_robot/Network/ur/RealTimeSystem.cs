@@ -32,22 +32,9 @@ namespace hkrita_robot.Network.ur
             InternalCloseThread();
         }
 
-        private void InternalConnect()
-        {
-            bool success;
-            mThread = new Thread(() =>
-            {
-                Console.WriteLine("Stream Connection via {0} is established: ", K_STREAM_PORT);
-                mClient.Connect(mReadStream);
-            });
-            mThread.IsBackground = true;
-            mThread.Start();
-        }
-
         public void Stop()
         {
             mExitThread = true;
-            Console.WriteLine(mThread.IsAlive);
             if (mThread.IsAlive == true)
             {
                 Thread.Sleep(100);
@@ -58,6 +45,19 @@ namespace hkrita_robot.Network.ur
         {
             Stop();
             mClient.CloseThread();
+        }       
+        
+        private void InternalConnect()
+        {
+            bool success;
+            mThread = new Thread(() =>
+            {
+                if (mThread.IsAlive) Console.WriteLine("Stream Connection via {0} is established: ", K_STREAM_PORT);
+                mClient.Connect(mReadStream);
+            });
+
+            mThread.IsBackground = true;
+            mThread.Start();
         }
     } 
 }

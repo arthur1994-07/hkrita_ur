@@ -10,12 +10,11 @@ namespace hkrita_robot.Network.ur
 {
     public class BufferedData
     {
-        private readonly List<byte[]> mBufferlist = new List<byte[]>();
-        private byte[] mBuffer = null;
-        private int mCount = 0;
-        private int mOffset = 0;
-        private bool mReadStream = false;
-        private bool mSendData = false;
+        public readonly List<byte[]> mBufferlist = new List<byte[]>();
+        public byte[] mBuffer = null;
+        public int mCount = 0;
+        public int mOffset = 0;
+
 
         public void Clear()
         {
@@ -27,7 +26,7 @@ namespace hkrita_robot.Network.ur
 
         public int Count() {  return mCount; }
 
-        public byte[] GetData(int size)
+        public byte[] WriteData(int size)
         {
             mBuffer = new byte[size];
             return mBuffer;

@@ -19,8 +19,7 @@ namespace hkrita_robot.Network.ur
 
 
         private bool mExitThread = false;
-        
-        private TcpClient mClient = new TcpClient();
+        private TcpClient mTCPClient = new TcpClient();
         private NetworkStream mStream = null; 
         private byte[] mBuffer = new byte[4096];
         private BufferedData mBufferData = new BufferedData();
@@ -35,18 +34,17 @@ namespace hkrita_robot.Network.ur
 
         public void Connect(bool readStream)
         {
-            lock (this)
-            {
-                InternalConnect(readStream);
-            }
+            InternalConnect(readStream);
         }
 
         public void CloseThread()
         {
-            if (mClient.Connected == true)
+            if (mTCPClient.Connected == true)
             {
-                mStream.Dispose();
-                mClient.Close();
+                //Console.WriteLine("Still connected");
+                mStream.Close();
+                mTCPClient.Close();
+                Console.WriteLine("Connection Status:" + mTCPClient.Connected);
             }
             Thread.Sleep(100);
         }
@@ -57,12 +55,13 @@ namespace hkrita_robot.Network.ur
         {
             try
             {
-                if (mClient.Connected == false)
+                if (mTCPClient.Connected == false)
                 {
-                    mClient.Connect(mAddress, mPort);
-                    Console.WriteLine("Connected: " + mClient.Connected);
+                    mTCPClient.Connect(mAddress, mPort);
+                    Console.WriteLine("Connected: " + mTCPClient.Connected);
                 }
-                mStream = mClient.GetStream();
+                mStream = mTCPClient.GetStream();
+
                 var t = new Stopwatch();
 
                 while (mExitThread == false)
@@ -86,7 +85,7 @@ namespace hkrita_robot.Network.ur
             }
             catch (Exception e)
             {
-                Console.WriteLine("SocketException: {0}", e);
+                //Console.WriteLine(se);
             }
         }
 
@@ -95,8 +94,6 @@ namespace hkrita_robot.Network.ur
             mBufferData.Clear();
         }
         
-
-
 
 
 
