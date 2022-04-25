@@ -21,8 +21,6 @@ namespace hkrita_robot.Network
         private NetworkStream mStream = null;
         // Packet Buffer
         private byte[] mBuffer = new byte[4096];
-
-
         // Size of first packet in bytes (integer)
         private const byte mFirstPacketSize = 4;
         // Size of other packets in bytes (double)
@@ -41,7 +39,6 @@ namespace hkrita_robot.Network
                     Console.WriteLine("Connected: " + mClient.Connected);
                 }
                 mStream = mClient.GetStream();
-
                 var t = new Stopwatch();
 
                 while (mExitThread == false)
@@ -65,6 +62,11 @@ namespace hkrita_robot.Network
             {
                 Console.WriteLine("SocketException: {0}", e);
             }    
+        }
+
+        public void ReadPoseOnce()
+        {
+
         }
 
         public void Connect()

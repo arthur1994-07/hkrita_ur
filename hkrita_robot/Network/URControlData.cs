@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace hkrita_robot.Network
 {
-    public static class URControlData
+    public class URControlData
     {
-        public const ushort Port = 30003;
+        public const ushort Port = 30002;
         public static string IpAddress = "192.168.56.101";
         public static int timeStep = 8;
 
@@ -22,5 +22,12 @@ namespace hkrita_robot.Network
         // Move Parameters: Velocity, Acceleration
         public static string velocity = "1.0";
         public static string acceleration = "1.0";
+
+
+        public static void ReadURData()
+        {
+
+        }
     }
+
 }

@@ -136,6 +136,7 @@
     <Compile Include="Container\ReadContainer.cs" />
     <Compile Include="Container\Pair.cs" />
     <Compile Include="Extension\ObservableExtension.cs" />
+    <Compile Include="Network\realtime\IEncoderDecoder.cs" />
     <Compile Include="Network\script\AbstractScript.cs" />
     <Compile Include="Network\ur\RealTimeRobotData.cs" />
     <Compile Include="Network\ur\RealTimeSystem.cs" />

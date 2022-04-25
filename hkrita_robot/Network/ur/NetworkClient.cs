@@ -55,13 +55,14 @@ namespace hkrita_robot.Network.ur
         {
             try
             {
+
                 if (mTCPClient.Connected == false)
                 {
                     mTCPClient.Connect(mAddress, mPort);
-                    Console.WriteLine("Connected: " + mTCPClient.Connected);
                 }
-                mStream = mTCPClient.GetStream();
 
+                mStream = mTCPClient.GetStream();
+                
                 var t = new Stopwatch();
 
                 while (mExitThread == false)

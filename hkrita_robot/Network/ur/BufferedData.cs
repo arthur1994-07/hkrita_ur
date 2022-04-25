@@ -53,7 +53,8 @@ namespace hkrita_robot.Network.ur
             URStreamData.C_Orientation[1] = BitConverter.ToDouble(buffer, buffer.Length - packetSize - (60 * offset));
             URStreamData.C_Orientation[2] = BitConverter.ToDouble(buffer, buffer.Length - packetSize - (61 * offset));
 
-            //Console.WriteLine("Position: " + URStreamData.C_Position[0] + ", " + URStreamData.C_Position[1] + ", " + URStreamData.C_Position[2]);
+
+            Console.WriteLine("Position: " + URStreamData.C_Position[0] + ", " + URStreamData.C_Position[1] + ", " + URStreamData.C_Position[2]);
 
         }
 
