@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using hkrita_robot.Extension;
 using hkrita_robot.Network;
 using hkrita_robot.Network.ur;
 
@@ -33,36 +34,57 @@ namespace hkrita_robot.Network
                 }
 
                 mStream = mClient.GetStream();
+
                 while (mExitThread == false)
                 {
-                        //Instruction 1(Home Position): Joint Input Command, Move Joint Interpolation
-                        //Get Bytes from String
-                      mPackedScript = mEncoder.GetBytes("movej([" + URControlData.J_Orientation[0].ToString() + "," + URControlData.J_Orientation[1].ToString() + "," + URControlData.J_Orientation[2].ToString() + ","
-                                                          + URControlData.J_Orientation[3].ToString() + "," + URControlData.J_Orientation[4].ToString() + "," + URControlData.J_Orientation[5].ToString() + "],"
-                                                           + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")" + "\n");
-                        mStream.Write(mPackedScript, 0, mPackedScript.Length);
-                        Thread.Sleep(1000);
+
+                    //Instruction 1(Home Position): Joint Input Command, Move Joint Interpolation
+                    //Get Bytes from String
+                    //mPackedScript = mEncoder.GetBytes("movej([" + URControlData.J_Orientation[0].ToString() + "," + URControlData.J_Orientation[1].ToString() + "," + URControlData.J_Orientation[2].ToString() + ","
+                    //                                      + URControlData.J_Orientation[3].ToString() + "," + URControlData.J_Orientation[4].ToString() + "," + URControlData.J_Orientation[5].ToString() + "],"
+                    //                                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")" + "\n");
+                    //mStream.Write(mPackedScript, 0, mPackedScript.Length);
+                    //Thread.Sleep(1000);
 
 
-                        mPackedScript = mEncoder.GetBytes("[movel(p[" + URControlData.C_Position[0].ToString() + "," + URControlData.C_Position[1].ToString() + "," + (URControlData.C_Position[2] - 0.1).ToString() + ","
-                                           + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
-                                           + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")," +
-                               "movel(p[" + (URControlData.C_Position[0] - 0.1).ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + (URControlData.C_Position[2] - 0.1).ToString() + ", "
-                                           + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
-                                           + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")," +
-                               "movel(p[" + (URControlData.C_Position[0] - 0.1).ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + URControlData.C_Position[2].ToString() + ", "
-                                           + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
-                                           + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")," +
-                               "movel(p[" + URControlData.C_Position[0].ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + (URControlData.C_Position[2]).ToString() + ", "
-                                           + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
-                                           + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")]" + "\n");
+                    //mPackedScript = mEncoder.GetBytes("[movel(p[" + URControlData.C_Position[0].ToString() + "," + URControlData.C_Position[1].ToString() + "," + (URControlData.C_Position[2] - 0.1).ToString() + ","
+                    //                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                    //                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")," +
+                    //           "movel(p[" + (URControlData.C_Position[0] - 0.1).ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + (URControlData.C_Position[2] - 0.1).ToString() + ", "
+                    //                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                    //                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")," +
+                    //           "movel(p[" + (URControlData.C_Position[0] - 0.1).ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + URControlData.C_Position[2].ToString() + ", "
+                    //                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                    //                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")," +
+                    //           "movel(p[" + URControlData.C_Position[0].ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + (URControlData.C_Position[2]).ToString() + ", "
+                    //                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                    //                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")]" + "\n");
 
 
-                        //Send command to the robot
-                        mStream.Write(mPackedScript, 0, mPackedScript.Length);
-                        //Wait Time(5 seconds)
-                        Thread.Sleep(1000);
+                    //  //Send command to the robot
+                    //mStream.Write(mPackedScript, 0, mPackedScript.Length);
+                    //  //Wait Time(5 seconds)
+                    //Thread.Sleep(1000);
+                    //String test = StringHelper.FormatString("set_tcp({0})", URControlData.testTcpPose);
+                    String test2 = StringHelper.FormatString("set_tcp({0})", URControlData.testTcpPose);
+                    Console.WriteLine("11");
 
+                    //String test = "set_tcp(p[" + URControlData.testTcpPose.GetPosition().x.ToString() + ", " +
+                    //    URControlData.testTcpPose.GetPosition().y.ToString() + ", "
+                    //    + URControlData.testTcpPose.GetPosition().z.ToString() + ", "
+                    //    + URControlData.testTcpPose.GetRotation().x.ToString() + ", "
+                    //    + URControlData.testTcpPose.GetRotation().y.ToString() + ", "
+                    //    + URControlData.testTcpPose.GetRotation().z.ToString() + "])" + "\n";
+                    //mPackedScript = mEncoder.GetBytes(test);
+
+                    ////mPackedScript = mEncoder.GetBytes("set_tcp(p[" + URControlData.testTcpPose.GetPosition().x.ToString() + ", " +
+                    ////    URControlData.testTcpPose.GetPosition().y.ToString() + ", "
+                    ////    + URControlData.testTcpPose.GetPosition().z.ToString() + ", "
+                    ////    + URControlData.testTcpPose.GetRotation().x.ToString() + ", "
+                    ////    + URControlData.testTcpPose.GetRotation().y.ToString() + ", "
+                    ////    + URControlData.testTcpPose.GetRotation().z.ToString() + "])" + "\n");
+                    //mStream.Write(mPackedScript, 0, mPackedScript.Length);
+                    //Thread.Sleep(1000);
                 }
             }
 

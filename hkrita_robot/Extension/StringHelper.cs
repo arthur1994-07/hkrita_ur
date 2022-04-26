@@ -18,12 +18,6 @@ namespace hkrita_robot.Extension
             return Console.ReadLine();
         }
 
-        public void WriteInputToScript()
-        {
-
-        }
-
-
         public static Boolean IsNullOrEmtpy(String value)
         {
             return value == null;
@@ -78,15 +72,40 @@ namespace hkrita_robot.Extension
             }
         }
 
+        public static string FormatString(String inputString, params Object[] param)
+        {
+            // e.g. StringHelper.FormatString("set_tcp({0})", mPose);
+
+            // access the arg index inside the string "set_tcp({0}) ---> {0}
+
+            // e.g. start ---> { at 8
+            //      end ----> } at 10 
+            StringBuilder builder = new StringBuilder();
+            int offset = 0;
+
+            int start = inputString.IndexOf("{");
+            int end = inputString.IndexOf("}", start + 1);
+            int next = inputString.IndexOf('{', start + 1);
+                //Console.WriteLine(inputString.Length);
+
+            // get the length of the index value
+            int indexLength = end - (start + 1);
+            string arg = inputString.Substring(start + 1, indexLength);
+            string value = GetArgNumber(arg, param);
+            return builder.ToString();
+        }
+
+
         public static string Format(String formatMsg, params Object[] param)
         {
+
             StringBuilder builder = new StringBuilder();
             int offset = 0;
             while (offset < formatMsg.Length)
             {
-                int start = formatMsg.IndexOf('{', offset);
+                int start = formatMsg.IndexOf("{", offset);
                 if (start < 0) break;
-                int end = formatMsg.IndexOf('{', start + 1);
+                int end = formatMsg.IndexOf('}', start + 1);
                 if (end < 0) break;
                 int next = formatMsg.IndexOf('{', start + 1);
                 if (next >= 0 && next < end)
@@ -97,10 +116,7 @@ namespace hkrita_robot.Extension
                 }
                 string arg = formatMsg.Substring(start + 1, end);
                 string value = GetArgNumber(arg, param);
-                if (value == null)
-                {
-                    builder.Append(formatMsg.Substring(offset, end + 1));
-                }
+                if (value == null) builder.Append(formatMsg.Substring(offset, end + 1));
                 else
                 {
                     builder.Append(formatMsg.Substring(offset, start));
@@ -120,7 +136,7 @@ namespace hkrita_robot.Extension
             int argNumber;
             try
             {
-                argNumber = Int32.Parse(arg);
+                argNumber = Convert.ToInt32(arg);
             }
             catch (FormatException e)
             {
@@ -135,6 +151,5 @@ namespace hkrita_robot.Extension
             if (obj.GetType().IsArray) return ListToString((Object[])obj);
             return obj.ToString();
         }
-
     }
 }

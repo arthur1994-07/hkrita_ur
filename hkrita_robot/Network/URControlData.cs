@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hkrita_robot.Maths;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,8 @@ namespace hkrita_robot.Network
         public const ushort Port = 30002;
         public static string IpAddress = "192.168.56.101";
         public static int timeStep = 8;
-
+        public static Pose testTcpPose = new Pose(-0.020, 0.010, 0.178, 0, 0, 3.142);
+        //public static Pose testTcpPose = new Pose(-0.020, 0.010, 0, 0, 0, 3.142);
 
         public static double[] J_Orientation = new double[6] { -1.6, -1.7, -2.2, -0.8, 1.59, -0.03 };
         //  Cartesian Space:

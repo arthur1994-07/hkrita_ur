@@ -30,10 +30,10 @@ namespace hkrita_robot.Network
             //NetworkClient network = new NetworkClient("192.168.56.101", 30013);
             //network.Connect(true);
 
-            URStream urStream = new URStream();
-            urStream.Connect();
+            //URStream urStream = new URStream();
+            //urStream.Connect();
             URControl urControl = new URControl();
-            //urControl.Connect();
+            urControl.Connect();
             //urControl.Connect();
 
             Console.WriteLine("[INFO] Press Q to exit:");
@@ -53,9 +53,9 @@ namespace hkrita_robot.Network
                 //robot.Close();
                 //network.CloseThread();
 
-                urStream.Destroy();
+                //urStream.Destroy();
 
-                //urControl.Destroy();
+                urControl.Destroy();
 
                 // Application quit
                 Environment.Exit(0);

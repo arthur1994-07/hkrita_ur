@@ -11,7 +11,7 @@ namespace hkrita_robot.Network.ur
 {
     public class RealTimeSystem 
     {
-        private static int K_STREAM_PORT = 30004;
+        private static int K_STREAM_PORT = 30013;
         private Thread mThread;
         private RealTimeRobotData mData = new RealTimeRobotData();
         private bool mExitThread = false;

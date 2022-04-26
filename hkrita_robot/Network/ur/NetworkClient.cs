@@ -55,7 +55,6 @@ namespace hkrita_robot.Network.ur
         {
             try
             {
-
                 if (mTCPClient.Connected == false)
                 {
                     mTCPClient.Connect(mAddress, mPort);

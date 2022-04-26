@@ -66,15 +66,39 @@ namespace hkrita_robot.Network
 
         public void ReadPoseOnce()
         {
-
+            // read Stream data once
+            try
+            {
+                if (mClient.Connected == false)
+                {
+                    mClient.Connect(URStreamData.IpAddress, URStreamData.Port);
+                    Console.WriteLine("Connected: " + mClient.Connected);
+                }
+                mStream = mClient.GetStream();
+                var t = new Stopwatch();
+                if (mStream.Read(mBuffer, 0, mBuffer.Length) != 0)
+                {
+                    t.Start();
+                    Array.Reverse(mBuffer);
+                    BufferedData.ReadPoseStreamInput(mBuffer, mFirstPacketSize, mOffset);
+                    t.Stop();
+                    if (t.ElapsedMilliseconds < URStreamData.timeStep)
+                    {
+                        Thread.Sleep(URStreamData.timeStep - (int)t.ElapsedMilliseconds);
+                    }
+                    t.Restart();
+                }
+            }
+            catch (Exception e) { }
         }
+        
 
         public void Connect()
         {
             mExitThread = false;
             // Start a thread to control UR
             mThread = new Thread(() => {
-                InternalConnect();
+                ReadPoseOnce();
             });
             mThread.IsBackground = true;
             mThread.Start();
