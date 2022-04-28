@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hkrita_robot.Extension;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +44,14 @@ namespace hkrita_robot.Maths
             Vector3D value = new Vector3D(mPose[3], mPose[4], mPose[5]);
             double angle = value.Magnitude();
             return Quaternion.FromAxisAngle(value.AssignNormalize(), angle);
+        }
+
+
+        public override bool Equals(Object o)
+        {
+            if (this == o) return true;
+            if (!(o.GetType().IsInstanceOfType(this))) return false;
+            return EqualsHelper.Equals(mPose, ((Pose) o).mPose);
         }
 
 

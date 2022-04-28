@@ -132,9 +132,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Constants.cs" />
     <Compile Include="Container\Triplet.cs" />
     <Compile Include="Container\ReadContainer.cs" />
     <Compile Include="Container\Pair.cs" />
+    <Compile Include="Extension\EqualsHelper.cs" />
     <Compile Include="Extension\ObservableExtension.cs" />
     <Compile Include="Network\realtime\IEncoderDecoder.cs" />
     <Compile Include="Network\script\AbstractScript.cs" />

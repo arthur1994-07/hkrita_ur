@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hkrita_robot.Maths;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,6 +75,7 @@ namespace hkrita_robot.Extension
 
         public static string FormatString(String inputString, params Object[] param)
         {
+           
             // e.g. StringHelper.FormatString("set_tcp({0})", mPose);
 
             // access the arg index inside the string "set_tcp({0}) ---> {0}
@@ -85,25 +87,28 @@ namespace hkrita_robot.Extension
 
             int start = inputString.IndexOf("{");
             int end = inputString.IndexOf("}", start + 1);
-            int next = inputString.IndexOf('{', start + 1);
+            //int next = inputString.IndexOf('{', start + 1);
                 //Console.WriteLine(inputString.Length);
 
             // get the length of the index value
-            int indexLength = end - (start + 1);
-            string arg = inputString.Substring(start + 1, indexLength);
-            string value = GetArgNumber(arg, param);
+            int index = end - (start + 1);
+            string arg = inputString.Substring(start+1, index);
+            string value = GetArgIndex(arg, param);
+            builder.Append(value);
+            
             return builder.ToString();
         }
 
 
         public static string Format(String formatMsg, params Object[] param)
         {
+            //string test = MySubString(formatMsg, 8, 10);
 
             StringBuilder builder = new StringBuilder();
             int offset = 0;
             while (offset < formatMsg.Length)
             {
-                int start = formatMsg.IndexOf("{", offset);
+                int start = formatMsg.IndexOf('{', offset);
                 if (start < 0) break;
                 int end = formatMsg.IndexOf('}', start + 1);
                 if (end < 0) break;
@@ -114,24 +119,31 @@ namespace hkrita_robot.Extension
                     offset = next;
                     continue;
                 }
-                string arg = formatMsg.Substring(start + 1, end);
-                string value = GetArgNumber(arg, param);
-                if (value == null) builder.Append(formatMsg.Substring(offset, end + 1));
+                string arg = MySubString(formatMsg, start + 1, end);
+                //string arg = formatMsg.Substring(start + 1, end);
+                string value = GetArgIndex(arg, param);
+                if (value == null)
+                {
+                    builder.Append(MySubString(formatMsg, offset, end + 1));
+                    //builder.Append(formatMsg.Substring(offset, end + 1));
+                }
                 else
                 {
-                    builder.Append(formatMsg.Substring(offset, start));
+                    builder.Append(MySubString(formatMsg, offset, start));
+                    //builder.Append(formatMsg.Substring(offset, start));
                     builder.Append(value);
                 }
                 offset = end + 1;
             }
             if (offset < formatMsg.Length)
             {
-                builder.Append(formatMsg.Substring(offset));
+                string last = formatMsg.Substring(offset);
+                builder.Append(last);
             }
             return builder.ToString();
         }
 
-        private static string GetArgNumber(string arg, params Object[] param)
+        private static string GetArgIndex(string arg, params Object[] param)
         {
             int argNumber;
             try
@@ -147,9 +159,16 @@ namespace hkrita_robot.Extension
 
         private static string ObjectToString(Object obj)
         {
-            if (obj == null) return "null";
+            obj.GetType();
+            if (obj == null) return "<null>";
             if (obj.GetType().IsArray) return ListToString((Object[])obj);
+            
             return obj.ToString();
+        }
+
+        private static string MySubString(string input, int startIndex, int endIndex)
+        {
+            return input.Substring(startIndex, endIndex - startIndex);
         }
     }
 }
