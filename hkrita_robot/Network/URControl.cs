@@ -66,26 +66,18 @@ namespace hkrita_robot.Network
                     //  //Wait Time(5 seconds)
                     //Thread.Sleep(1000);
                     //String test = StringHelper.FormatString("set_tcp({0})", URControlData.testTcpPose);
-                    String test2 = StringHelper.Format("set_tcp({0})", URControlData.testTcpPose, URControlData.testTcpPose2);
-
-                    Console.WriteLine("11");
-
-                    String test = "set_tcp(p[" + URControlData.testTcpPose.GetPosition().x.ToString() + ", " +
-                        URControlData.testTcpPose.GetPosition().y.ToString() + ", "
-                        + URControlData.testTcpPose.GetPosition().z.ToString() + ", "
-                        + URControlData.testTcpPose.GetRotation().x.ToString() + ", "
-                        + URControlData.testTcpPose.GetRotation().y.ToString() + ", "
-                        + URControlData.testTcpPose.GetRotation().z.ToString() + "])" + "\n";
+                    String test = StringHelper.Format("set_tcp({0})", URControlData.testTcpPose, URControlData.testTcpPose2);
+                    test += "\n";
+                    //mPackedScript = mEncoder.GetBytes(test);
+                    //string test2 = "set_tcp(p[" + URControlData.testTcpPose.GetPosition().x.ToString() + ", " +
+                    //    URControlData.testTcpPose.GetPosition().y.ToString() + ", "
+                    //    + URControlData.testTcpPose.GetPosition().z.ToString() + ", "
+                    //    + URControlData.testTcpPose.GetRotation().x.ToString() + ", "
+                    //    + URControlData.testTcpPose.GetRotation().y.ToString() + ", "
+                    //    + URControlData.testTcpPose.GetRotation().z.ToString() + "])" + "\n";
                     mPackedScript = mEncoder.GetBytes(test);
-
-                    ////mPackedScript = mEncoder.GetBytes("set_tcp(p[" + URControlData.testTcpPose.GetPosition().x.ToString() + ", " +
-                    ////    URControlData.testTcpPose.GetPosition().y.ToString() + ", "
-                    ////    + URControlData.testTcpPose.GetPosition().z.ToString() + ", "
-                    ////    + URControlData.testTcpPose.GetRotation().x.ToString() + ", "
-                    ////    + URControlData.testTcpPose.GetRotation().y.ToString() + ", "
-                    ////    + URControlData.testTcpPose.GetRotation().z.ToString() + "])" + "\n");
-                    //mStream.Write(mPackedScript, 0, mPackedScript.Length);
-                    //Thread.Sleep(1000);
+                    mStream.Write(mPackedScript, 0, mPackedScript.Length);
+                    Thread.Sleep(1000);
                 }
             }
 

@@ -1,4 +1,5 @@
-﻿using hkrita_robot.Network;
+﻿using hkrita_robot.Maths;
+using hkrita_robot.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,8 @@ namespace hkrita_robot
 
         public static void Main(string[] args)
         {
-
             URLauncher launcher = new URLauncher();
+
         }
     }
 }

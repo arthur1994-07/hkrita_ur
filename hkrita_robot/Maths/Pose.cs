@@ -1,6 +1,7 @@
 ﻿using hkrita_robot.Extension;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,9 @@ namespace hkrita_robot.Maths
 {
     public class Pose : ICloneable
     {
+        public string defaultPattern = "#.0000000000";
         private readonly double[] mPose = new double[6];
-
+        
         // constructors
         public Pose() { }
         public Pose(double x, double y, double z, double rx, double ry, double rz) { Set(x, y, z, rx, ry, rz); }
@@ -33,7 +35,7 @@ namespace hkrita_robot.Maths
         public double[] GetPose()
         {
             double[] newArray = new double[mPose.Length];
-            mPose.CopyTo(newArray, mPose.Length);
+            mPose.CopyTo(newArray,0);
             return newArray;
         }
 
@@ -47,11 +49,29 @@ namespace hkrita_robot.Maths
         }
 
 
+
         public override bool Equals(Object o)
         {
             if (this == o) return true;
             if (!(o.GetType().IsInstanceOfType(this))) return false;
             return EqualsHelper.Equals(mPose, ((Pose) o).mPose);
+        }
+
+        public override string ToString()
+        {
+            return ToString(false);
+        }
+
+        public string ToString(Boolean milliformat)
+        {
+            double unit = milliformat ? 1000 : 1;
+            return StringHelper.Format("p{6}[{0}, {1}, {2}, {3}, {4}, {5}] ",
+                (mPose[0] * unit).ToString(defaultPattern),
+                (mPose[1] * unit).ToString(defaultPattern),
+                (mPose[2] * unit).ToString(defaultPattern),
+                (mPose[3] * unit).ToString(defaultPattern), (mPose[4] * unit).ToString(defaultPattern), (mPose[5] * unit).ToString(defaultPattern),
+                milliformat ? "m" : ""
+                );
         }
 
 
