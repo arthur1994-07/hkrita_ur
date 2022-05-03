@@ -134,7 +134,7 @@
   <ItemGroup>
     <Compile Include="API\Constants.cs" />
     <Compile Include="Container\Triplet.cs" />
-    <Compile Include="Container\ReadContainer.cs" />
+    <Compile Include="UR\accessor\ReadContainer.cs" />
     <Compile Include="Container\Pair.cs" />
     <Compile Include="Extension\EqualsHelper.cs" />
     <Compile Include="Extension\ObservableExtension.cs" />
@@ -150,7 +150,6 @@
     <Compile Include="Network\URLauncher.cs" />
     <Compile Include="Network\URStreamData.cs" />
     <Compile Include="CodeTest\AsyncTest.cs" />
-    <Compile Include="CodeTest\FunctionalInterface.cs" />
     <Compile Include="Extension\ArraysHelper.cs" />
     <Compile Include="Extension\StringHelper.cs" />
     <Compile Include="Maths\Vector3D.cs" />

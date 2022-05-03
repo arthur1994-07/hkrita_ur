@@ -12,9 +12,10 @@ namespace hkrita_robot.Container
 
         public ReadContainer(T type)
         {
-
+            mGeneric = type;
         }
 
-
+       
+        
     }
 }
