@@ -36,24 +36,20 @@ namespace hkrita_robot.UR.control
 
         public void MoveJoint()
         {
-            throw new NotImplementedException();
         }
 
 
 
         public void SetTCP(Pose tcpOffset)
         {
-            throw new NotImplementedException();
         }
 
         public void SubmitScript(string script)
         {
-            throw new NotImplementedException();
         }
 
         public void SubmitScript()
         {
-            throw new NotImplementedException();
         }
         public object Clone()
         {

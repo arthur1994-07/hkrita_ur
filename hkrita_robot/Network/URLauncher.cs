@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using com.sun.istack.@internal.logging;
 using hkrita_robot.Container;
 using hkrita_robot.Network;
 using hkrita_robot.Network.ur;
@@ -16,30 +17,20 @@ namespace hkrita_robot.Network
 
         // the current robot arm control uses primary secondary interface 30001 30002 port
         // streaming data port using 30003/30013 (old version pre 3.5)
-
-
-        // TODO: develop RTDE using 30004 port and to get current pose 
         public URLauncher()
         {
-
             RobotSystem robot = new RobotSystem("192.168.56.101");
             robot.Connect();
             RealTimeSystem stream = new RealTimeSystem("192.168.56.101");
             //stream.Connect();
-
 
             Console.WriteLine("[INFO] Press Q to exit:");
             string stop = Convert.ToString(Console.ReadLine());
 
             if (stop == "q")
             {
-                //Console.WriteLine("Cartesian Space: Position (metres), Orientation (radian):");
                 Console.WriteLine("X: {0} | Y: {1} | Z: {2}",
                 URStreamData.C_Position[0], URStreamData.C_Position[1], URStreamData.C_Position[2]);
-
-
-                // Destroy UR {Control / Stream}
-
                 //stream.Close();
 
                 robot.Close();
