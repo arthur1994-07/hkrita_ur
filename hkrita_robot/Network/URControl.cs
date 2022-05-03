@@ -41,37 +41,36 @@ namespace hkrita_robot.Network
 
                     //Instruction 1(Home Position): Joint Input Command, Move Joint Interpolation
                     //Get Bytes from String
-                    mPackedScript = mEncoder.GetBytes("movej([" + URControlData.J_Orientation[0].ToString() + "," + URControlData.J_Orientation[1].ToString() + "," + URControlData.J_Orientation[2].ToString() + ","
-                                                          + URControlData.J_Orientation[3].ToString() + "," + URControlData.J_Orientation[4].ToString() + "," + URControlData.J_Orientation[5].ToString() + "],"
-                                                           + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")" + "\n");
-                    mStream.Write(mPackedScript, 0, mPackedScript.Length);
-                    Thread.Sleep(3000);
+                    //mPackedScript = mEncoder.GetBytes("movej([" + URControlData.J_Orientation[0].ToString() + "," + URControlData.J_Orientation[1].ToString() + "," + URControlData.J_Orientation[2].ToString() + ","
+                    //                                      + URControlData.J_Orientation[3].ToString() + "," + URControlData.J_Orientation[4].ToString() + "," + URControlData.J_Orientation[5].ToString() + "],"
+                    //                                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")" + "\n");
+                    //mStream.Write(mPackedScript, 0, mPackedScript.Length);
+                    //Thread.Sleep(3000);
 
-                    string bigMoveScript = "[movel(p[" + URControlData.C_Position[0].ToString() + "," + URControlData.C_Position[1].ToString() + "," + (URControlData.C_Position[2] - 0.1).ToString() + ","
-                                           + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
-                                           + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + "),"  +
-                               "movel(p[" + (URControlData.C_Position[0] - 0.1).ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + (URControlData.C_Position[2] - 0.1).ToString() + ", "
-                                           + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
-                                           + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + "),"  +
-                               "movel(p[" + (URControlData.C_Position[0] - 0.1).ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + URControlData.C_Position[2].ToString() + ", "
-                                           + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
-                                           + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + "),"  +
-                               "movel(p[" + URControlData.C_Position[0].ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + (URControlData.C_Position[2]).ToString() + ", "
-                                           + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
-                                           + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")]" + "\n";
+                    //string bigMoveScript = "[movel(p[" + URControlData.C_Position[0].ToString() + "," + URControlData.C_Position[1].ToString() + "," + (URControlData.C_Position[2] - 0.1).ToString() + ","
+                    //                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                    //                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + "),"  +
+                    //           "movel(p[" + (URControlData.C_Position[0] - 0.1).ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + (URControlData.C_Position[2] - 0.1).ToString() + ", "
+                    //                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                    //                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + "),"  +
+                    //           "movel(p[" + (URControlData.C_Position[0] - 0.1).ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + URControlData.C_Position[2].ToString() + ", "
+                    //                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                    //                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + "),"  +
+                    //           "movel(p[" + URControlData.C_Position[0].ToString() + ", " + URControlData.C_Position[1].ToString() + ", " + (URControlData.C_Position[2]).ToString() + ", "
+                    //                       + URControlData.C_Orientation[0].ToString() + "," + URControlData.C_Orientation[1].ToString() + "," + URControlData.C_Orientation[2].ToString() + "],"
+                    //                       + "a=" + URControlData.acceleration + ", v=" + URControlData.velocity + ")]" + "\n";
 
-                    mPackedScript = mEncoder.GetBytes(bigMoveScript);
-                    ////  //Send command to the robot
-                    mStream.Write(mPackedScript, 0, mPackedScript.Length);
+                    //mPackedScript = mEncoder.GetBytes(bigMoveScript);
+                    //////  //Send command to the robot
+                    //mStream.Write(mPackedScript, 0, mPackedScript.Length);
 
                     ////Wait Time(5 seconds)
-                    //String test = StringHelper.Format("set_tcp({1})", URControlData.testTcpPose, URControlData.testTcpPose2) + "\n";
-                    //mPackedScript = mEncoder.GetBytes(test);
-                    //mStream.Write(mPackedScript, 0, mPackedScript.Length);
+                    String test = StringHelper.Format("set_tcp({0})", URControlData.testTcpPose, URControlData.testTcpPose2) + "\n";
+                    mPackedScript = mEncoder.GetBytes(test);
+                    mStream.Write(mPackedScript, 0, mPackedScript.Length);
                     Thread.Sleep(3000);
                 }
             }
-
             catch (SocketException e)
             {
                 Console.WriteLine("SocketException: {0}", e);

@@ -49,7 +49,6 @@ namespace hkrita_robot.Network.ur
         
         private void InternalConnect()
         {
-            bool success;
             mThread = new Thread(() =>
             {
                 if (mThread.IsAlive) Console.WriteLine("Stream Connection via {0} is established: ", K_STREAM_PORT);

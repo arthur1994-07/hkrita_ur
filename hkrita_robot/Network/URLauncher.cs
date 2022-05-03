@@ -23,18 +23,10 @@ namespace hkrita_robot.Network
         {
 
             RobotSystem robot = new RobotSystem("192.168.56.101");
-            //robot.Connect(true);
+            robot.Connect();
             RealTimeSystem stream = new RealTimeSystem("192.168.56.101");
             //stream.Connect();
 
-            //NetworkClient network = new NetworkClient("192.168.56.101", 30013);
-            //network.Connect(true);
-
-            //URStream urStream = new URStream();
-            //urStream.Connect();
-            URControl urControl = new URControl();
-            urControl.Connect();
-            //urControl.Connect();
 
             Console.WriteLine("[INFO] Press Q to exit:");
             string stop = Convert.ToString(Console.ReadLine());
@@ -50,12 +42,7 @@ namespace hkrita_robot.Network
 
                 //stream.Close();
 
-                //robot.Close();
-                //network.CloseThread();
-
-                //urStream.Destroy();
-
-                urControl.Destroy();
+                robot.Close();
 
                 // Application quit
                 Environment.Exit(0);

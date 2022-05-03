@@ -11,29 +11,26 @@ namespace hkrita_robot.UR
 {
     public class RobotSystem
     {
-        private readonly static int NORMAL_PORT = 30003;
-        private readonly static int STREAM_PORT = 30013;
+        private readonly static int NORMAL_PORT = 30002;
             
         private readonly string mAddress;
         private Thread mThread;
         private Boolean mExitThread;
         private Boolean mClosed; 
-        private NetworkClient mNetworkClient; 
-
+        private NetworkClient mNetworkClient;
+        private bool mStreamData = false;
 
         public RobotSystem(string ipAddress)
         {
             mAddress = ipAddress;
-            mNetworkClient = new NetworkClient(mAddress, STREAM_PORT);
+            mNetworkClient = new NetworkClient(mAddress, NORMAL_PORT);
         }
 
-        public bool Connect(bool streamData)
+        public void Connect()
         {
             try
             {
-                bool success = InternalConnect(streamData);
-                if (!success) Close();
-                return success;
+                InternalConnect();
             }
             catch(Exception e)
             {
@@ -47,22 +44,18 @@ namespace hkrita_robot.UR
             CloseThread();
         }
 
-        private bool InternalConnect(bool streamData)
+        private void InternalConnect()
         {
-            Close();
-            bool success;           
             mThread = new Thread(() =>
             {
                 Console.WriteLine("Robot Connection {0} is established: " , mAddress);
-                mNetworkClient.Connect(streamData);
+                mNetworkClient.Connect(mStreamData);
             });
        
             mClosed = false;
 
             mThread.IsBackground = true;
             mThread.Start();
-
-            return true;
         }
 
         private void CloseThread()
