@@ -52,8 +52,8 @@ namespace hkrita_robot.Network.script
         {
             mPose.Set(pose);
             double[] poseVec = pose.GetPose();
-            string poseStr = StringHelper.Format("p[{0},{1},{2},{3},{4},{5}]".
-                )
+            //string poseStr = StringHelper.Format("p[{0},{1},{2},{3},{4},{5}]".
+            //    )
 
         }
     }
