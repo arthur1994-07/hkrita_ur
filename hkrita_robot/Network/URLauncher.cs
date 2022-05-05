@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using com.sun.istack.@internal.logging;
 using hkrita_robot.Container;
+using hkrita_robot.Maths;
 using hkrita_robot.Network;
 using hkrita_robot.Network.ur;
 using hkrita_robot.UR;
+using hkrita_robot.UR.accessor;
 
 namespace hkrita_robot.Network
 {
@@ -21,7 +23,7 @@ namespace hkrita_robot.Network
         {
             RobotSystem robot = new RobotSystem("192.168.56.101");
             robot.Connect();
-            RealTimeSystem stream = new RealTimeSystem("192.168.56.101");
+            //RealTimeSystem stream = new RealTimeSystem("192.168.56.101");
             //stream.Connect();
 
             Console.WriteLine("[INFO] Press Q to exit:");

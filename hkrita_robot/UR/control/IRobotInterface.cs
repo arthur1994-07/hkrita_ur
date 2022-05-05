@@ -20,6 +20,6 @@ namespace hkrita_robot.UR.control
         void SetTCP(Pose tcpOffset);
         void SubmitScript(String script);
         void SubmitScript();
-
+        Pose GetTcp(); 
     }
 }

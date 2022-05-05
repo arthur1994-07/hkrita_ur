@@ -1,5 +1,6 @@
 ﻿using hkrita_robot.Network;
 using hkrita_robot.Network.ur;
+using hkrita_robot.Network.ur.internalData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,16 @@ namespace hkrita_robot.UR
         private Boolean mClosed; 
         private NetworkClient mNetworkClient;
         private bool mStreamData = false;
+        private InternalRobotData mData = new InternalRobotData();
 
         public RobotSystem(string ipAddress)
         {
             mAddress = ipAddress;
             mNetworkClient = new NetworkClient(mAddress, NORMAL_PORT);
         }
+
+
+        public IRobotData GetData() { return mData; }
 
         public void Connect()
         {

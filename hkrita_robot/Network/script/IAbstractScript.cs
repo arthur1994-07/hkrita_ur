@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hkrita_robot.UR
+namespace hkrita_robot.Network.script
 {
-    public interface IRobotData
+    public interface IAbstractScript
     {
-
+        string getScript();
     }
 }

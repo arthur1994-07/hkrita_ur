@@ -1,5 +1,6 @@
 ﻿using hkrita_robot.Extension;
 using hkrita_robot.Maths;
+using hkrita_robot.Network.script;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,9 @@ namespace hkrita_robot.UR.control
 
         public void MoveLocation(Pose newLocation, double acceleration, double speed)
         {
-            StringHelper writer = new StringHelper();
-            throw new NotImplementedException();
+            Console.WriteLine("Moving robot with location {0}, acc = {1}, speed = {2}",
+                newLocation, acceleration, speed);
+
         }
 
 
@@ -42,6 +44,9 @@ namespace hkrita_robot.UR.control
 
         public void SetTCP(Pose tcpOffset)
         {
+            Console.WriteLine("Setting tcp offset for robot {0}", tcpOffset);
+            IAbstractScript script = new SetTCPScript(tcpOffset);
+            
         }
 
         public void SubmitScript(string script)
@@ -54,6 +59,15 @@ namespace hkrita_robot.UR.control
         public object Clone()
         {
             throw new NotImplementedException();
+        }
+
+        public Pose GetTcp()
+        {
+            Console.WriteLine("Request to get tcp offset action");
+            Pose pose = mRobot.GetData().GetTCPPose().Get();
+            if (pose == null) return null;
+            Console.WriteLine("Request to get tcp offset action {0} is successfully", pose);
+            return pose;
         }
 
     }
