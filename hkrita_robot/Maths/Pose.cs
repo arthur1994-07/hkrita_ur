@@ -77,7 +77,7 @@ namespace hkrita_robot.Maths
 
         public object Clone()
         {
-            throw new NotImplementedException();
+            return new Pose(this);
         }
     }
 }

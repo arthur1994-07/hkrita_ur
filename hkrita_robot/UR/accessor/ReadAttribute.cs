@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace hkrita_robot.UR.accessor
 {
-    public class ReadAttribute<T>
+    public class ReadAttribute<T>  
+    
     {
 
         private class AutoChangeObservable : IObservable<T>
@@ -33,20 +34,23 @@ namespace hkrita_robot.UR.accessor
         private ReaderWriterLock mLock = new ReaderWriterLock();
         private T mObject;
         private TypeInfo mType;
-
         public ReadAttribute(TypeInfo type,T genericObject)
         {
             mType = type;
-            mObject = genericObject;    
+            mObject = genericObject;
         }
         public T Get()
         {
-            lock (mLock)
+             lock (mLock)
             {
                 try
                 {
-                    if (mObject == null) return default;
-                    MethodInfo method = mType.GetDeclaredMethod("clone");
+                    //if (mObject == null) return default;
+                    MethodInfo[] methods = mType.GetMethods();
+
+                    MethodInfo method = mType.GetDeclaredMethod("Clone");
+
+
                     return (T) method.Invoke(mObject, null);
                 }
                 catch (MethodAccessException ex) 

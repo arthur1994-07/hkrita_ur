@@ -8,9 +8,11 @@ using com.sun.istack.@internal.logging;
 using hkrita_robot.Container;
 using hkrita_robot.Maths;
 using hkrita_robot.Network;
+using hkrita_robot.Network.script;
 using hkrita_robot.Network.ur;
 using hkrita_robot.UR;
 using hkrita_robot.UR.accessor;
+using hkrita_robot.UR.control;
 
 namespace hkrita_robot.Network
 {
@@ -21,8 +23,12 @@ namespace hkrita_robot.Network
         // streaming data port using 30003/30013 (old version pre 3.5)
         public URLauncher()
         {
-            RobotSystem robot = new RobotSystem("192.168.56.101");
-            robot.Connect();
+            //RobotSystem robot = new RobotSystem("192.168.56.101");
+            //robot.Connect();
+            RobotController mRobot = new RobotController("192.168.56.101");
+            mRobot.Connect();
+            mRobot.GetRobotLocation();
+            
             //RealTimeSystem stream = new RealTimeSystem("192.168.56.101");
             //stream.Connect();
 
@@ -35,7 +41,7 @@ namespace hkrita_robot.Network
                 URStreamData.C_Position[0], URStreamData.C_Position[1], URStreamData.C_Position[2]);
                 //stream.Close();
 
-                robot.Close();
+                //robot.Close();
 
                 // Application quit
                 Environment.Exit(0);

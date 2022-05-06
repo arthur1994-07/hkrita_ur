@@ -16,10 +16,22 @@ namespace hkrita_robot.Network.script
 
         public enum Type
         {
-            l,
-            j,
-            p
+            L = 'l',
+            J = 'j',
+            P = 'p'
+
+        };
+        public Type type;
+
+        private char mChar;
+
+        public char getChar(Type t) 
+        {
+            type = (Type)Enum.Parse(typeof(Type), t.ToString());
+            mChar = (char)type; 
+            return mChar; 
         }
+
 
         public readonly static double[] preferred_speed = new double[] { 0.25, 0.2, 0.75, 0.1, 0.8, 2 };
         public readonly static double[] preferred_acceleration = new double[] { 1.2, 1, 1.5, 0.5, 1, 3 };
@@ -33,7 +45,7 @@ namespace hkrita_robot.Network.script
         private string mScript = "";
         protected Pose mPose = new Pose();
 
-        //public MoveScript(Pose pose) { this(pose, Type.l); }
+        //public MoveScript(Pose pose) { this(pose, Type.L); }
 
         public MoveScript(Pose pose, Type type)
         {
@@ -41,15 +53,19 @@ namespace hkrita_robot.Network.script
                 blend_radius);
         }
 
-
-
-
-
-
-        public string getScript()
+        public MoveScript(Pose pose, Type type, int preferSet)
         {
-            throw new NotImplementedException();
+            preferSet = Math.Min(Math.Max(preferSet, 0), preferred_acceleration.Length -1);
+            Set(pose, type, preferred_acceleration[preferSet], preferred_speed[preferSet], blend_radius);
         }
+        public MoveScript(Pose pose, Type type, double acceleration, double speed, double blendRadius)
+        {
+            Set(pose, type, acceleration, speed, blendRadius);
+        }
+
+
+        public string getScript() { return mScript; }
+      
 
 
 
@@ -66,17 +82,17 @@ namespace hkrita_robot.Network.script
             string velocityString = speed < Constants.K_numerical_epsilon ? "" :
                 StringHelper.Format("V = {0}", speed.ToString(format_4));
 
-            if (type == Type.j)
+            if (type == Type.J)
             {
-                mScript = StringHelper.Format("movej(get_inverse_kin{0}, get_actual_joint_positions()) {1}{2})",
+                mScript = StringHelper.Format("movej(get_inverse_kin{0}, get_actual_joint_positions()), a={1}, v={2})",
                     poseStr, accelerationString, velocityString);
             }
             else
             {
-                String addString = type != Type.p || blendRadius < Constants.K_Double_epsilon ? "" :
+                String addString = type != Type.P || blendRadius < Constants.K_Double_epsilon ? "" :
                     StringHelper.Format("r={0}", blendRadius.ToString(format_4));
-                //mScript = StringHelper.Format("move{0}({1}{2}{3}{4}",
-                //    )
+                mScript = StringHelper.Format("move{0}({1}, a={2}, v={3},{4})",
+                    getChar(type), poseStr, acceleration.ToString(format_4), speed.ToString(format_4), addString);
             }
         }
     }

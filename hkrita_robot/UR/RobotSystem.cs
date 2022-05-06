@@ -29,7 +29,7 @@ namespace hkrita_robot.UR
         }
 
 
-        public IRobotData GetData() { return mData; }
+        public IRobotData GetData()  { return mData; }
 
         public void Connect()
         {

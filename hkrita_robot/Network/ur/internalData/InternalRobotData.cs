@@ -16,9 +16,9 @@ namespace hkrita_robot.Network.ur.internalData
 
         public ReadAttribute<Pose> robotPose;
         public ReadAttribute<Pose> tcpPose;
-        public ReadAttribute<bool> isProgramRunning;
+        //public ReadAttribute<Boolean> isProgramRunning;
 
-        public ReadAttribute<bool> GetIsProgramRunning() {  return isProgramRunning; }  
+        //public ReadAttribute<Boolean> GetIsProgramRunning() {  return isProgramRunning; }  
         public ReadAttribute<Pose> GetRobotPose() { return robotPose; }
         public ReadAttribute<Pose> GetTCPPose() { return tcpPose; } 
 
@@ -26,7 +26,7 @@ namespace hkrita_robot.Network.ur.internalData
         {
             robotPose = new ReadAttribute<Pose>(typeof(Pose).GetTypeInfo(), null);
             tcpPose = new ReadAttribute<Pose>(typeof(Pose).GetTypeInfo(), null);
-            isProgramRunning = new ReadAttribute<bool>(typeof(bool).GetTypeInfo(), false);
+            //isProgramRunning = new ReadAttribute<Boolean>(typeof(Boolean).GetTypeInfo(), false);
         }
     }
 }

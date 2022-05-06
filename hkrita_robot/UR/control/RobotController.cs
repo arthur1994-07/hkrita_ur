@@ -25,6 +25,19 @@ namespace hkrita_robot.UR.control
 
 
 
+        public RobotController(string robotAddress)
+        {
+            mRobotAddress = robotAddress;
+            mRobot = new RobotSystem(mRobotAddress);
+        }
+
+        public void Connect()
+        {
+            Console.WriteLine("Connect to robot with address {0} ", mRobotAddress);
+            mRobot.Connect();
+        }
+
+
 
 
         public void MoveLocation(Pose newLocation, double acceleration, double speed)
@@ -59,6 +72,14 @@ namespace hkrita_robot.UR.control
         public object Clone()
         {
             throw new NotImplementedException();
+        }
+
+        public Pose GetRobotLocation()
+        {
+            Console.WriteLine("Getting robot location");
+            Pose pose = mRobot.GetData().GetRobotPose().Get();
+            Console.WriteLine("robot location retrieved : {0}", pose);
+            return pose;
         }
 
         public Pose GetTcp()
