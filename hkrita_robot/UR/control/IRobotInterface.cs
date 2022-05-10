@@ -22,7 +22,7 @@ namespace hkrita_robot.UR.control
         void SubmitScript();
         Pose GetTcp();
         Pose GetRobotLocation();
-
+        SixJointAngles GetRobotJointAngle();
 
     }
 }

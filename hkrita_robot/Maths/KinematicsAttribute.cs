@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hkrita_robot.Network.script
+namespace hkrita_robot.Maths
 {
-    public interface IAbstractScript
+    public class KinematicsAttribute
     {
-        string GetScript();
+
     }
 }

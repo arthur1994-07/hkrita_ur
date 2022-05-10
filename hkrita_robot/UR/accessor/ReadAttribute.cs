@@ -15,7 +15,7 @@ namespace hkrita_robot.UR.accessor
 
         private class AutoChangeObservable : IObservable<T>
         {
-            public void set()
+            public void Set()
             {
                 lock(this)
                 {

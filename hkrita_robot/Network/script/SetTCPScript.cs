@@ -20,7 +20,7 @@ namespace hkrita_robot.Network.script
         public void Set(Pose tcpPose) { mTcpPose.Set(tcpPose); }
 
 
-        public string getScript()
+        public string GetScript()
         {
             return StringHelper.Format("set_tcp({0})", mTcpPose) + "\n";
         }

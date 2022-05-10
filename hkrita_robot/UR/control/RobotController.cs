@@ -29,6 +29,7 @@ namespace hkrita_robot.UR.control
         {
             mRobotAddress = robotAddress;
             mRobot = new RobotSystem(mRobotAddress);
+           
         }
 
         public void Connect()
@@ -89,6 +90,11 @@ namespace hkrita_robot.UR.control
             if (pose == null) return null;
             Console.WriteLine("Request to get tcp offset action {0} is successfully", pose);
             return pose;
+        }
+
+        public SixJointAngles GetRobotJointAngle()
+        {
+            return null;
         }
 
     }

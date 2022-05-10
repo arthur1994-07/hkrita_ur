@@ -47,6 +47,10 @@ namespace hkrita_robot.Extension
         {
             String Next();
         }
+        public static string MySubString(string input, int startIndex, int endIndex)
+        {
+            return input.Substring(startIndex, endIndex - startIndex);
+        }
 
         public static string GenerateUniqueName(string given, Request requester)
         {
@@ -72,33 +76,6 @@ namespace hkrita_robot.Extension
                 prettyName = Format("{0}_{1}", given, k);
             }
         }
-
-        public static string FormatString(String inputString, params Object[] param)
-        {
-           
-            // e.g. StringHelper.FormatString("set_tcp({0})", mPose);
-
-            // access the arg index inside the string "set_tcp({0}) ---> {0}
-
-            // e.g. start ---> { at 8
-            //      end ----> } at 10 
-            StringBuilder builder = new StringBuilder();
-            int offset = 0;
-
-            int start = inputString.IndexOf("{");
-            int end = inputString.IndexOf("}", start + 1);
-            //int next = inputString.IndexOf('{', start + 1);
-                //Console.WriteLine(inputString.Length);
-
-            // get the length of the index value
-            int index = end - (start + 1);
-            string arg = inputString.Substring(start+1, index);
-            string value = GetArgIndex(arg, param);
-            builder.Append(value);
-            
-            return builder.ToString();
-        }
-
 
         public static string Format(String formatMsg, params Object[] param)
         {
@@ -166,9 +143,6 @@ namespace hkrita_robot.Extension
             return obj.ToString();
         }
 
-        private static string MySubString(string input, int startIndex, int endIndex)
-        {
-            return input.Substring(startIndex, endIndex - startIndex);
-        }
+
     }
 }

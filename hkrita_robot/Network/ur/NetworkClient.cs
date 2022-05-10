@@ -53,6 +53,7 @@ namespace hkrita_robot.Network.ur
 
         // Client Connection 
         // Connection requires TcpClient and NetworkStream 
+        // TODO: add action delegate as input argument
         private void InternalConnect(bool readStream)
         {
             try

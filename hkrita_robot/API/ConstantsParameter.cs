@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace hkrita_robot.API
 {
-    public class Constants
+    public class ConstantsParameter
     {
         public static readonly double K_Double_epsilon = Double.MinValue;
         public static readonly double K_Float_epsilon = float.MinValue;

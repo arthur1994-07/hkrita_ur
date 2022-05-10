@@ -162,11 +162,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Constants.cs" />
+    <Compile Include="API\ConstantsParameter.cs" />
     <Compile Include="Container\Triplet.cs" />
+    <Compile Include="Maths\KinematicsAttribute.cs" />
+    <Compile Include="Maths\SixJointAngles.cs" />
+    <Compile Include="Network\script\JointAngleScript.cs" />
     <Compile Include="Network\script\MoveScript.cs" />
     <Compile Include="Network\script\SetTCPScript.cs" />
     <Compile Include="Network\ur\internalData\InternalRobotData.cs" />
+    <Compile Include="Recorder\RecordedData.cs" />
     <Compile Include="UR\accessor\ReadAttribute.cs" />
     <Compile Include="UR\accessor\ReadContainer.cs" />
     <Compile Include="Container\Pair.cs" />
@@ -209,6 +213,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Misc\" />
+    <Folder Include="tech\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

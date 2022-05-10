@@ -64,7 +64,7 @@ namespace hkrita_robot.Network.script
         }
 
 
-        public string getScript() { return mScript; }
+        public string GetScript() { return mScript; }
       
 
 
@@ -77,9 +77,9 @@ namespace hkrita_robot.Network.script
             string poseStr = StringHelper.Format("p[{0},{1},{2},{3},{4},{5}]",
                 poseVec[0].ToString(format_6), poseVec[1].ToString(format_6), poseVec[2].ToString(format_6),
                 poseVec[3].ToString(format_4), poseVec[4].ToString(format_4), poseVec[5].ToString(format_4));
-            string accelerationString = acceleration < Constants.K_numerical_epsilon ? "" :
+            string accelerationString = acceleration < ConstantsParameter.K_numerical_epsilon ? "" :
                 StringHelper.Format("a = {0}", acceleration.ToString(format_4));
-            string velocityString = speed < Constants.K_numerical_epsilon ? "" :
+            string velocityString = speed < ConstantsParameter.K_numerical_epsilon ? "" :
                 StringHelper.Format("V = {0}", speed.ToString(format_4));
 
             if (type == Type.J)
@@ -89,7 +89,7 @@ namespace hkrita_robot.Network.script
             }
             else
             {
-                String addString = type != Type.P || blendRadius < Constants.K_Double_epsilon ? "" :
+                String addString = type != Type.P || blendRadius < ConstantsParameter.K_Double_epsilon ? "" :
                     StringHelper.Format("r={0}", blendRadius.ToString(format_4));
                 mScript = StringHelper.Format("move{0}({1}, a={2}, v={3},{4})",
                     getChar(type), poseStr, acceleration.ToString(format_4), speed.ToString(format_4), addString);

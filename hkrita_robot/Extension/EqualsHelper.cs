@@ -10,7 +10,7 @@ namespace hkrita_robot.Extension
     {
 
         public static bool Equals(int v1, int v2) {  return v1 == v2; }  
-        public static bool Equals(double v1, double v2) { return Equals(v1, v2, Constants.K_numerical_epsilon); }
+        public static bool Equals(double v1, double v2) { return Equals(v1, v2, ConstantsParameter.K_numerical_epsilon); }
 
         public static bool Equals<T>(Task v1, Task v2)
         {
@@ -43,7 +43,7 @@ namespace hkrita_robot.Extension
             return true;
         }
 
-        public static bool Equals(double[] v1, double[] v2) { return Equals(v1, v2, Constants.K_numerical_epsilon); }
+        public static bool Equals(double[] v1, double[] v2) { return Equals(v1, v2, ConstantsParameter.K_numerical_epsilon); }
 
         public static bool Equals<T>(T[] v1, T[] v2)
         {
