@@ -19,12 +19,11 @@ namespace hkrita_robot
             //URLauncher launcher = new URLauncher();
             RobotController robot = new RobotController("192.168.56.101");
             robot.SetTCP(pose);
-            robot.SubmitScript();
 
             robot.SetAction((s) => 
             {
-                Console.WriteLine(s);
-            }, null);
+                Console.WriteLine("obtained script: "+ s);
+            });
         }
     }
 }

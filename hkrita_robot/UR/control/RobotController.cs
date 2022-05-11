@@ -23,6 +23,7 @@ namespace hkrita_robot.UR.control
         private readonly string mRobotAddress;
         private RobotSystem mRobot;
         private Action<string> mAction;
+        private string mScript;
         public RobotController(string robotAddress)
         {
             mRobotAddress = robotAddress;
@@ -42,8 +43,7 @@ namespace hkrita_robot.UR.control
             Console.WriteLine("Moving robot with location {0}, acc = {1}, speed = {2}",
                 newLocation, acceleration, speed);
             IAbstractScript script = new MoveScript(newLocation, MoveScript.Type.L, acceleration, speed);
-            string moveScript = script.GetScript();
-            Console.WriteLine("");
+            mScript = script.GetScript();
 
         }
 
@@ -52,23 +52,28 @@ namespace hkrita_robot.UR.control
         {
             Console.WriteLine("Setting tcp offset for robot {0}", tcpOffset);
             IAbstractScript script = new SetTCPScript(tcpOffset);
-            string setScript = script.GetScript();
+            //access this variable in callback 
+            mScript = script.GetScript();
         }
 
-        public Action<string> SubmitScript()
+        public void GetScriptCallback()
         {
-            // submit script and connect client to run script function as one single thread
-            return (s) =>
+            Action<string> callback = (s) =>
             {
-                mRobot.Connect();
-                Console.WriteLine(s);
+                   
             };
         }
 
-        public RobotController SetAction(Action<string> action, string script)
+        public void SubmitScript()
         {
-            action.Invoke(script);
-            return this;
+            // submit script and connect client to run script function as one single thread
+            
+        }
+
+        public void SetAction(Action<string> action)
+        {
+
+            action.Invoke(mScript);
         }
 
         public void TestAction()
