@@ -14,8 +14,6 @@ namespace hkrita_robot.Network.ur
     public class NetworkClient
     {
         private static int timeStep = 8;
-        private static readonly int K_CONNECT_TIMEOUT = 3;
-        private static readonly int K_SOCKET_TIMEOUT = 100;
         private const byte mFirstPacketSize = 4;
         private const byte mOffset = 8;
 
@@ -27,7 +25,7 @@ namespace hkrita_robot.Network.ur
         private UTF8Encoding mEncoder = new UTF8Encoding();
         private string mAddress;
         private int mPort;
-
+        private Action<string> mCallback;
         public NetworkClient(String ipAddress, int port)
         {
             mAddress = ipAddress;
@@ -43,7 +41,6 @@ namespace hkrita_robot.Network.ur
         {
             if (mTCPClient.Connected == true)
             {
-                //Console.WriteLine("Still connected");
                 mStream.Close();
                 mTCPClient.Close();
                 Console.WriteLine("Connection Status:" + mTCPClient.Connected);
@@ -53,7 +50,7 @@ namespace hkrita_robot.Network.ur
 
         // Client Connection 
         // Connection requires TcpClient and NetworkStream 
-        // TODO: add action delegate as input argument
+        // TODO: add action delegate to use client and stream as input argument
         private void InternalConnect(bool readStream)
         {
             try
@@ -62,15 +59,19 @@ namespace hkrita_robot.Network.ur
                 mStream = mTCPClient.GetStream();
                 var t = new Stopwatch();
 
-
                 while (mExitThread == false)
                 {
+                    // Client connected 
                     if (readStream == false)
                     {
+
                         String test = StringHelper.Format("set_tcp({0})", URControlData.testTcpPose, URControlData.testTcpPose2) + "\n";
+
+
                         mBuffer = mEncoder.GetBytes(test);
                         mStream.Write(mBuffer, 0, mBuffer.Length);
                         Thread.Sleep(1000);
+
                     }
 
                     // Read stream data

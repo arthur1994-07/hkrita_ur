@@ -22,9 +22,7 @@ namespace hkrita_robot.UR.control
 
         private readonly string mRobotAddress;
         private RobotSystem mRobot;
-
-
-
+        private Action<string> mAction;
         public RobotController(string robotAddress)
         {
             mRobotAddress = robotAddress;
@@ -39,41 +37,49 @@ namespace hkrita_robot.UR.control
         }
 
 
-
-
         public void MoveLocation(Pose newLocation, double acceleration, double speed)
         {
             Console.WriteLine("Moving robot with location {0}, acc = {1}, speed = {2}",
                 newLocation, acceleration, speed);
+            IAbstractScript script = new MoveScript(newLocation, MoveScript.Type.L, acceleration, speed);
+            string moveScript = script.GetScript();
+            Console.WriteLine("");
 
         }
-
-
-
-        public void MoveJoint()
-        {
-        }
-
 
 
         public void SetTCP(Pose tcpOffset)
         {
             Console.WriteLine("Setting tcp offset for robot {0}", tcpOffset);
             IAbstractScript script = new SetTCPScript(tcpOffset);
-            
+            string setScript = script.GetScript();
         }
 
-        public void SubmitScript(string script)
+        public Action<string> SubmitScript()
         {
+            // submit script and connect client to run script function as one single thread
+            return (s) =>
+            {
+                mRobot.Connect();
+                Console.WriteLine(s);
+            };
         }
 
-        public void SubmitScript()
+        public RobotController SetAction(Action<string> action, string script)
         {
+            action.Invoke(script);
+            return this;
         }
-        public object Clone()
+
+        public void TestAction()
         {
-            throw new NotImplementedException();
+            Action<int, int> val = (x, y) =>
+            {
+                Console.WriteLine(x + y);
+            };
+            val(10, 20);
         }
+
 
         public Pose GetRobotLocation()
         {
@@ -92,10 +98,12 @@ namespace hkrita_robot.UR.control
             return pose;
         }
 
-        public SixJointAngles GetRobotJointAngle()
-        {
-            return null;
-        }
+        public SixJointAngles GetRobotJointAngle() { return null; }
+        public void MoveJoint() {}
 
+        public object Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

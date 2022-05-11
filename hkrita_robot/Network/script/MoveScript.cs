@@ -19,7 +19,6 @@ namespace hkrita_robot.Network.script
             L = 'l',
             J = 'j',
             P = 'p'
-
         };
         public Type type;
 
@@ -63,6 +62,10 @@ namespace hkrita_robot.Network.script
             Set(pose, type, acceleration, speed, blendRadius);
         }
 
+        public MoveScript(Pose pose, Type type, double acceleration, double speed)
+        {
+            Set(pose, type, acceleration, speed, blend_radius);
+        }
 
         public string GetScript() { return mScript; }
       

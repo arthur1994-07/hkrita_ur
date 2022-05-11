@@ -10,9 +10,7 @@ using System.Threading.Tasks;
 namespace hkrita_robot.UR.accessor
 {
     public class ReadAttribute<T>  
-    
     {
-
         private class AutoChangeObservable : IObservable<T>
         {
             public void Set()
@@ -63,7 +61,5 @@ namespace hkrita_robot.UR.accessor
                 }
             }
         }
-
-
     }
 }

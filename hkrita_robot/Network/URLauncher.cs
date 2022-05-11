@@ -28,6 +28,10 @@ namespace hkrita_robot.Network
             RobotController mRobot = new RobotController("192.168.56.101");
             mRobot.Connect();
             mRobot.GetRobotLocation();
+
+
+            Pose p = new Pose(0, 0.1, 0.1, 0, 0, 0);
+            mRobot.MoveLocation(p, 0.1, 0.1);
             
             //RealTimeSystem stream = new RealTimeSystem("192.168.56.101");
             //stream.Connect();
