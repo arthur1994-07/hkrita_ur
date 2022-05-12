@@ -148,6 +148,14 @@ namespace hkrita_robot.CodeTest
             Console.WriteLine("method call count: " + count);
 
         }
+        public void TestAction()
+        {
+            Action<int, int> val = (x, y) =>
+            {
+                Console.WriteLine(x + y);
+            };
+            val(10, 20);
+        }
     }
 
 }

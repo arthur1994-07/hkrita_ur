@@ -164,6 +164,7 @@
   <ItemGroup>
     <Compile Include="API\ConstantsParameter.cs" />
     <Compile Include="Container\SingleContainer.cs" />
+    <Compile Include="Extension\ActionHelper.cs" />
     <Compile Include="Maths\KinematicsAttribute.cs" />
     <Compile Include="Maths\SixJointAngles.cs" />
     <Compile Include="Network\script\JointAngleScript.cs" />

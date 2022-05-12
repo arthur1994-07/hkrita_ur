@@ -83,11 +83,16 @@ namespace hkrita_robot.Network.script
             string accelerationString = acceleration < ConstantsParameter.K_numerical_epsilon ? "" :
                 StringHelper.Format("a = {0}", acceleration.ToString(format_4));
             string velocityString = speed < ConstantsParameter.K_numerical_epsilon ? "" :
-                StringHelper.Format("V = {0}", speed.ToString(format_4));
+                StringHelper.Format("v = {0}", speed.ToString(format_4));
 
             if (type == Type.J)
             {
-                mScript = StringHelper.Format("movej(get_inverse_kin{0}, get_actual_joint_positions()), a={1}, v={2})",
+                mScript = StringHelper.Format("movej(get_inverse_kin({0}, get_actual_joint_positions()), a={1}, v={2})",
+                    poseStr, accelerationString, velocityString);
+            }
+            if (type == Type.L)
+            {
+                mScript = StringHelper.Format("movel({0},{1},{2})",
                     poseStr, accelerationString, velocityString);
             }
             else

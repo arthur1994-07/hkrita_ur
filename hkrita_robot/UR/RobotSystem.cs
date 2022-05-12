@@ -31,11 +31,11 @@ namespace hkrita_robot.UR
 
         public IRobotData GetData()  { return mData; }
 
-        public void Connect()
+        public void Connect(string script)
         {
             try
             {
-                InternalConnect();
+                InternalConnect(script);
             }
             catch(Exception e)
             {
@@ -49,12 +49,12 @@ namespace hkrita_robot.UR
             CloseThread();
         }
 
-        private void InternalConnect()
+        private void InternalConnect(string script)
         {
             mThread = new Thread(() =>
             {
                 Console.WriteLine("Robot Connection {0} is established: " , mAddress);
-                mNetworkClient.Connect(mStreamData);
+                mNetworkClient.Connect(mStreamData, script);
             });
        
             mClosed = false;

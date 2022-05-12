@@ -1,10 +1,12 @@
 ﻿using hkrita_robot.Extension;
 using hkrita_robot.Maths;
+using hkrita_robot.Network;
 using hkrita_robot.Network.script;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace hkrita_robot.UR.control
@@ -22,7 +24,6 @@ namespace hkrita_robot.UR.control
 
         private readonly string mRobotAddress;
         private RobotSystem mRobot;
-        private Action<string> mAction;
         private string mScript;
         public RobotController(string robotAddress)
         {
@@ -31,20 +32,14 @@ namespace hkrita_robot.UR.control
            
         }
 
-        public void Connect()
-        {
-            Console.WriteLine("Connect to robot with address {0} ", mRobotAddress);
-            mRobot.Connect();
-        }
-
 
         public void MoveLocation(Pose newLocation, double acceleration, double speed)
         {
             Console.WriteLine("Moving robot with location {0}, acc = {1}, speed = {2}",
                 newLocation, acceleration, speed);
             IAbstractScript script = new MoveScript(newLocation, MoveScript.Type.L, acceleration, speed);
-            mScript = script.GetScript();
-
+            mScript = script.GetScript() + "\n";
+            SubmitScript(mScript);
         }
 
 
@@ -54,35 +49,19 @@ namespace hkrita_robot.UR.control
             IAbstractScript script = new SetTCPScript(tcpOffset);
             //access this variable in callback 
             mScript = script.GetScript();
+            SubmitScript(mScript);
         }
 
-        public void GetScriptCallback()
+        public void SubmitScript(Action<object> action)
         {
-            Action<string> callback = (s) =>
-            {
-                   
-            };
+            ActionHelper.SetAction(action, mScript);
         }
 
-        public void SubmitScript()
+        public void SubmitScript(string script)
         {
-            // submit script and connect client to run script function as one single thread
-            
-        }
-
-        public void SetAction(Action<string> action)
-        {
-
-            action.Invoke(mScript);
-        }
-
-        public void TestAction()
-        {
-            Action<int, int> val = (x, y) =>
-            {
-                Console.WriteLine(x + y);
-            };
-            val(10, 20);
+            mRobot.Connect(mScript);
+            Thread.Sleep(3000);
+            mRobot.Close();
         }
 
 
@@ -103,9 +82,13 @@ namespace hkrita_robot.UR.control
             return pose;
         }
 
-        public SixJointAngles GetRobotJointAngle() { return null; }
-        public void MoveJoint() {}
+        public void MoveJoint(SixJointAngles newAngles, double acceleration, double speed) 
+        {
 
+        }
+
+        public SixJointAngles GetRobotJointAngle() { return null; }
+        public void Close() { mRobot.Close(); }
         public object Clone()
         {
             throw new NotImplementedException();

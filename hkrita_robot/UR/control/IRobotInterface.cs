@@ -16,7 +16,7 @@ namespace hkrita_robot.UR.control
 
 
         void MoveLocation(Pose newLocation, double acceleration, double speed);
-        void MoveJoint();
+        void MoveJoint(SixJointAngles newAngle, double acceleration, double speed);
         void SetTCP(Pose tcpOffset);
         Pose GetTcp();
         Pose GetRobotLocation();

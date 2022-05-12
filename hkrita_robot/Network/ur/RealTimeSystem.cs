@@ -52,7 +52,7 @@ namespace hkrita_robot.Network.ur
             mThread = new Thread(() =>
             {
                 if (mThread.IsAlive) Console.WriteLine("Stream Connection via {0} is established: ", K_STREAM_PORT);
-                mClient.Connect(mReadStream);
+                mClient.Connect(mReadStream, null);
             });
 
             mThread.IsBackground = true;

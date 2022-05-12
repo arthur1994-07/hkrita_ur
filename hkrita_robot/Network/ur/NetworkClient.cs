@@ -25,16 +25,15 @@ namespace hkrita_robot.Network.ur
         private UTF8Encoding mEncoder = new UTF8Encoding();
         private string mAddress;
         private int mPort;
-        private Action<string> mCallback;
         public NetworkClient(String ipAddress, int port)
         {
             mAddress = ipAddress;
             mPort = port;
         }
 
-        public void Connect(bool readStream)
+        public void Connect(bool readStream, string script)
         {
-            InternalConnect(readStream);
+            InternalConnect(readStream, script);
         }
 
         public void CloseThread()
@@ -51,7 +50,7 @@ namespace hkrita_robot.Network.ur
         // Client Connection 
         // Connection requires TcpClient and NetworkStream 
         // TODO: add action delegate to use client and stream as input argument
-        private void InternalConnect(bool readStream)
+        private void InternalConnect(bool readStream, string script)
         {
             try
             {
@@ -65,13 +64,9 @@ namespace hkrita_robot.Network.ur
                     if (readStream == false)
                     {
 
-                        String test = StringHelper.Format("set_tcp({0})", URControlData.testTcpPose, URControlData.testTcpPose2) + "\n";
-
-
-                        mBuffer = mEncoder.GetBytes(test);
+                        mBuffer = mEncoder.GetBytes(script);
                         mStream.Write(mBuffer, 0, mBuffer.Length);
                         Thread.Sleep(1000);
-
                     }
 
                     // Read stream data

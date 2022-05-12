@@ -23,16 +23,24 @@ namespace hkrita_robot.Network
         // streaming data port using 30003/30013 (old version pre 3.5)
         public URLauncher()
         {
-            //RobotSystem robot = new RobotSystem("192.168.56.101");
-            //robot.Connect();
+            Pose pose = new Pose(-0.02, 0.01, 0, 0, 0, 0.03);
+            Pose pose2 = new Pose(-0.02, 0.01, 0.2, 0, 0, 0.03);
+            Pose startPose = new Pose(-0.15, -0.412, 0.150, 0, 3.15, 0);
+            Pose targetPose = new Pose(-0.15, -0.23, 0.15, 0, 3.15, 0);
+            Pose targetPose2 = new Pose(-0.15, -0.314, 0.414, 0, 3.15, 0);
+            Pose targetPose3 = new Pose(-0.15, -0.258, 0.444, 1.169, 2.092, -0.008);
+
+
             RobotController mRobot = new RobotController("192.168.56.101");
-            mRobot.Connect();
-            mRobot.GetRobotLocation();
+            //mRobot.SetTCP(pose2);
+            mRobot.MoveLocation(startPose, 0.5, 0.5);
+            mRobot.MoveLocation(targetPose, 0.5, 0.5);
+            mRobot.MoveLocation(targetPose2, 0.5, 0.5);
+            mRobot.MoveLocation(targetPose3, 0.5, 0.5);
+
+            mRobot.GetTcp();
 
 
-            Pose p = new Pose(0, 0.1, 0.1, 0, 0, 0);
-            mRobot.MoveLocation(p, 0.1, 0.1);
-            
             //RealTimeSystem stream = new RealTimeSystem("192.168.56.101");
             //stream.Connect();
 
@@ -43,9 +51,7 @@ namespace hkrita_robot.Network
             {
                 Console.WriteLine("X: {0} | Y: {1} | Z: {2}",
                 URStreamData.C_Position[0], URStreamData.C_Position[1], URStreamData.C_Position[2]);
-                //stream.Close();
-
-                //robot.Close();
+                //mRobot.Close();
 
                 // Application quit
                 Environment.Exit(0);
