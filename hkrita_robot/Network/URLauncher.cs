@@ -41,8 +41,8 @@ namespace hkrita_robot.Network
             mRobot.GetTcp();
 
 
-            //RealTimeSystem stream = new RealTimeSystem("192.168.56.101");
-            //stream.Connect();
+            RealTimeSystem stream = new RealTimeSystem("192.168.56.101");
+            stream.Connect();
 
             Console.WriteLine("[INFO] Press Q to exit:");
             string stop = Convert.ToString(Console.ReadLine());

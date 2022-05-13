@@ -47,9 +47,8 @@ namespace hkrita_robot.Network.ur
             Thread.Sleep(100);
         }
 
-        // Client Connection 
-        // Connection requires TcpClient and NetworkStream 
-        // TODO: add action delegate to use client and stream as input argument
+        // Client Connection: connection action is performed by one single thread
+        // 
         private void InternalConnect(bool readStream, string script)
         {
             try
@@ -58,6 +57,7 @@ namespace hkrita_robot.Network.ur
                 mStream = mTCPClient.GetStream();
                 var t = new Stopwatch();
 
+                //loop thread
                 while (mExitThread == false)
                 {
                     // Client connected 
