@@ -11,7 +11,7 @@ namespace hkrita_robot.Network.ur
 {
     public class RealTimeSystem 
     {
-        private static int K_STREAM_PORT = 30013;
+        private static int K_STREAM_PORT = 30003;
         private Thread mThread;
         private RealTimeRobotData mData = new RealTimeRobotData();
         private bool mExitThread = false;
@@ -24,7 +24,15 @@ namespace hkrita_robot.Network.ur
 
         public void Connect()
         {
-            InternalConnect();
+            try
+            {
+                InternalConnect();
+            }
+            catch (Exception ex)
+            {
+                Close();
+                throw ex;
+            }
         }
 
         public void Close()
@@ -44,7 +52,7 @@ namespace hkrita_robot.Network.ur
         public void InternalCloseThread()
         {
             Stop();
-            mClient.CloseThread();
+            mClient.Close();
         }       
         
         private void InternalConnect()

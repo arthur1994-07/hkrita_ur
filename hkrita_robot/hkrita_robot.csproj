@@ -171,6 +171,7 @@
     <Compile Include="Network\script\JointAngleScript.cs" />
     <Compile Include="Network\script\MoveScript.cs" />
     <Compile Include="Network\script\SetTCPScript.cs" />
+    <Compile Include="Network\ur\internalData\UpdateRobotCartesianData.cs" />
     <Compile Include="Network\ur\ScriptExecution.cs" />
     <Compile Include="Network\ur\internalData\InternalRobotData.cs" />
     <Compile Include="Recorder\RecordedData.cs" />

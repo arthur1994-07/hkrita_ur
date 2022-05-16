@@ -59,17 +59,19 @@ namespace hkrita_robot.UR.control
 
         public void SubmitScript(string script)
         {
-            mRobot.Connect(mScript);
+            mRobot.SendScript(mScript);
             Thread.Sleep(3000);
             mRobot.Close();
         }
 
-
         public Pose GetRobotLocation()
         {
+            mRobot.ReadStream();
             Console.WriteLine("Getting robot location");
             Pose pose = mRobot.GetData().GetRobotPose().Get();
+
             Console.WriteLine("robot location retrieved : {0}", pose);
+
             return pose;
         }
 

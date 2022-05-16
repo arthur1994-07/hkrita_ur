@@ -1,4 +1,6 @@
-﻿using hkrita_robot.Network;
+﻿using hkrita_robot.Container;
+using hkrita_robot.Maths;
+using hkrita_robot.Network;
 using hkrita_robot.Network.ur;
 using hkrita_robot.Network.ur.internalData;
 using System;
@@ -19,6 +21,7 @@ namespace hkrita_robot.UR
         private Boolean mExitThread;
         private Boolean mClosed; 
         private NetworkClient mNetworkClient;
+        private RealTimeSystem mRealTimeClient;
         private bool mStreamData = false;
         private InternalRobotData mData = new InternalRobotData();
 
@@ -26,18 +29,32 @@ namespace hkrita_robot.UR
         {
             mAddress = ipAddress;
             mNetworkClient = new NetworkClient(mAddress, NORMAL_PORT);
+            mRealTimeClient = new RealTimeSystem(mAddress);
         }
 
 
         public IRobotData GetData()  { return mData; }
 
-        public void Connect(string script)
+        public void SendScript(string script)
         {
             try
             {
-                InternalConnect(script);
+                InternalSendScript(script);
             }
             catch(Exception e)
+            {
+                Close();
+                throw e;
+            }
+        }
+        public void ReadStream()
+        {
+            try
+            {
+                //InternalReadStream();
+                mRealTimeClient.Connect();
+            }
+            catch (Exception e)
             {
                 Close();
                 throw e;
@@ -49,16 +66,29 @@ namespace hkrita_robot.UR
             CloseThread();
         }
 
-        private void InternalConnect(string script)
+        private void InternalReadStream()
+        {
+            mThread = new Thread(() =>
+            {
+                if (mThread.IsAlive) Console.WriteLine("Robot Connection {0} is established: ", mAddress);
+                //Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>)mNetworkClient.Connect(!mStreamData, null);
+                //mData.robotPose.Set(pair.GetFirst());
+                mNetworkClient.Connect(true , null);
+            });
+            mClosed = false;
+            mThread.IsBackground = true;
+            mThread.Start();
+        }
+
+
+        private void InternalSendScript(string script)
         {
             mThread = new Thread(() =>
             {
                 Console.WriteLine("Robot Connection {0} is established: " , mAddress);
                 mNetworkClient.Connect(mStreamData, script);
             });
-       
             mClosed = false;
-
             mThread.IsBackground = true;
             mThread.Start();
         }
@@ -70,6 +100,8 @@ namespace hkrita_robot.UR
             {
                 mThread.Interrupt();
                 mThread.Join();
+                Console.WriteLine("Connection status: " + mThread.IsAlive);
+                mClosed = true;
             }
             catch (Exception ex) { }
             mThread = null;
@@ -88,7 +120,7 @@ namespace hkrita_robot.UR
         public void Destroy()
         {
             Stop();
-            mNetworkClient.CloseThread();
+            mNetworkClient.Close();
         }
 
 

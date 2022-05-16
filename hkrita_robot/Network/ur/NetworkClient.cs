@@ -1,5 +1,7 @@
 ﻿using hkrita_robot.Container;
 using hkrita_robot.Extension;
+using hkrita_robot.Maths;
+using hkrita_robot.Network.ur.internalData;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,31 +27,32 @@ namespace hkrita_robot.Network.ur
         private UTF8Encoding mEncoder = new UTF8Encoding();
         private string mAddress;
         private int mPort;
+        private UpdateRobotCartesianData mCartesianData = new UpdateRobotCartesianData(); 
         public NetworkClient(String ipAddress, int port)
         {
             mAddress = ipAddress;
             mPort = port;
         }
 
-        public void Connect(bool readStream, string script)
+        public object Connect(bool readStream, string script)
         {
-            InternalConnect(readStream, script);
+            return InternalConnect(readStream, script);
         }
 
-        public void CloseThread()
+        public void Close()
         {
             if (mTCPClient.Connected == true)
             {
                 mStream.Close();
                 mTCPClient.Close();
+                
                 Console.WriteLine("Connection Status:" + mTCPClient.Connected);
             }
             Thread.Sleep(100);
         }
 
         // Client Connection: connection action is performed by one single thread
-        // 
-        private void InternalConnect(bool readStream, string script)
+        private object InternalConnect(bool readStream, string script)
         {
             try
             {
@@ -57,41 +60,43 @@ namespace hkrita_robot.Network.ur
                 mStream = mTCPClient.GetStream();
                 var t = new Stopwatch();
 
-                //loop thread
-                while (mExitThread == false)
+                // execute script once
+                if (readStream == false)
                 {
-                    // Client connected 
-                    if (readStream == false)
-                    {
-
-                        mBuffer = mEncoder.GetBytes(script);
-                        mStream.Write(mBuffer, 0, mBuffer.Length);
-                        Thread.Sleep(1000);
-                    }
-
-                    // Read stream data
-                    if (readStream == true) ReadStream(mBuffer, mFirstPacketSize, mOffset, t);
+                    UTF8Encoding encoder = new UTF8Encoding();
+                    mBuffer = encoder.GetBytes(script);
+                    mStream.Write(mBuffer, 0, mBuffer.Length);
+                    Thread.Sleep(1000);
+                    return null;
                 }
+                // Read stream data
+                if (readStream == true) return (Pair<Pose, SixJointAngles>)ReadStream(mBuffer, mFirstPacketSize, mOffset, t);
             }
             catch (Exception e)
             {}
+            return null;
         }
 
-        private void ReadStream(byte[] buffer, byte firstPacketSize, byte offset, Stopwatch timer)
+        private object ReadStream(byte[] buffer, byte firstPacketSize, byte offset, Stopwatch timer)
         {
+            
             lock(this)
             {
-                if (mStream.Read(mBuffer, 0, mBuffer.Length) != 0)
+                if (mStream.Read(buffer, 0, buffer.Length) != 0)
                 {
                     timer.Start();
-                    Array.Reverse(mBuffer);
+                    Array.Reverse(buffer);
 
-                    BufferedData.ReadPoseStreamInput(mBuffer, mFirstPacketSize, mOffset);
+                    // Read stream data 
+                    Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>) UpdateRobotCartesianData.ReadCartesianInput(buffer, firstPacketSize, offset);
 
                     timer.Stop();
                     if (timer.ElapsedMilliseconds < timeStep) Thread.Sleep(timeStep - (int)timer.ElapsedMilliseconds);
                     timer.Restart();
+
+                    return pair;
                 }
+                return null;
             }
         }
 

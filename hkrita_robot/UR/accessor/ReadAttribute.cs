@@ -39,7 +39,7 @@ namespace hkrita_robot.UR.accessor
         }
         public T Get()
         {
-             lock (mLock)
+            lock (mLock)
             {
                 try
                 {
@@ -49,16 +49,24 @@ namespace hkrita_robot.UR.accessor
                     MethodInfo method = mType.GetDeclaredMethod("Clone");
 
 
-                    return (T) method.Invoke(mObject, null);
+                    return (T)method.Invoke(mObject, null);
                 }
-                catch (MethodAccessException ex) 
+                catch (MethodAccessException ex)
                 {
                     return mObject;
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
                     return default;
                 }
+            }
+        }
+
+        public void Set(T obj)
+        {
+            lock (mLock)
+            {
+                mObject = obj;
             }
         }
     }
