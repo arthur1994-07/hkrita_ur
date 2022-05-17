@@ -16,17 +16,16 @@ namespace hkrita_robot.Network.ur.internalData
 
         public ReadAttribute<Pose> robotPose;
         public ReadAttribute<Pose> tcpPose;
-        //public ReadAttribute<Boolean> isProgramRunning;
-
-        //public ReadAttribute<Boolean> GetIsProgramRunning() {  return isProgramRunning; }  
+        public ReadAttribute<SixJointAngles> currentJointAngle;
         public ReadAttribute<Pose> GetRobotPose() { return robotPose; }
         public ReadAttribute<Pose> GetTCPPose() { return tcpPose; } 
+        public ReadAttribute<SixJointAngles> GetJointAngles() { return currentJointAngle; }
 
         public InternalRobotData()
         {
             robotPose = new ReadAttribute<Pose>(typeof(Pose).GetTypeInfo(), null);
             tcpPose = new ReadAttribute<Pose>(typeof(Pose).GetTypeInfo(), null);
-            //isProgramRunning = new ReadAttribute<Boolean>(typeof(Boolean).GetTypeInfo(), false);
+            currentJointAngle = new ReadAttribute<SixJointAngles>(typeof(SixJointAngles).GetTypeInfo(), null);
         }
     }
 }

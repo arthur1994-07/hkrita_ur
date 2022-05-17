@@ -12,6 +12,6 @@ namespace hkrita_robot.UR
     {
         ReadAttribute<Pose> GetRobotPose();
         ReadAttribute<Pose> GetTCPPose();
-        //ReadAttribute<bool> GetIsProgramRunning();
+        ReadAttribute<SixJointAngles> GetJointAngles();
     }
 }

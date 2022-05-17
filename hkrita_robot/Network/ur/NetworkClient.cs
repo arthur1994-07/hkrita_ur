@@ -44,8 +44,6 @@ namespace hkrita_robot.Network.ur
             {
                 mStream.Close();
                 mTCPClient.Close();
-                
-                Console.WriteLine("Connection Status:" + mTCPClient.Connected);
             }
             Thread.Sleep(100);
         }

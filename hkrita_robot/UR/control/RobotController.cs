@@ -13,30 +13,40 @@ namespace hkrita_robot.UR.control
 {
     public class RobotController : IRobotInterface, ICloneable
     {
-        private double robot_movel_acc;
-        private double robot_movel_velo;
-        private double robot_movej_acc;
-        private double robot_movej_velo;
-        public double MOVEL_ACCELERATION { get => robot_movel_acc; set => robot_movel_acc = 0.5; }
-        public double MOVEL_VELOCITY { get => robot_movel_velo; set => robot_movel_velo = 1.2; }
-        public double MOVEJ_ACCELERATION { get => robot_movej_acc; set => robot_movej_acc = 0.3; }
-        public double MOVEJ_VELOCITY { get => robot_movej_velo; set => robot_movej_velo = 1.2; }
+        private readonly double robot_movel_acc = 0.5;
+        private readonly double robot_movel_velo = 0.8;
+        private readonly double robot_movej_acc = (Math.PI / 180) * 80;
+        private readonly double robot_movej_velo = (Math.PI / 180) * 60;
+
 
         private readonly string mRobotAddress;
         private RobotSystem mRobot;
         private string mScript;
+
         public RobotController(string robotAddress)
         {
             mRobotAddress = robotAddress;
             mRobot = new RobotSystem(mRobotAddress);
-           
         }
 
-
+        public void MoveJoint(SixJointAngles newAngles)
+        {
+            MoveJoint(newAngles, robot_movej_acc, robot_movej_velo);
+        }
+        public void MoveJoint(SixJointAngles newAngles, double acceleration, double speed)
+        {
+            Console.WriteLine("Moving robot with angle {0}, acc = {1}, speed = {2}", newAngles,
+                acceleration, speed);
+            IAbstractScript script = new JointAngleScript(newAngles, acceleration, speed);
+            mScript = script.GetScript() + "\n";
+            SubmitScript(mScript); 
+        }
+        public void MoveLocation(Pose newLocation)
+        {
+            MoveLocation(newLocation, robot_movel_acc, robot_movel_velo);
+        }
         public void MoveLocation(Pose newLocation, double acceleration, double speed)
         {
-            //Console.WriteLine("Moving robot with location {0}, acc = {1}, speed = {2}",
-            //    newLocation, acceleration, speed);
             IAbstractScript script = new MoveScript(newLocation, MoveScript.Type.L, acceleration, speed);
             mScript = script.GetScript() + "\n";
             SubmitScript(mScript);
@@ -69,7 +79,6 @@ namespace hkrita_robot.UR.control
             mRobot.ReadData();
             Pose pose = mRobot.GetData().GetRobotPose().Get();
             Console.WriteLine("robot location retrieved : {0}", pose);
-
             return pose;
         }
 
@@ -78,11 +87,6 @@ namespace hkrita_robot.UR.control
             Pose pose = mRobot.GetData().GetTCPPose().Get();
             if (pose == null) return null;
             return pose;
-        }
-
-        public void MoveJoint(SixJointAngles newAngles, double acceleration, double speed) 
-        {
-
         }
 
         public SixJointAngles GetRobotJointAngle() { return null; }

@@ -53,6 +53,17 @@ namespace hkrita_robot.Maths
             this.wrist3 = angles.wrist3;
             return this;
         }
+        
+        public SixJointAngles ToAngles()
+        {
+            robotBase *= (180 / Math.PI);
+            shoulder *= (180 / Math.PI);
+            elbow *= (180 / Math.PI); 
+            wrist1 *= (180 / Math.PI);
+            wrist2 *= (180 / Math.PI);
+            wrist3 *= (180 / Math.PI);
+            return this;
+        }
 
         public double[] GetRaw() { return new double[] { robotBase, shoulder, elbow, wrist1, wrist2, wrist3 }; }
 

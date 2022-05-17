@@ -97,17 +97,14 @@ namespace hkrita_robot.Extension
                     continue;
                 }
                 string arg = MySubString(formatMsg, start + 1, end);
-                //string arg = formatMsg.Substring(start + 1, end);
                 string value = GetArgIndex(arg, param);
                 if (value == null)
                 {
                     builder.Append(MySubString(formatMsg, offset, end + 1));
-                    //builder.Append(formatMsg.Substring(offset, end + 1));
                 }
                 else
                 {
                     builder.Append(MySubString(formatMsg, offset, start));
-                    //builder.Append(formatMsg.Substring(offset, start));
                     builder.Append(value);
                 }
                 offset = end + 1;

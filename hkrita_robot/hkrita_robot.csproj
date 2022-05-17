@@ -188,7 +188,7 @@
     <Compile Include="Network\ur\NetworkClient.cs" />
     <Compile Include="Network\URControl.cs" />
     <Compile Include="Network\URStream.cs" />
-    <Compile Include="Network\URLauncher.cs" />
+    <Compile Include="Network\ur\test launch\URLauncher.cs" />
     <Compile Include="Network\URStreamData.cs" />
     <Compile Include="CodeTest\AsyncTest.cs" />
     <Compile Include="Extension\ArraysHelper.cs" />

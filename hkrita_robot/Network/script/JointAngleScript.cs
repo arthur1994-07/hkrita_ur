@@ -35,8 +35,8 @@ namespace hkrita_robot.Network.script
             string accelerationStr = acceleration < ConstantsParameter.K_numerical_epsilon ? "" :
                 StringHelper.Format(", a={0}", acceleration);
             string speedStr = speed < ConstantsParameter.K_numerical_epsilon ? "" :
-                StringHelper.Format(", v={0]}", speed);
-            return StringHelper.Format("movej({0}{1}{2}", jointAngleStr, accelerationStr, speedStr);
+                StringHelper.Format(", v={0}", speed);
+            return StringHelper.Format("movej({0}{1}{2})", jointAngleStr, accelerationStr, speedStr);
         }
 
    

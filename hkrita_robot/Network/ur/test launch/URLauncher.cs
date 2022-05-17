@@ -29,17 +29,19 @@ namespace hkrita_robot.Network
             Pose targetPose = new Pose(-0.15, -0.23, 0.15, 0, 3.15, 0);
             Pose targetPose2 = new Pose(-0.15, -0.314, 0.414, 0, 3.15, 0);
             Pose targetPose3 = new Pose(-0.15, -0.258, 0.444, 1.169, 2.092, -0.008);
-
+            SixJointAngles joints = new SixJointAngles(-2.35414463678469, - 2.38869373003115, - 0.47816068330874,
+                - 2.18282062212099, 2.28414177894592, 0.117019392549992);
 
             RobotController mRobot = new RobotController("192.168.56.101");
-            ////mRobot.SetTCP(pose2);
-            mRobot.MoveLocation(startPose, 0.5, 0.5);
-            mRobot.MoveLocation(targetPose, 0.5, 0.5);
-            mRobot.MoveLocation(targetPose2, 0.5, 0.5);
-            mRobot.MoveLocation(targetPose3, 0.5, 0.5);
+            //mRobot.MoveLocation(startPose);
+            //mRobot.MoveLocation(targetPose);
+            //mRobot.MoveLocation(targetPose2);
+            //mRobot.MoveLocation(targetPose3);
             mRobot.GetRobotLocation();
-            mRobot.SetTCP(scannerTcp);
-            Console.WriteLine(mRobot.GetTcp());
+            mRobot.MoveJoint(joints);
+
+            
+
             Console.WriteLine("[INFO] Press Q to exit:");
             string stop = Convert.ToString(Console.ReadLine());
 
