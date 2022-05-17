@@ -35,8 +35,8 @@ namespace hkrita_robot.UR.control
 
         public void MoveLocation(Pose newLocation, double acceleration, double speed)
         {
-            Console.WriteLine("Moving robot with location {0}, acc = {1}, speed = {2}",
-                newLocation, acceleration, speed);
+            //Console.WriteLine("Moving robot with location {0}, acc = {1}, speed = {2}",
+            //    newLocation, acceleration, speed);
             IAbstractScript script = new MoveScript(newLocation, MoveScript.Type.L, acceleration, speed);
             mScript = script.GetScript() + "\n";
             SubmitScript(mScript);
@@ -46,8 +46,8 @@ namespace hkrita_robot.UR.control
         public void SetTCP(Pose tcpOffset)
         {
             Console.WriteLine("Setting tcp offset for robot {0}", tcpOffset);
+            mRobot.GetData().GetTCPPose().Set(tcpOffset);
             IAbstractScript script = new SetTCPScript(tcpOffset);
-            //access this variable in callback 
             mScript = script.GetScript();
             SubmitScript(mScript);
         }
@@ -66,10 +66,8 @@ namespace hkrita_robot.UR.control
 
         public Pose GetRobotLocation()
         {
-            mRobot.ReadStream();
-            Console.WriteLine("Getting robot location");
+            mRobot.ReadData();
             Pose pose = mRobot.GetData().GetRobotPose().Get();
-
             Console.WriteLine("robot location retrieved : {0}", pose);
 
             return pose;
@@ -77,10 +75,8 @@ namespace hkrita_robot.UR.control
 
         public Pose GetTcp()
         {
-            Console.WriteLine("Request to get tcp offset action");
             Pose pose = mRobot.GetData().GetTCPPose().Get();
             if (pose == null) return null;
-            Console.WriteLine("Request to get tcp offset action {0} is successfully", pose);
             return pose;
         }
 

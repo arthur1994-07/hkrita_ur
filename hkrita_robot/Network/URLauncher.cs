@@ -23,26 +23,23 @@ namespace hkrita_robot.Network
         public URLauncher()
         {
 
-            //Pose pose = new Pose(-0.02, 0.01, 0, 0, 0, 0.03);
-            //Pose pose2 = new Pose(-0.02, 0.01, 0.2, 0, 0, 0.03);
-            //Pose startPose = new Pose(-0.15, -0.412, 0.150, 0, 3.15, 0);
-            //Pose targetPose = new Pose(-0.15, -0.23, 0.15, 0, 3.15, 0);
-            //Pose targetPose2 = new Pose(-0.15, -0.314, 0.414, 0, 3.15, 0);
-            //Pose targetPose3 = new Pose(-0.15, -0.258, 0.444, 1.169, 2.092, -0.008);
+            Pose pose = new Pose(-0.02, 0.01, 0, 0, 0, 0.03);
+            Pose scannerTcp = new Pose(-0.02, 0.01, 0.176, 0, 0, 0.03);
+            Pose startPose = new Pose(-0.15, -0.412, 0.150, 0, 3.15, 0);
+            Pose targetPose = new Pose(-0.15, -0.23, 0.15, 0, 3.15, 0);
+            Pose targetPose2 = new Pose(-0.15, -0.314, 0.414, 0, 3.15, 0);
+            Pose targetPose3 = new Pose(-0.15, -0.258, 0.444, 1.169, 2.092, -0.008);
 
 
             RobotController mRobot = new RobotController("192.168.56.101");
             ////mRobot.SetTCP(pose2);
-            RobotSystem robot = new RobotSystem("192.168.56.101");
-            robot.ReadStream();
-            ////mRobot.MoveLocation(startPose, 0.5, 0.5);
-            ////mRobot.MoveLocation(targetPose, 0.5, 0.5);
-            ////mRobot.MoveLocation(targetPose2, 0.5, 0.5);
-            ////mRobot.MoveLocation(targetPose3, 0.5, 0.5);
-            //mRobot.GetRobotLocation();
-            //RealTimeSystem stream = new RealTimeSystem("192.168.56.101");
-            //stream.Connect();
-
+            mRobot.MoveLocation(startPose, 0.5, 0.5);
+            mRobot.MoveLocation(targetPose, 0.5, 0.5);
+            mRobot.MoveLocation(targetPose2, 0.5, 0.5);
+            mRobot.MoveLocation(targetPose3, 0.5, 0.5);
+            mRobot.GetRobotLocation();
+            mRobot.SetTCP(scannerTcp);
+            Console.WriteLine(mRobot.GetTcp());
             Console.WriteLine("[INFO] Press Q to exit:");
             string stop = Convert.ToString(Console.ReadLine());
 

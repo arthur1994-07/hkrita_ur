@@ -21,7 +21,7 @@ namespace hkrita_robot.UR
         private Boolean mExitThread;
         private Boolean mClosed; 
         private NetworkClient mNetworkClient;
-        private RealTimeSystem mRealTimeClient;
+        private ReadDataClient mReadDataClient;
         private bool mStreamData = false;
         private InternalRobotData mData = new InternalRobotData();
 
@@ -29,7 +29,7 @@ namespace hkrita_robot.UR
         {
             mAddress = ipAddress;
             mNetworkClient = new NetworkClient(mAddress, NORMAL_PORT);
-            mRealTimeClient = new RealTimeSystem(mAddress);
+            mReadDataClient = new ReadDataClient(mAddress);
         }
 
 
@@ -47,12 +47,12 @@ namespace hkrita_robot.UR
                 throw e;
             }
         }
-        public void ReadStream()
+        public void ReadData()
         {
             try
             {
-                //InternalReadStream();
-                mRealTimeClient.Connect();
+                Pose pose = mReadDataClient.ReadStream();
+                mData.robotPose.Set(pose);
             }
             catch (Exception e)
             {
@@ -64,20 +64,6 @@ namespace hkrita_robot.UR
         public void Close()
         {
             CloseThread();
-        }
-
-        private void InternalReadStream()
-        {
-            mThread = new Thread(() =>
-            {
-                if (mThread.IsAlive) Console.WriteLine("Robot Connection {0} is established: ", mAddress);
-                //Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>)mNetworkClient.Connect(!mStreamData, null);
-                //mData.robotPose.Set(pair.GetFirst());
-                mNetworkClient.Connect(true , null);
-            });
-            mClosed = false;
-            mThread.IsBackground = true;
-            mThread.Start();
         }
 
 

@@ -182,7 +182,7 @@
     <Compile Include="Network\realtime\IEncoderDecoder.cs" />
     <Compile Include="Network\script\IAbstractScript.cs" />
     <Compile Include="Network\ur\RealTimeRobotData.cs" />
-    <Compile Include="Network\ur\RealTimeSystem.cs" />
+    <Compile Include="Network\ur\ReadDataClient.cs" />
     <Compile Include="URTest.cs" />
     <Compile Include="Network\URControlData.cs" />
     <Compile Include="Network\ur\NetworkClient.cs" />

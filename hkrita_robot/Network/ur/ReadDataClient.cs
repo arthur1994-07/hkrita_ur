@@ -1,4 +1,6 @@
 ﻿using hkrita_robot.Container;
+using hkrita_robot.Maths;
+using hkrita_robot.Network.ur.internalData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +11,24 @@ using System.Threading.Tasks;
 
 namespace hkrita_robot.Network.ur
 {
-    public class RealTimeSystem 
+    public class ReadDataClient 
     {
         private static int K_STREAM_PORT = 30003;
         private Thread mThread;
-        private RealTimeRobotData mData = new RealTimeRobotData();
+        private InternalRobotData mData = new InternalRobotData();
         private bool mExitThread = false;
         private NetworkClient mClient;
         private bool mReadStream = true;
-        public RealTimeSystem(string ipAddress)
+        public ReadDataClient(string ipAddress)
         {
             mClient = new NetworkClient(ipAddress, K_STREAM_PORT);
         }
 
-        public void Connect()
+        public Pose ReadStream()
         {
             try
             {
-                InternalConnect();
+                return InternalReadStream();
             }
             catch (Exception ex)
             {
@@ -55,16 +57,12 @@ namespace hkrita_robot.Network.ur
             mClient.Close();
         }       
         
-        private void InternalConnect()
+        private Pose InternalReadStream()
         {
-            mThread = new Thread(() =>
-            {
-                if (mThread.IsAlive) Console.WriteLine("Stream Connection via {0} is established: ", K_STREAM_PORT);
-                mClient.Connect(mReadStream, null);
-            });
+            Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>)mClient.Connect(mReadStream, null);
+            mData.robotPose.Set(pair.GetFirst());
+            return pair.GetFirst(); 
 
-            mThread.IsBackground = true;
-            mThread.Start();
         }
     } 
 }

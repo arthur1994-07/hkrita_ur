@@ -52,7 +52,7 @@ namespace hkrita_robot.Network.ur.internalData
             pose = new Pose(C_Position[0], C_Position[1], C_Position[2],
                 C_Orientation[0], C_Orientation[1], C_Orientation[2]);
 
-            Console.WriteLine("Position: " + C_Position[0] + ", " + C_Position[1] + ", " + C_Position[2]);
+            //Console.WriteLine("Position: " + C_Position[0] + ", " + C_Position[1] + ", " + C_Position[2]);
 
             return new Pair<Pose, SixJointAngles>(pose, jointAngles);
         }

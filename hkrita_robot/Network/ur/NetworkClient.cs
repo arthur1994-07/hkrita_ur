@@ -24,7 +24,6 @@ namespace hkrita_robot.Network.ur
         private NetworkStream mStream = null; 
         private byte[] mBuffer = new byte[4096];
         private BufferedData mBufferData = new BufferedData();
-        private UTF8Encoding mEncoder = new UTF8Encoding();
         private string mAddress;
         private int mPort;
         private UpdateRobotCartesianData mCartesianData = new UpdateRobotCartesianData(); 
