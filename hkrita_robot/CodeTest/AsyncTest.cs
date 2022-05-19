@@ -13,14 +13,14 @@ namespace hkrita_robot.CodeTest
 
 
 
-        public static void createAction()
+        public static void CreateAction()
         {
             Action<object> action = ((object o) =>
             {
                 Console.WriteLine("new Action created: Task = {0}, obj= {1}, Thread = {2}",
                     Task.CurrentId, o, Thread.CurrentThread.ManagedThreadId);
-                Task<int> task1 = method1();
-                method2();
+                Task<int> task1 = LoopingMethod(1);
+                LoopingMethod();
             });
             Task newTask = new Task(action, "new task");
             newTask.Start();
@@ -29,12 +29,24 @@ namespace hkrita_robot.CodeTest
             newTask.Wait();
         }
 
+
+        public static void TestAction()
+        {
+            Action<object> action = ((o) =>
+            {
+                Console.WriteLine("object in action: " + o);
+            });
+            Task newTask = new Task(action, "test task");
+            newTask.Start();
+            newTask.Wait();
+        }
+        
         /** Task Instantiation **/
-        public static void actionMethod()
+        public static void ActionMethod()
         {
             Action<object> action = (object o) =>
             {
-                Console.WriteLine("new Action created: Task = {0}, obj = {1}, Thread = {2}",
+                Console.WriteLine("Task = {0}, obj = {1}, Thread = {2}",
                     Task.CurrentId, o, Thread.CurrentThread.ManagedThreadId);
             };
             /** create a task but do not start it **/
@@ -62,7 +74,7 @@ namespace hkrita_robot.CodeTest
             String taskData = "task 3";
             Task t3 = Task.Run(() =>
             {
-                Console.WriteLine("Task = {0}, obj = {1}, Thread = {2}",
+                Console.WriteLine("Started Task = {0}, obj = {1}, Thread = {2}",
                     Task.CurrentId, taskData, Thread.CurrentThread.ManagedThreadId);
             });
             t3.Wait();
@@ -93,14 +105,14 @@ namespace hkrita_robot.CodeTest
             });
         }
 
-        public static async Task<int> method1()
+        public static async Task<int> LoopingMethod(int index)
         {
             int count = 0;
             await Task.Run(() =>
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    Console.WriteLine("Method 1");
+                    Console.WriteLine("loop " + index);
                     count++;
                     Task.Delay(100).Wait();
                 }
@@ -108,53 +120,65 @@ namespace hkrita_robot.CodeTest
 
             return count;
         }
-
-        public static int method2()
+        public static void LoopingMethod()
         {
             int count = 0;
+      
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine("loop");
+                    count++;
+                    Task.Delay(100).Wait();
+                }
+         
+            
+        }
+        public static async Task<int> Method1()
+        {
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine("Method 1");
+                    Task.Delay(100).Wait();
+                }
+            });
+            return 0;
+        }
+        public static void Method2()
+        {
             for (int i = 0; i < 10; i++)
             {
-                Console.WriteLine("method 2");
+                Console.WriteLine("Method 2");
                 Task.Delay(100).Wait();
+
             }
-            return count;
         }
 
-        public static int method3()
-        {
-            int count = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                Console.WriteLine("method 3");
-                Task.Delay(100).Wait();
-            }
-            return count;
-        }
 
-        public static void countCalledMethods(int count)
+
+        public static async Task<int> CallMethods()
         {
 
+            Task<int> task = Method1();
+            Method2();
+
+            Console.WriteLine("task result: "+ task.Result);
+            return task.Result;
         }
-
-        public static async Task callMethods()
-        {
-            emptyMethod();
-            actionMethod();
-            //method2();
-
-            Task<int> task = method1();
-            method2();
-            int count = await task;
-            Console.WriteLine("method call count: " + count);
-
-        }
-        public void TestAction()
+        public void TestCallback()
         {
             Action<int, int> val = (x, y) =>
             {
                 Console.WriteLine(x + y);
             };
             val(10, 20);
+        }
+
+        public async Task<object> DoSomething()
+        {
+            Console.WriteLine(1);
+            return 1;
         }
     }
 

@@ -10,6 +10,13 @@ namespace hkrita_robot.Maths
 {
     public class Pose : ICloneable
     {
+        public enum Direction
+        {
+            X,
+            Y,
+            Z
+        }
+
         public string defaultPattern = "#.0000000000";
         private readonly double[] mPose = new double[6];
         
@@ -17,7 +24,8 @@ namespace hkrita_robot.Maths
         public Pose() { }
         public Pose(double x, double y, double z, double rx, double ry, double rz) { Set(x, y, z, rx, ry, rz); }
         public Pose(Pose pose) { Set(pose); }
-
+        public Pose(Coordinate3D translate, Quaternion rotation) { Set(translate, rotation); }
+        public Pose(Coordinate3D translate, Matrix3D rotation) { Set(translate, rotation); }
 
         //methods
         public Pose Set(double x, double y, double z, double rx, double ry, double rz)
@@ -32,6 +40,19 @@ namespace hkrita_robot.Maths
         }
 
         public void Set(Pose pose) { Array.Copy(pose.mPose, 0, mPose, 0, mPose.Length); }
+        public Pose Set(Coordinate3D translate, Matrix3D rotation) { return Set(translate, Quaternion.FromRotationMatrix(rotation)); }
+        public Pose Set(Coordinate3D translate, Quaternion rotation)
+        {
+            mPose[0] = translate.x;
+            mPose[1] = translate.y;
+            mPose[2] = translate.z;
+            double p = rotation.ToAxisAngleMagnitude();
+            Vector3D dir = rotation.ToAxisAngleDirection();
+            mPose[3] = dir.x * p;
+            mPose[4] = dir.y * p;
+            mPose[5] = dir.z * p;
+            return this;
+        }
         public double[] GetPose()
         {
             double[] newArray = new double[mPose.Length];
@@ -48,6 +69,24 @@ namespace hkrita_robot.Maths
             return Quaternion.FromAxisAngle(value.AssignNormalize(), angle);
         }
 
+        public Matrix4D GetTransformation()
+        {
+            return AffineTransform3D.Set(new Vector3D().Set(GetPosition()) , GetRotation());
+        }
+
+        public Pose MoveAlong(double distance, Direction dir)
+        {
+            Matrix4D matrix = GetTransformation();
+            Point3D vec = null;
+            switch (dir)
+            {
+                case Direction.X: vec = new Point3D(1, 0, 0); break;
+                case Direction.Y: vec = new Point3D(0, 1, 0); break;
+                case Direction.Z: vec = new Point3D(0, 0, 1); break;
+                default: break;
+            }
+            return AffineTransform3D.ToPose(matrix.Multiply(AffineTransform3D.Set(vec.Multiply(distance))));
+        }
 
 
         public override bool Equals(Object o)

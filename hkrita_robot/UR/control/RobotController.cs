@@ -35,8 +35,8 @@ namespace hkrita_robot.UR.control
         }
         public void MoveJoint(SixJointAngles newAngles, double acceleration, double speed)
         {
-            Console.WriteLine("Moving robot with angle {0}, acc = {1}, speed = {2}", newAngles,
-                acceleration, speed);
+            //Console.WriteLine("Moving robot with angle {0}, acc = {1}, speed = {2}", newAngles,
+            //    acceleration, speed);
             IAbstractScript script = new JointAngleScript(newAngles, acceleration, speed);
             mScript = script.GetScript() + "\n";
             SubmitScript(mScript); 

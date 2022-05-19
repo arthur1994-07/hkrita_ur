@@ -86,7 +86,6 @@ namespace hkrita_robot.UR
             {
                 mThread.Interrupt();
                 mThread.Join();
-                Console.WriteLine("Connection status: " + mThread.IsAlive);
                 mClosed = true;
             }
             catch (Exception ex) { }
