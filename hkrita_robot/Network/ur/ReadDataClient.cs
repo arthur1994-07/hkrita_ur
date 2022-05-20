@@ -24,7 +24,7 @@ namespace hkrita_robot.Network.ur
             mClient = new NetworkClient(ipAddress, K_STREAM_PORT);
         }
 
-        public Pose ReadStream()
+        public Pair<Pose, SixJointAngles> ReadStream()
         {
             try
             {
@@ -32,7 +32,6 @@ namespace hkrita_robot.Network.ur
             }
             catch (Exception ex)
             {
-                Close();
                 throw ex;
             }
         }
@@ -42,26 +41,17 @@ namespace hkrita_robot.Network.ur
             InternalCloseThread();
         }
 
-        public void Stop()
-        {
-            mExitThread = true;
-            if (mThread.IsAlive == true)
-            {
-                Thread.Sleep(100);
-            }
-        }
 
         public void InternalCloseThread()
         {
-            Stop();
-            mClient.Close();
+            //mThread.Interrupt();
+            mClient.Disconnect();
         }       
         
-        private Pose InternalReadStream()
+        private Pair<Pose, SixJointAngles> InternalReadStream()
         {
             Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>)mClient.Connect(mReadStream, null);
-            mData.robotPose.Set(pair.GetFirst());
-            return pair.GetFirst(); 
+            return pair; 
 
         }
     } 

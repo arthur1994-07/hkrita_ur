@@ -35,8 +35,6 @@ namespace hkrita_robot.UR.control
         }
         public void MoveJoint(SixJointAngles newAngles, double acceleration, double speed)
         {
-            //Console.WriteLine("Moving robot with angle {0}, acc = {1}, speed = {2}", newAngles,
-            //    acceleration, speed);
             IAbstractScript script = new JointAngleScript(newAngles, acceleration, speed);
             mScript = script.GetScript() + "\n";
             SubmitScript(mScript); 
@@ -45,6 +43,8 @@ namespace hkrita_robot.UR.control
         {
             MoveLocation(newLocation, robot_movel_acc, robot_movel_velo);
         }
+
+
         public void MoveLocation(Pose newLocation, double acceleration, double speed)
         {
             IAbstractScript script = new MoveScript(newLocation, MoveScript.Type.L, acceleration, speed);
@@ -52,6 +52,24 @@ namespace hkrita_robot.UR.control
             SubmitScript(mScript);
         }
 
+
+        public void SubmitScript(string script)
+        {
+            mRobot.SendScript(mScript);
+            Thread.Sleep(3000);
+            Console.WriteLine("submit script");
+            Close();
+        }
+
+        public Pose GetRobotLocation()
+        {
+            mRobot.ReadData();
+            Pose pose = mRobot.GetData().GetRobotPose().Get();
+            Console.WriteLine("robot location retrieved : {0}", pose);
+            //mRobot.Close();
+            //mRobot.Disconnect();
+            return pose;
+        }
 
         public void SetTCP(Pose tcpOffset)
         {
@@ -61,32 +79,16 @@ namespace hkrita_robot.UR.control
             mScript = script.GetScript();
             SubmitScript(mScript);
         }
-
-        public void SubmitScript(Action<object> action)
-        {
-            ActionHelper.SetAction(action, mScript);
-        }
-
-        public void SubmitScript(string script)
-        {
-            mRobot.SendScript(mScript);
-            Thread.Sleep(3000);
-            mRobot.Close();
-        }
-
-        public Pose GetRobotLocation()
-        {
-            mRobot.ReadData();
-            Pose pose = mRobot.GetData().GetRobotPose().Get();
-            Console.WriteLine("robot location retrieved : {0}", pose);
-            return pose;
-        }
-
         public Pose GetTcp()
         {
             Pose pose = mRobot.GetData().GetTCPPose().Get();
             if (pose == null) return null;
             return pose;
+        }
+
+        public void SubmitScript(Action<object> action)
+        {
+            ActionHelper.SetAction(action, mScript);
         }
 
         public SixJointAngles GetRobotJointAngle() { return null; }

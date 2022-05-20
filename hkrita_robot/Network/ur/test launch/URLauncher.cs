@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using com.sun.istack.@internal.logging;
 using hkrita_robot.Container;
@@ -28,29 +29,40 @@ namespace hkrita_robot.Network
             - 2.18282062212099, 2.28414177894592, 0.117019392549992);
 
         private RobotController mRobot = new RobotController("192.168.56.101");
+        private URStream stream = new URStream();
         // the current robot arm control uses primary secondary interface 30001 30002 port
         // streaming data port using 30003/30013 (old version pre 3.5)
         public URLauncher()
         {
-
+            //stream.Disconnect();
             RobotLaunch(mRobot);
+            //stream.Connect();
+            //stream.Disconnect();
 
-            CloseRobotApp();   
+            //stream.Disconnect();
+
+
+            //CloseRobotApp();
         }
-        
+
         public void RobotLaunch(RobotController robot)
         {
             robot.MoveLocation(mStartPose);
-            robot.MoveLocation(mTargetPose);
-            robot.MoveLocation(mTargetPose2);
-            robot.MoveLocation(mTargetPose3);
+            //Pose startPt = robot.GetRobotLocation();
 
-            Pose currentPosition = mRobot.GetRobotLocation();
-            Pose moveAlongZ = currentPosition.MoveAlong(0.5, Pose.Direction.Z);
+            //robot.MoveLocation(mTargetPose);
+            //robot.MoveLocation(mTargetPose2);
+            //robot.MoveLocation(mTargetPose3);
+            Pose pose2 = robot.GetRobotLocation();
+            Pose moveAlongZ = pose2.MoveAlong(0.1, Pose.Direction.Z);
             robot.MoveLocation(moveAlongZ);
-            robot.GetRobotLocation();
-            robot.MoveJoint(mJoints);
+            Pose moveAlongX = moveAlongZ.MoveAlong(0.1, Pose.Direction.Y);
+            robot.MoveLocation(moveAlongX);
+            //Pose finalLocation = robot.GetRobotLocation();
+            //if (moveAlongZ != finalLocation) Console.WriteLine("no match!!");
 
+            //robot.MoveJoint(mJoints);
+            Console.WriteLine("");
         }
 
         public void CloseRobotApp()
@@ -66,9 +78,22 @@ namespace hkrita_robot.Network
                 Environment.Exit(0);
             }
         }
+
+        //public async Task<int> StaticRoller(RobotController robot)
+        //{
+        //    await Task.Run(() =>
+        //    {
+        //        robot.MoveJoint();
+        //    });
+        //}
         public void AsyncRobotmovement()
         {
 
+        }
+        public void Rotate(RobotController robot)
+        {
+            Thread.Sleep(1000);
+            robot.GetRobotLocation();
         }
         
     }

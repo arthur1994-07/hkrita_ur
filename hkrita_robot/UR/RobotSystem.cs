@@ -49,16 +49,18 @@ namespace hkrita_robot.UR
         }
         public void ReadData()
         {
-            try
+            Task newTask = Task.Factory.StartNew(() =>
             {
-                Pose pose = mReadDataClient.ReadStream();
+                Pair<Pose, SixJointAngles> data = mReadDataClient.ReadStream();
+                //mReadDataClient.Close();
+                Pose pose = data.GetFirst();
+                SixJointAngles joints = data.GetSecond();
                 mData.robotPose.Set(pose);
-            }
-            catch (Exception e)
-            {
-                Close();
-                throw e;
-            }
+                mData.currentJointAngle.Set(joints);
+                Console.WriteLine("");
+            });
+            newTask.Wait();
+            //Disconnect();
         }
 
         public void Close()
@@ -69,9 +71,10 @@ namespace hkrita_robot.UR
 
         private void InternalSendScript(string script)
         {
+            // start new thread 
             mThread = new Thread(() =>
             {
-                Console.WriteLine("Robot Connection {0} is established: " , mAddress);
+                Console.WriteLine("Robot Connection {0} is established: ", mAddress);
                 mNetworkClient.Connect(mStreamData, script);
             });
             mClosed = false;
@@ -87,25 +90,16 @@ namespace hkrita_robot.UR
                 mThread.Interrupt();
                 mThread.Join();
                 mClosed = true;
+                Console.WriteLine("Thread status: " + mThread.IsAlive);
             }
             catch (Exception ex) { }
             mThread = null;
         }
 
-        private void Stop()
-        {
-            mExitThread = true;
-            Console.WriteLine(mThread.IsAlive);
-            if (mThread.IsAlive == true)
-            {
-                Thread.Sleep(100);
-            }
-        }
 
-        public void Destroy()
+        public void Disconnect()
         {
-            Stop();
-            mNetworkClient.Close();
+            mNetworkClient.Disconnect();
         }
 
 

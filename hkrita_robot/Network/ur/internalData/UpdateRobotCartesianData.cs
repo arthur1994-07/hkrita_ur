@@ -52,11 +52,7 @@ namespace hkrita_robot.Network.ur.internalData
             pose = new Pose(C_Position[0], C_Position[1], C_Position[2],
                 C_Orientation[0], C_Orientation[1], C_Orientation[2]);
 
-            Console.WriteLine("Position: " + pose.GetPosition().x + ", " + pose.GetPosition().y + ", " + pose.GetPosition().z);
-            Console.WriteLine("Rotation: {0} {1} {2}", pose.GetAxisAngleRepresentation().x, pose.GetAxisAngleRepresentation().y,
-                pose.GetAxisAngleRepresentation().z);
-            Console.WriteLine("Joint Orientation: {0} {1} {2} {3} {4} {5}",jointAngles.robotBase, jointAngles.shoulder,
-                jointAngles.elbow, jointAngles.wrist1, jointAngles.wrist2, jointAngles.wrist3);
+            //Console.WriteLine(pose);
             return new Pair<Pose, SixJointAngles>(pose, jointAngles);
         }
 

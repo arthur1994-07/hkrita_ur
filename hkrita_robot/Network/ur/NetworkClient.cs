@@ -27,6 +27,8 @@ namespace hkrita_robot.Network.ur
         private string mAddress;
         private int mPort;
         private UpdateRobotCartesianData mCartesianData = new UpdateRobotCartesianData(); 
+
+
         public NetworkClient(String ipAddress, int port)
         {
             mAddress = ipAddress;
@@ -38,12 +40,13 @@ namespace hkrita_robot.Network.ur
             return InternalConnect(readStream, script);
         }
 
-        public void Close()
+        public void Disconnect()
         {
             if (mTCPClient.Connected == true)
             {
                 mStream.Close();
                 mTCPClient.Close();
+                Console.WriteLine("Status: " + mTCPClient.Connected);   
             }
             Thread.Sleep(100);
         }
@@ -56,7 +59,7 @@ namespace hkrita_robot.Network.ur
                 if (mTCPClient.Connected == false) mTCPClient.Connect(mAddress, mPort);
                 mStream = mTCPClient.GetStream();
                 var t = new Stopwatch();
-
+                //byte[] buffer = new byte[4096]; 
                 // execute script once
                 if (readStream == false)
                 {
@@ -64,6 +67,7 @@ namespace hkrita_robot.Network.ur
                     mBuffer = encoder.GetBytes(script);
                     mStream.Write(mBuffer, 0, mBuffer.Length);
                     Thread.Sleep(1000);
+
                     return null;
                 }
                 // Read stream data
@@ -90,13 +94,19 @@ namespace hkrita_robot.Network.ur
                     timer.Stop();
                     if (timer.ElapsedMilliseconds < timeStep) Thread.Sleep(timeStep - (int)timer.ElapsedMilliseconds);
                     timer.Restart();
-
+                    ClearBuffer(mBuffer);
                     return pair;
                 }
                 return null;
             }
         }
 
+
+        private void ClearBuffer(byte[] buffer)
+        {
+            ArraysHelper.Fill(buffer);
+           
+        }
         private void InternalClose()
         {
             mBufferData.Clear();
