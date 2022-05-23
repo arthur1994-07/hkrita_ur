@@ -67,11 +67,11 @@ namespace hkrita_robot.Network.ur
                     mBuffer = encoder.GetBytes(script);
                     mStream.Write(mBuffer, 0, mBuffer.Length);
                     Thread.Sleep(1000);
-
                     return null;
                 }
                 // Read stream data
                 if (readStream == true) return (Pair<Pose, SixJointAngles>)ReadStream(mBuffer, mFirstPacketSize, mOffset, t);
+                
             }
             catch (Exception e)
             {}

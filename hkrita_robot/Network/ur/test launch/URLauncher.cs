@@ -25,39 +25,54 @@ namespace hkrita_robot.Network
         private Pose mTargetPose = new Pose(-0.15, -0.23, 0.15, 0, 3.15, 0);
         private Pose mTargetPose2 = new Pose(-0.15, -0.314, 0.414, 0, 3.15, 0);
         private Pose mTargetPose3 = new Pose(-0.15, -0.258, 0.444, 1.169, 2.092, -0.008);
+        private Pose mTargetPose4 = new Pose(-0.15, -0.312, 0.05, 0, 3.15, 0);
         private SixJointAngles mJoints = new SixJointAngles(-2.35414463678469, - 2.38869373003115, - 0.47816068330874,
             - 2.18282062212099, 2.28414177894592, 0.117019392549992);
 
         private RobotController mRobot = new RobotController("192.168.56.101");
         private URStream stream = new URStream();
+        private URStream stream2 = new URStream();
+        private URStream stream3 = new URStream();
+        private URStream stream4 = new URStream();
+
+
         // the current robot arm control uses primary secondary interface 30001 30002 port
         // streaming data port using 30003/30013 (old version pre 3.5)
         public URLauncher()
         {
-            //stream.Disconnect();
-            RobotLaunch(mRobot);
-            //stream.Connect();
-            //stream.Disconnect();
+            mRobot.MoveLocation(mStartPose);
+            //Pose mStartPose = mRobot.GetRobotLocation();
+            stream.Connect();
+            Thread.Sleep(1000);
+            mRobot.MoveLocation(mTargetPose2);
+            stream2.Connect();
+            Thread.Sleep(1000);
+            mRobot.MoveLocation(mTargetPose3);
+            //RobotLaunch(mRobot);
+            stream3.Connect();
+            Thread.Sleep(1000);
 
-            //stream.Disconnect();
+            CloseRobotApp();
 
-
-            //CloseRobotApp();
         }
 
         public void RobotLaunch(RobotController robot)
         {
             robot.MoveLocation(mStartPose);
-            //Pose startPt = robot.GetRobotLocation();
+            Pose startPt = robot.GetRobotLocation();
+            Matrix3D rot = startPt.GetRotation().ToRotationMatrix();
+            Vector3D zRotate = new Vector3D(0, 0, 1.57);
+            rot.Multiply(zRotate);
+            
 
-            //robot.MoveLocation(mTargetPose);
-            //robot.MoveLocation(mTargetPose2);
-            //robot.MoveLocation(mTargetPose3);
             Pose pose2 = robot.GetRobotLocation();
             Pose moveAlongZ = pose2.MoveAlong(0.1, Pose.Direction.Z);
             robot.MoveLocation(moveAlongZ);
             Pose moveAlongX = moveAlongZ.MoveAlong(0.1, Pose.Direction.Y);
             robot.MoveLocation(moveAlongX);
+
+            robot.MoveLocation(mTargetPose4);
+          
             //Pose finalLocation = robot.GetRobotLocation();
             //if (moveAlongZ != finalLocation) Console.WriteLine("no match!!");
 
@@ -90,10 +105,18 @@ namespace hkrita_robot.Network
         {
 
         }
-        public void Rotate(RobotController robot)
+        public void RotateWrist3(Pose currentPose)
         {
-            Thread.Sleep(1000);
-            robot.GetRobotLocation();
+            Matrix3D mat = currentPose.GetRotation().ToRotationMatrix();
+            // flange rotation relative to base
+            Matrix3D tcp = Quaternion.FromEuler(new Vector3D(0, 0, 0)).ToRotationMatrix();
+            // tcp totation relative to flange
+            Matrix3D final = mat.Multiply(tcp);
+            // rotation of tcp relative to base 
+            Vector3D vec = RotationTransform.ToEuler(final);
+            Pose newPose = new Pose(currentPose.GetPosition().x, currentPose.GetPosition().y,
+                currentPose.GetPosition().z, vec.x, vec.y, vec.z);
+            mRobot.MoveLocation(newPose);
         }
         
     }

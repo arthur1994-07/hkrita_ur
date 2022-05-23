@@ -44,7 +44,6 @@ namespace hkrita_robot.UR.control
             MoveLocation(newLocation, robot_movel_acc, robot_movel_velo);
         }
 
-
         public void MoveLocation(Pose newLocation, double acceleration, double speed)
         {
             IAbstractScript script = new MoveScript(newLocation, MoveScript.Type.L, acceleration, speed);
@@ -52,12 +51,11 @@ namespace hkrita_robot.UR.control
             SubmitScript(mScript);
         }
 
-
         public void SubmitScript(string script)
         {
             mRobot.SendScript(mScript);
             Thread.Sleep(3000);
-            Console.WriteLine("submit script");
+            //Console.WriteLine("submit script");
             Close();
         }
 
@@ -71,6 +69,12 @@ namespace hkrita_robot.UR.control
             return pose;
         }
 
+        public SixJointAngles GetRobotJointAngle()
+        {
+            mRobot.ReadData();
+            SixJointAngles jointAngles = mRobot.GetData().GetJointAngles().Get();
+            return jointAngles.ToAngles(); 
+        }
         public void SetTCP(Pose tcpOffset)
         {
             Console.WriteLine("Setting tcp offset for robot {0}", tcpOffset);
@@ -78,7 +82,8 @@ namespace hkrita_robot.UR.control
             IAbstractScript script = new SetTCPScript(tcpOffset);
             mScript = script.GetScript();
             SubmitScript(mScript);
-        }
+        }  
+
         public Pose GetTcp()
         {
             Pose pose = mRobot.GetData().GetTCPPose().Get();
@@ -91,7 +96,7 @@ namespace hkrita_robot.UR.control
             ActionHelper.SetAction(action, mScript);
         }
 
-        public SixJointAngles GetRobotJointAngle() { return null; }
+      
         public void Close() { mRobot.Close(); }
         public object Clone()
         {

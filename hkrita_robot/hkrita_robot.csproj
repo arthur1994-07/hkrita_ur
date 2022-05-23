@@ -166,6 +166,7 @@
     <Compile Include="Container\SingleContainer.cs" />
     <Compile Include="Extension\ActionHelper.cs" />
     <Compile Include="Maths\AffineTransform3D.cs" />
+    <Compile Include="Maths\RotationTransform.cs" />
     <Compile Include="Maths\Matrix4D.cs" />
     <Compile Include="Maths\KinematicsAttribute.cs" />
     <Compile Include="Maths\SixJointAngles.cs" />

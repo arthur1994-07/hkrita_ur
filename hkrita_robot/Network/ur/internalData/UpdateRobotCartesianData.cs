@@ -1,4 +1,5 @@
 ﻿using hkrita_robot.Container;
+using hkrita_robot.Extension;
 using hkrita_robot.Maths;
 using System;
 using System.Collections.Generic;
@@ -52,8 +53,18 @@ namespace hkrita_robot.Network.ur.internalData
             pose = new Pose(C_Position[0], C_Position[1], C_Position[2],
                 C_Orientation[0], C_Orientation[1], C_Orientation[2]);
 
-            //Console.WriteLine(pose);
+            ClearData();
+
+            Console.WriteLine(pose);
             return new Pair<Pose, SixJointAngles>(pose, jointAngles);
+        }
+
+        public static void ClearData()
+        {
+            ArraysHelper.Fill(J_Orientation, 0);
+            ArraysHelper.Fill(C_Position, 0);
+            ArraysHelper.Fill(C_Orientation, 0);
+
         }
 
 

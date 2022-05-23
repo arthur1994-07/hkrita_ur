@@ -48,6 +48,7 @@ namespace hkrita_robot.CodeTest
             {
                 Console.WriteLine("Task = {0}, obj = {1}, Thread = {2}",
                     Task.CurrentId, o, Thread.CurrentThread.ManagedThreadId);
+                
             };
             /** create a task but do not start it **/
             Task t1 = new Task(action, "task 1");

@@ -101,11 +101,14 @@ namespace hkrita_robot.Network
         {
             mExitThread = false;
             // Start a thread to control UR
-            mThread = new Thread(() => {
+            mThread = new Thread(() =>
+            {
                 ReadPoseOnce();
             });
             mThread.IsBackground = true;
             mThread.Start();
+            //ReadPoseOnce();
+            //Disconnect();
         }
 
 
@@ -114,7 +117,9 @@ namespace hkrita_robot.Network
         {
             if (mClient.Connected == true)
             {
-                //mThread.Interrupt();
+                mThread.Interrupt();
+                mThread.Join();
+
                 mStream.Close();
                 mClient.Close();
                 Console.WriteLine("Status:" + mClient.Connected);

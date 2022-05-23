@@ -26,33 +26,13 @@ namespace hkrita_robot.Network.ur
 
         public Pair<Pose, SixJointAngles> ReadStream()
         {
-            try
-            {
-                return InternalReadStream();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return (Pair<Pose, SixJointAngles>) mClient.Connect(mReadStream, null);
         }
 
         public void Close()
         {
-            InternalCloseThread();
-        }
-
-
-        public void InternalCloseThread()
-        {
             //mThread.Interrupt();
             mClient.Disconnect();
-        }       
-        
-        private Pair<Pose, SixJointAngles> InternalReadStream()
-        {
-            Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>)mClient.Connect(mReadStream, null);
-            return pair; 
-
-        }
+        }      
     } 
 }
