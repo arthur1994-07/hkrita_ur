@@ -15,12 +15,13 @@ namespace hkrita_robot.UR
     public class RobotSystem
     {
         private readonly static int NORMAL_PORT = 30002;
-            
+        private readonly static int STREAM_PORT = 30003;
         private readonly string mAddress;
         private Thread mThread;
         private Boolean mExitThread;
         private Boolean mClosed; 
         private NetworkClient mNetworkClient;
+        private NormalClient mNormalClient;
         private ReadDataClient mReadDataClient;
         private bool mStreamData = false;
         private InternalRobotData mData = new InternalRobotData();
@@ -30,9 +31,14 @@ namespace hkrita_robot.UR
             mAddress = ipAddress;
             mNetworkClient = new NetworkClient(mAddress, NORMAL_PORT);
             mReadDataClient = new ReadDataClient(mAddress);
+            mNormalClient = new NormalClient(mAddress, STREAM_PORT);
         }
 
-
+        public bool Connect()
+        {
+            bool success = InternalConnect();
+            return success;
+        }
         public IRobotData GetData()  { return mData; }
 
         public void SendScript(string script)
@@ -47,6 +53,9 @@ namespace hkrita_robot.UR
                 throw e;
             }
         }
+
+
+
         public void ReadData()
         {
             Task newTask = Task.Factory.StartNew(() =>
@@ -68,7 +77,33 @@ namespace hkrita_robot.UR
             CloseThread();
         }
 
+        private bool InternalConnect()
+        {
+            bool success;
+            success = mNormalClient.Connect();
+            if (!success) return false;
+            mThread = new Thread(() =>
+            {
+                try
+                {
+                    Console.WriteLine("The robot connection {0} is established", mAddress);
+                    bool dataSuccess = mNormalClient.GetMessage(s =>
+                    {
+                        byte[] data = (byte[]) s;
+                        Console.WriteLine("Callback value:" + data.Length);
+                        // TODO : get cartesian data in call back
+                        Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>)UpdateRobotCartesianData.ReadCartesianInput(data, BufferedData.firstPacketSize, BufferedData.streamOffset);
+                    });
+                } 
+                catch (Exception e)
+                {
+                    Console.WriteLine("The robot connection {0} has exception and will be closed", mAddress);
+                }
+            });
+            mThread.Start();
 
+            return true;
+        }
         private void InternalSendScript(string script)
         {
             // start new thread 

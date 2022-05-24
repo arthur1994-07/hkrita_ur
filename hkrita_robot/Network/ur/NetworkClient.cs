@@ -22,22 +22,56 @@ namespace hkrita_robot.Network.ur
         private bool mExitThread = false;
         private TcpClient mTCPClient = new TcpClient();
         private NetworkStream mStream = null; 
-        private byte[] mBuffer = new byte[4096];
+        private byte[] mBuffer = new byte[mByteSize];
+        private static int mByteSize = 4096;
         private BufferedData mBufferData = new BufferedData();
         private string mAddress;
         private int mPort;
-        private UpdateRobotCartesianData mCartesianData = new UpdateRobotCartesianData(); 
 
 
         public NetworkClient(String ipAddress, int port)
         {
             mAddress = ipAddress;
             mPort = port;
+            mBufferData.WriteData(mByteSize);
         }
 
+        public bool Connect()
+        {
+            return OldInternalConnect();
+        }
         public object Connect(bool readStream, string script)
         {
             return InternalConnect(readStream, script);
+        }
+
+        public byte[] GetRemainData()
+        {
+            int count = mBufferData.Count();
+            return count == 0 ? null : mBufferData.WriteData(mByteSize);
+        }
+
+        public byte[] Read()
+        { 
+           return InternalReadData();
+        }
+
+
+        private bool OldInternalConnect()
+        {
+            // method to connect client to UR server
+            try
+            {
+                mTCPClient.Connect(mAddress, mPort);
+                if (mTCPClient.Connected == false) return false;
+                mStream = mTCPClient.GetStream();
+                Console.WriteLine("Connected");
+            }
+            catch (Exception e) 
+            { 
+                Disconnect(); 
+            }
+            return true;
         }
 
         public void Disconnect()
@@ -59,7 +93,6 @@ namespace hkrita_robot.Network.ur
                 if (mTCPClient.Connected == false) mTCPClient.Connect(mAddress, mPort);
                 mStream = mTCPClient.GetStream();
                 var t = new Stopwatch();
-                //byte[] buffer = new byte[4096]; 
                 // execute script once
                 if (readStream == false)
                 {
@@ -80,7 +113,6 @@ namespace hkrita_robot.Network.ur
 
         private object ReadStream(byte[] buffer, byte firstPacketSize, byte offset, Stopwatch timer)
         {
-            
             lock(this)
             {
                 if (mStream.Read(buffer, 0, buffer.Length) != 0)
@@ -102,6 +134,29 @@ namespace hkrita_robot.Network.ur
         }
 
 
+        private byte[] ReadByteStream(byte[] buffer, byte firstPacketSize, byte offset, Stopwatch timer)
+        //private byte[] ReadByteStream(BufferedData bufferedData, Stopwatch timer)
+        {
+
+            lock (this)
+            {
+                if (mStream.Read(buffer, 0, buffer.Length) == 0) return null;
+                timer.Start();
+                Array.Reverse(buffer);
+                timer.Stop();
+                if (timer.ElapsedMilliseconds < timeStep) Thread.Sleep(timeStep - (int)timer.ElapsedMilliseconds);
+                return buffer;
+            }
+        }
+
+        private byte[] InternalReadData()
+        {
+            // Read Stream while connected 
+            if (mStream.CanRead == false) return null;
+            var t = new Stopwatch();
+            return ReadByteStream(mBufferData.buffer, BufferedData.firstPacketSize, BufferedData.streamOffset, t);
+        }
+         
         private void ClearBuffer(byte[] buffer)
         {
             ArraysHelper.Fill(buffer);

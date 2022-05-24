@@ -40,19 +40,26 @@ namespace hkrita_robot.Network
         // streaming data port using 30003/30013 (old version pre 3.5)
         public URLauncher()
         {
-            mRobot.MoveLocation(mStartPose);
-            //Pose mStartPose = mRobot.GetRobotLocation();
-            stream.Connect();
-            Thread.Sleep(1000);
-            mRobot.MoveLocation(mTargetPose2);
-            stream2.Connect();
-            Thread.Sleep(1000);
-            mRobot.MoveLocation(mTargetPose3);
-            //RobotLaunch(mRobot);
-            stream3.Connect();
-            Thread.Sleep(1000);
+            mRobot.SubmitScript(s =>
+            {
+                Console.WriteLine(s);
+            });
 
-            CloseRobotApp();
+            RobotSystem robotSys = new RobotSystem("192.168.56.101");
+            robotSys.Connect();
+            //mRobot.MoveLocation(mStartPose);
+            ////Pose mStartPose = mRobot.GetRobotLocation();
+            //stream.Connect();
+            //Thread.Sleep(1000);
+            //mRobot.MoveLocation(mTargetPose2);
+            //stream2.Connect();
+            //Thread.Sleep(1000);
+            //mRobot.MoveLocation(mTargetPose3);
+            ////RobotLaunch(mRobot);
+            //stream3.Connect();
+            //Thread.Sleep(1000);
+
+            //CloseRobotApp();
 
         }
 

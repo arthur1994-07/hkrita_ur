@@ -170,6 +170,7 @@
     <Compile Include="Maths\Matrix4D.cs" />
     <Compile Include="Maths\KinematicsAttribute.cs" />
     <Compile Include="Maths\SixJointAngles.cs" />
+    <Compile Include="Network\NormalClient.cs" />
     <Compile Include="Network\script\JointAngleScript.cs" />
     <Compile Include="Network\script\MoveScript.cs" />
     <Compile Include="Network\script\SetTCPScript.cs" />

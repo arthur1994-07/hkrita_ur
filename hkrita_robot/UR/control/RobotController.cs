@@ -93,6 +93,11 @@ namespace hkrita_robot.UR.control
 
         public void SubmitScript(Action<object> action)
         {
+            if (mScript == null)
+            {
+                Console.WriteLine("null");
+                return;
+            }
             ActionHelper.SetAction(action, mScript);
         }
 
