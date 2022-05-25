@@ -25,20 +25,23 @@ namespace hkrita_robot.UR
         private ReadDataClient mReadDataClient;
         private bool mStreamData = false;
         private InternalRobotData mData = new InternalRobotData();
-
+        private InternalUpdateRobotDataListener mUpdater;
         public RobotSystem(string ipAddress)
         {
             mAddress = ipAddress;
             mNetworkClient = new NetworkClient(mAddress, NORMAL_PORT);
             mReadDataClient = new ReadDataClient(mAddress);
             mNormalClient = new NormalClient(mAddress, STREAM_PORT);
+            mUpdater = new InternalUpdateRobotDataListener(mData);
         }
+
 
         public bool Connect()
         {
             bool success = InternalConnect();
             return success;
         }
+
         public IRobotData GetData()  { return mData; }
 
         public void SendScript(string script)
@@ -55,26 +58,14 @@ namespace hkrita_robot.UR
         }
 
 
-
-        public void ReadData()
-        {
-            Task newTask = Task.Factory.StartNew(() =>
-            {
-                Pair<Pose, SixJointAngles> data = mReadDataClient.ReadStream();
-                //mReadDataClient.Close();
-                Pose pose = data.GetFirst();
-                SixJointAngles joints = data.GetSecond();
-                mData.robotPose.Set(pose);
-                mData.currentJointAngle.Set(joints);
-                Console.WriteLine("");
-            });
-            newTask.Wait();
-            //Disconnect();
-        }
-
         public void Close()
         {
             CloseThread();
+        }
+
+        public void Disconnect()
+        {
+            mNetworkClient.Disconnect();
         }
 
         private bool InternalConnect()
@@ -82,26 +73,25 @@ namespace hkrita_robot.UR
             bool success;
             success = mNormalClient.Connect();
             if (!success) return false;
-            mThread = new Thread(() =>
-            {
-                try
-                {
-                    Console.WriteLine("The robot connection {0} is established", mAddress);
-                    bool dataSuccess = mNormalClient.GetMessage(s =>
-                    {
-                        byte[] data = (byte[]) s;
-                        Console.WriteLine("Callback value:" + data.Length);
-                        // TODO : get cartesian data in call back
-                        Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>)UpdateRobotCartesianData.ReadCartesianInput(data, BufferedData.firstPacketSize, BufferedData.streamOffset);
-                    });
-                } 
-                catch (Exception e)
-                {
-                    Console.WriteLine("The robot connection {0} has exception and will be closed", mAddress);
-                }
-            });
-            mThread.Start();
 
+            try
+            {
+                UpdateRobotCartesianData streamData = new UpdateRobotCartesianData();
+                Console.WriteLine("The robot connection {0} is established", mAddress);
+                bool dataSuccess = mNormalClient.GetMessage(s =>
+                {
+                    byte[] data = (byte[]) s;
+                    if (BufferedData.CheckByteStream(data) == true) Console.WriteLine("Empty stream");
+                    Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>) streamData.ReadCartesianInput(data, BufferedData.firstPacketSize, BufferedData.streamOffset);
+                    mData.robotPose.Set(pair.GetFirst());
+                    mData.currentJointAngle.Set(pair.GetSecond());
+                });
+            } 
+            catch (Exception e)
+            {
+                Console.WriteLine("The robot connection {0} has exception and will be closed", mAddress);
+                Disconnect();
+            }
             return true;
         }
         private void InternalSendScript(string script)
@@ -132,10 +122,6 @@ namespace hkrita_robot.UR
         }
 
 
-        public void Disconnect()
-        {
-            mNetworkClient.Disconnect();
-        }
 
 
         

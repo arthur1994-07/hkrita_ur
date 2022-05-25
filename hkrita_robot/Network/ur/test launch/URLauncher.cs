@@ -30,10 +30,7 @@ namespace hkrita_robot.Network
             - 2.18282062212099, 2.28414177894592, 0.117019392549992);
 
         private RobotController mRobot = new RobotController("192.168.56.101");
-        private URStream stream = new URStream();
-        private URStream stream2 = new URStream();
-        private URStream stream3 = new URStream();
-        private URStream stream4 = new URStream();
+
 
 
         // the current robot arm control uses primary secondary interface 30001 30002 port
@@ -44,22 +41,18 @@ namespace hkrita_robot.Network
             {
                 Console.WriteLine(s);
             });
+            while (true)
+            {
+                mRobot.MoveLocation(mStartPose);
+                GetNewPose();
+                Thread.Sleep(1000);
+                mRobot.MoveLocation(mTargetPose2);
+                GetNewPose();
 
-            RobotSystem robotSys = new RobotSystem("192.168.56.101");
-            robotSys.Connect();
-            //mRobot.MoveLocation(mStartPose);
-            ////Pose mStartPose = mRobot.GetRobotLocation();
-            //stream.Connect();
-            //Thread.Sleep(1000);
-            //mRobot.MoveLocation(mTargetPose2);
-            //stream2.Connect();
-            //Thread.Sleep(1000);
-            //mRobot.MoveLocation(mTargetPose3);
-            ////RobotLaunch(mRobot);
-            //stream3.Connect();
-            //Thread.Sleep(1000);
+                Thread.Sleep(1000);
+            }
 
-            //CloseRobotApp();
+            CloseRobotApp();
 
         }
 
@@ -87,6 +80,11 @@ namespace hkrita_robot.Network
             Console.WriteLine("");
         }
 
+        public Pose GetNewPose()
+        {
+            RobotController robot = new RobotController("192.168.56.101");
+            return robot.GetRobotLocation();
+        }
         public void CloseRobotApp()
         {
 
@@ -108,10 +106,7 @@ namespace hkrita_robot.Network
         //        robot.MoveJoint();
         //    });
         //}
-        public void AsyncRobotmovement()
-        {
-
-        }
+        
         public void RotateWrist3(Pose currentPose)
         {
             Matrix3D mat = currentPose.GetRotation().ToRotationMatrix();

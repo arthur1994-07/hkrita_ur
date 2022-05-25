@@ -33,6 +33,15 @@ namespace hkrita_robot.Network.ur
         }
         public int GetByteSize() { return buffer.Length; }
          
+        public static bool CheckByteStream(byte[] data)
+        {
+            bool isEmpty = true;
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] != 0) isEmpty = false;
+            }
+            return isEmpty; 
+        }
     }
 
 }

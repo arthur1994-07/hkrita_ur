@@ -55,23 +55,23 @@ namespace hkrita_robot.UR.control
         {
             mRobot.SendScript(mScript);
             Thread.Sleep(3000);
-            //Console.WriteLine("submit script");
             Close();
         }
 
         public Pose GetRobotLocation()
         {
-            mRobot.ReadData();
+            mRobot.Connect();
+          //mRobot.ReadData();
+
             Pose pose = mRobot.GetData().GetRobotPose().Get();
             Console.WriteLine("robot location retrieved : {0}", pose);
-            //mRobot.Close();
-            //mRobot.Disconnect();
+
             return pose;
         }
 
         public SixJointAngles GetRobotJointAngle()
         {
-            mRobot.ReadData();
+            mRobot.Connect();
             SixJointAngles jointAngles = mRobot.GetData().GetJointAngles().Get();
             return jointAngles.ToAngles(); 
         }

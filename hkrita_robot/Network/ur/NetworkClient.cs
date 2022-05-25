@@ -121,13 +121,13 @@ namespace hkrita_robot.Network.ur
                     Array.Reverse(buffer);
 
                     // Read stream data 
-                    Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>) UpdateRobotCartesianData.ReadCartesianInput(buffer, firstPacketSize, offset);
+                    //Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>) UpdateRobotCartesianData.ReadCartesianInput(buffer, firstPacketSize, offset);
 
                     timer.Stop();
                     if (timer.ElapsedMilliseconds < timeStep) Thread.Sleep(timeStep - (int)timer.ElapsedMilliseconds);
                     timer.Restart();
                     ClearBuffer(mBuffer);
-                    return pair;
+                    return null;
                 }
                 return null;
             }
@@ -137,7 +137,6 @@ namespace hkrita_robot.Network.ur
         private byte[] ReadByteStream(byte[] buffer, byte firstPacketSize, byte offset, Stopwatch timer)
         //private byte[] ReadByteStream(BufferedData bufferedData, Stopwatch timer)
         {
-
             lock (this)
             {
                 if (mStream.Read(buffer, 0, buffer.Length) == 0) return null;
