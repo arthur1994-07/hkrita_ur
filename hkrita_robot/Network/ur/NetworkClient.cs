@@ -62,16 +62,20 @@ namespace hkrita_robot.Network.ur
             // method to connect client to UR server
             try
             {
-                mTCPClient.Connect(mAddress, mPort);
-                if (mTCPClient.Connected == false) return false;
+                if (mTCPClient.Connected == false)
+                {
+                    mTCPClient.Connect(mAddress, mPort);
+                }
                 mStream = mTCPClient.GetStream();
                 Console.WriteLine("Connected");
+                return true;
             }
             catch (Exception e) 
-            { 
-                Disconnect(); 
+            {
+                Console.WriteLine(e);
+                //Disconnect();
             }
-            return true;
+            return false;
         }
 
         public void Disconnect()
@@ -151,7 +155,6 @@ namespace hkrita_robot.Network.ur
         private byte[] InternalReadData()
         {
             // Read Stream while connected 
-            if (mStream.CanRead == false) return null;
             var t = new Stopwatch();
             return ReadByteStream(mBufferData.buffer, BufferedData.firstPacketSize, BufferedData.streamOffset, t);
         }

@@ -44,11 +44,12 @@ namespace hkrita_robot.Network
             while (true)
             {
                 mRobot.MoveLocation(mStartPose);
+                //mRobot.GetRobotLocation();
                 GetNewPose();
                 Thread.Sleep(1000);
                 mRobot.MoveLocation(mTargetPose2);
                 GetNewPose();
-
+                //mRobot.GetRobotLocation();
                 Thread.Sleep(1000);
             }
 

@@ -62,9 +62,9 @@ namespace hkrita_robot.UR.control
         {
             mRobot.Connect();
           //mRobot.ReadData();
-
             Pose pose = mRobot.GetData().GetRobotPose().Get();
             Console.WriteLine("robot location retrieved : {0}", pose);
+            //mRobot.Disconnect();
 
             return pose;
         }
@@ -73,6 +73,7 @@ namespace hkrita_robot.UR.control
         {
             mRobot.Connect();
             SixJointAngles jointAngles = mRobot.GetData().GetJointAngles().Get();
+            //mRobot.Disconnect();
             return jointAngles.ToAngles(); 
         }
         public void SetTCP(Pose tcpOffset)
@@ -101,7 +102,7 @@ namespace hkrita_robot.UR.control
             ActionHelper.SetAction(action, mScript);
         }
 
-      
+        
         public void Close() { mRobot.Close(); }
         public object Clone()
         {

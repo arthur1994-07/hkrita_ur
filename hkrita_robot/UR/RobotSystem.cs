@@ -26,6 +26,7 @@ namespace hkrita_robot.UR
         private bool mStreamData = false;
         private InternalRobotData mData = new InternalRobotData();
         private InternalUpdateRobotDataListener mUpdater;
+        private List<byte[]> mByteStream = new List<byte[]>();
         public RobotSystem(string ipAddress)
         {
             mAddress = ipAddress;
@@ -72,15 +73,18 @@ namespace hkrita_robot.UR
         {
             bool success;
             success = mNormalClient.Connect();
+            Console.WriteLine("Connection success? " + success);
             if (!success) return false;
 
             try
             {
                 UpdateRobotCartesianData streamData = new UpdateRobotCartesianData();
+                
                 Console.WriteLine("The robot connection {0} is established", mAddress);
                 bool dataSuccess = mNormalClient.GetMessage(s =>
                 {
                     byte[] data = (byte[]) s;
+                    mByteStream.Add(data); 
                     if (BufferedData.CheckByteStream(data) == true) Console.WriteLine("Empty stream");
                     Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>) streamData.ReadCartesianInput(data, BufferedData.firstPacketSize, BufferedData.streamOffset);
                     mData.robotPose.Set(pair.GetFirst());
@@ -92,6 +96,7 @@ namespace hkrita_robot.UR
                 Console.WriteLine("The robot connection {0} has exception and will be closed", mAddress);
                 Disconnect();
             }
+            
             return true;
         }
         private void InternalSendScript(string script)

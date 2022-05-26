@@ -47,8 +47,6 @@ namespace hkrita_robot.Network.ur.internalData
 
         public object ReadCartesianInput(byte[] buffer, byte packetSize, byte offset)
         {
-
-
             //Read Joint values in Radians
             J_Orientation[0] = BitConverter.ToDouble(buffer, buffer.Length - packetSize - (32 * offset));
             J_Orientation[1] = BitConverter.ToDouble(buffer, buffer.Length - packetSize - (33 * offset));
