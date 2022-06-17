@@ -16,6 +16,5 @@ namespace hkrita_robot.Extension
             mThreshold = passThreshold; 
         }
 
-        public void 
     }
 }

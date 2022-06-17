@@ -1,18 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using com.sun.istack.@internal.logging;
-using hkrita_robot.Container;
 using hkrita_robot.Maths;
-using hkrita_robot.Network;
-using hkrita_robot.Network.script;
-using hkrita_robot.Network.ur;
-using hkrita_robot.UR;
-using hkrita_robot.UR.accessor;
 using hkrita_robot.UR.control;
 
 namespace hkrita_robot.Network
