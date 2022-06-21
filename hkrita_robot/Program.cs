@@ -24,8 +24,8 @@ namespace hkrita_robot
             //URLauncher launcher = new URLauncher();
             var tcp = "p[-0.020, 0.010, 0.180, 0, 0, 1.5710]";
             //var str = tcp.Split(',');
-            string[] str = StringHelper.FormatPoseString(tcp);
-            Console.WriteLine("");
+            Pose p = Pose.ToPose(tcp);
+            Console.WriteLine(p);
         }
     }
 }

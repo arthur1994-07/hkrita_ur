@@ -114,11 +114,10 @@ namespace hkrita_robot.Maths
                 );
         }
 
-        public Pose ToPose(string script)
+        public static Pose ToPose(string script)
         {
             string[] str = StringHelper.FormatPoseString(script);
             double[] newPose = new double[str.Length];
-
 
             for (int i = 0; i < str.Length; i++)
             {
