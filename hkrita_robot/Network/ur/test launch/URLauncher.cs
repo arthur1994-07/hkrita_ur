@@ -17,9 +17,7 @@ namespace hkrita_robot.Network
         private SixJointAngles mJoints = new SixJointAngles(-2.35414463678469, - 2.38869373003115, - 0.47816068330874,
             - 2.18282062212099, 2.28414177894592, 0.117019392549992);
 
-        private RobotController mRobot = new RobotController("192.168.56.101");
-
-
+        private RobotController mRobot = new RobotController();
 
         // the current robot arm control uses primary secondary interface 30001 30002 port
         // streaming data port using 30003/30013 (old version pre 3.5)
@@ -40,9 +38,7 @@ namespace hkrita_robot.Network
                 //mRobot.GetRobotLocation();
                 Thread.Sleep(1000);
             }
-
-            CloseRobotApp();
-
+            //CloseRobotApp();
         }
 
         public void RobotLaunch(RobotController robot)
@@ -71,12 +67,12 @@ namespace hkrita_robot.Network
 
         public Pose GetNewPose()
         {
-            RobotController robot = new RobotController("192.168.56.101");
+            // TODO : update GetRobotLocation code by adding internal pose update 
+            RobotController robot = new RobotController();
             return robot.GetRobotLocation();
         }
         public void CloseRobotApp()
         {
-
             Console.WriteLine("[INFO] Press Q to exit:");
             string stop = Convert.ToString(Console.ReadLine());
 

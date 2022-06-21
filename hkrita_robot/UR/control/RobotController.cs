@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace hkrita_robot.UR.control
 {
+    //  limitation of robotController : it requires to initialise a new object when the user retreieves stream data from the UR such as joint and pose data
     public class RobotController : IRobotInterface, ICloneable
     {
         private readonly double robot_movel_acc = 0.5;
@@ -19,14 +20,12 @@ namespace hkrita_robot.UR.control
         private readonly double robot_movej_velo = (Math.PI / 180) * 60;
 
 
-        private readonly string mRobotAddress;
         private RobotSystem mRobot;
         private string mScript;
 
-        public RobotController(string robotAddress)
+        public RobotController()
         {
-            mRobotAddress = robotAddress;
-            mRobot = new RobotSystem(mRobotAddress);
+            mRobot = new RobotSystem();
         }
 
         public void MoveJoint(SixJointAngles newAngles)
@@ -61,11 +60,8 @@ namespace hkrita_robot.UR.control
         public Pose GetRobotLocation()
         {
             mRobot.Connect();
-          //mRobot.ReadData();
             Pose pose = mRobot.GetData().GetRobotPose().Get();
             Console.WriteLine("robot location retrieved : {0}", pose);
-            //mRobot.Disconnect();
-
             return pose;
         }
 
@@ -73,7 +69,6 @@ namespace hkrita_robot.UR.control
         {
             mRobot.Connect();
             SixJointAngles jointAngles = mRobot.GetData().GetJointAngles().Get();
-            //mRobot.Disconnect();
             return jointAngles.ToAngles(); 
         }
         public void SetTCP(Pose tcpOffset)

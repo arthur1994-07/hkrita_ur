@@ -1,6 +1,7 @@
 ﻿using hkrita_robot.Maths;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,7 @@ namespace hkrita_robot.Extension
             return input.Substring(startIndex, endIndex - startIndex);
         }
 
+
         public static string GenerateUniqueName(string given, Request requester)
         {
             string prettyName = given;
@@ -77,10 +79,13 @@ namespace hkrita_robot.Extension
             }
         }
 
+        public object ExtractString(string text)
+        {
+            return null;
+        }
+
         public static string Format(String formatMsg, params Object[] param)
         {
-            //string test = MySubString(formatMsg, 8, 10);
-
             StringBuilder builder = new StringBuilder();
             int offset = 0;
             while (offset < formatMsg.Length)
@@ -116,6 +121,25 @@ namespace hkrita_robot.Extension
             }
             return builder.ToString();
         }
+
+        public static String[] FormatPoseString(String input)
+        {
+            int offset = 0;
+
+     
+            int startIndex = input.IndexOf('p') + 1;
+            input.Substring(startIndex);
+
+            int brackStart = input.IndexOf('[') + 1;
+            input.Substring(brackStart);
+
+            int brackEnd = input.IndexOf(']');
+            input = MySubString(input, brackStart, brackEnd);
+
+            return input.Split(','); // string array containing coordinate strings
+        }
+
+
 
         private static string GetArgIndex(string arg, params Object[] param)
         {

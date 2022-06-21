@@ -16,7 +16,7 @@ namespace hkrita_robot.UR
     {
         private readonly static int NORMAL_PORT = 30002;
         private readonly static int STREAM_PORT = 30003;
-        private readonly string mAddress;
+        private readonly string mAddress = "192.168.56.101";
         private Thread mThread;
         private Boolean mExitThread;
         private Boolean mClosed; 
@@ -27,9 +27,8 @@ namespace hkrita_robot.UR
         private InternalRobotData mData = new InternalRobotData();
         private InternalUpdateRobotDataListener mUpdater;
         private List<byte[]> mByteStream = new List<byte[]>();
-        public RobotSystem(string ipAddress)
+        public RobotSystem()
         {
-            mAddress = ipAddress;
             mNetworkClient = new NetworkClient(mAddress, NORMAL_PORT);
             mReadDataClient = new ReadDataClient(mAddress);
             mNormalClient = new NormalClient(mAddress, STREAM_PORT);

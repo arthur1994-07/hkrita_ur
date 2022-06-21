@@ -53,6 +53,7 @@ namespace hkrita_robot.Maths
             mPose[5] = dir.z * p;
             return this;
         }
+     
         public double[] GetPose()
         {
             double[] newArray = new double[mPose.Length];
@@ -104,13 +105,26 @@ namespace hkrita_robot.Maths
         public string ToString(Boolean milliformat)
         {
             double unit = milliformat ? 1000 : 1;
-            return StringHelper.Format("p{6}[{0}, {1}, {2}, {3}, {4}, {5}] ",
+            return StringHelper.Format("p{6}[{0}, {1}, {2}, {3}, {4}, {5}] ",  // {6} = miliformat  , {1-5} = mPose elements
                 (mPose[0] * unit).ToString(defaultPattern),
                 (mPose[1] * unit).ToString(defaultPattern),
                 (mPose[2] * unit).ToString(defaultPattern),
                 (mPose[3] * unit).ToString(defaultPattern), (mPose[4] * unit).ToString(defaultPattern), (mPose[5] * unit).ToString(defaultPattern),
                 milliformat ? "m" : ""
                 );
+        }
+
+        public Pose ToPose(string script)
+        {
+            string[] str = StringHelper.FormatPoseString(script);
+            double[] newPose = new double[str.Length];
+
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                newPose[i] = double.Parse(str[i]);
+            }
+            return new Pose(newPose[0], newPose[1], newPose[2], newPose[3], newPose[4], newPose[5]);
         }
 
 
