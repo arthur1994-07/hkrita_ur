@@ -35,9 +35,7 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
-  <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
       <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
@@ -178,6 +176,7 @@
     <Compile Include="Maths\KinematicsAttribute.cs" />
     <Compile Include="Maths\SixJointAngles.cs" />
     <Compile Include="Network\NormalClient.cs" />
+    <Compile Include="Network\script\StopScript.cs" />
     <Compile Include="Network\script\JointAngleScript.cs" />
     <Compile Include="Network\script\MoveScript.cs" />
     <Compile Include="Network\script\SetTCPScript.cs" />

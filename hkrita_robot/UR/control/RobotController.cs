@@ -50,6 +50,13 @@ namespace hkrita_robot.UR.control
             SubmitScript(mScript);
         }
 
+        public void Stop()
+        {
+            IAbstractScript script = new StopScript();
+            mScript = script.GetScript() + "\n";
+            SubmitScript(mScript);
+        }
+
         public void SubmitScript(string script)
         {
             mRobot.SendScript(mScript);

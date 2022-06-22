@@ -69,8 +69,7 @@ namespace hkrita_robot.Network.script
 
         public string GetScript() { return mScript; }
       
-
-
+        
 
 
         public void Set(Pose pose, Type type, double acceleration, double speed, double blendRadius)
