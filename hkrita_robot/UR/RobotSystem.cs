@@ -35,6 +35,14 @@ namespace hkrita_robot.UR
             mUpdater = new InternalUpdateRobotDataListener(mData);
         }
 
+        public RobotSystem(string address)
+        {
+            mNetworkClient = new NetworkClient(address, NORMAL_PORT);
+            mReadDataClient = new ReadDataClient(address);
+            mNormalClient = new NormalClient(address, STREAM_PORT);
+            mUpdater = new InternalUpdateRobotDataListener(mData);
+        }
+
 
         public bool Connect()
         {

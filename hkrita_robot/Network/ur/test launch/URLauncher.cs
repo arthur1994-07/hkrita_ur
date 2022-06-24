@@ -9,11 +9,11 @@ namespace hkrita_robot.Network
     {
         private Pose pose = new Pose(-0.02, 0.01, 0, 0, 0, 0.03);
         Pose scannerTcp = new Pose(-0.02, 0.01, 0.176, 0, 0, 0.03);
-        private Pose mStartPose = new Pose(-0.15, -0.412, 0.150, 0, 3.15, 0);
-        private Pose mTargetPose = new Pose(-0.15, -0.23, 0.15, 0, 3.15, 0);
-        private Pose mTargetPose2 = new Pose(-0.15, -0.314, 0.414, 0, 3.15, 0);
+        private Pose mStartPose = new Pose(-0.15, -0.412, 0.150, 0, 2.564, 0);
+        private Pose mTargetPose = new Pose(-0.15, -0.23, 0.15, 0, 2.5654, 0);
+        private Pose mTargetPose2 = new Pose(-0.15, -0.314, 0.414, 0, 2.564, 0);
         private Pose mTargetPose3 = new Pose(-0.15, -0.258, 0.444, 1.169, 2.092, -0.008);
-        private Pose mTargetPose4 = new Pose(-0.15, -0.312, 0.05, 0, 3.15, 0);
+        private Pose mTargetPose4 = new Pose(-0.15, -0.312, 0.05, 0, 2.10, 0);
         private SixJointAngles mJoints = new SixJointAngles(-2.35414463678469, - 2.38869373003115, - 0.47816068330874,
             - 2.18282062212099, 2.28414177894592, 0.117019392549992);
 
@@ -22,22 +22,22 @@ namespace hkrita_robot.Network
         // the current robot arm control uses primary secondary interface 30001 30002 port
         // streaming data port using 30003/30013 (old version pre 3.5)
         public URLauncher()
-        {
-            
-            mRobot.SubmitScript(s =>
-            {
-                Console.WriteLine(s);
-            });
+        {   
+            //mRobot.SubmitScript(s =>
+            //{
+            //    Console.WriteLine(s);
+            //});
             while (true)
             {
                 mRobot.MoveLocation(mStartPose);
                 //mRobot.GetRobotLocation();
                 GetNewPose();
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
                 mRobot.MoveLocation(mTargetPose2);
                 GetNewPose();
                 //mRobot.GetRobotLocation();
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
+                mRobot.Stop();
             }
             //CloseRobotApp();
         }

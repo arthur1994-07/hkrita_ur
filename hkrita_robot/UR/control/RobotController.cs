@@ -28,6 +28,11 @@ namespace hkrita_robot.UR.control
             mRobot = new RobotSystem();
         }
 
+        public RobotController(string address)
+        {
+            mRobot = new RobotSystem(address);
+        }
+
         public void MoveJoint(SixJointAngles newAngles)
         {
             MoveJoint(newAngles, robot_movej_acc, robot_movej_velo);

@@ -13,7 +13,7 @@ namespace hkrita_robot.Network.script
 
         public string GetScript()
         {
-            return StringHelper.Format("abort");
+            return StringHelper.Format("stop");
         }
 
     }
