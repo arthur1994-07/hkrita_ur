@@ -126,7 +126,6 @@ namespace hkrita_robot.Extension
         {
             int offset = 0;
 
-     
             int startIndex = input.IndexOf('p') + 1;
             input.Substring(startIndex);
 
@@ -138,7 +137,6 @@ namespace hkrita_robot.Extension
 
             return input.Split(','); // string array containing coordinate strings
         }
-
 
 
         private static string GetArgIndex(string arg, params Object[] param)

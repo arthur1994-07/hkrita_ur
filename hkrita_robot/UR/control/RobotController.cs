@@ -22,7 +22,7 @@ namespace hkrita_robot.UR.control
 
         private RobotSystem mRobot;
         private string mScript;
-
+        private string mAddress;
         public RobotController()
         {
             mRobot = new RobotSystem();
@@ -30,6 +30,7 @@ namespace hkrita_robot.UR.control
 
         public RobotController(string address)
         {
+            mAddress = address;
             mRobot = new RobotSystem(address);
         }
 
@@ -65,15 +66,17 @@ namespace hkrita_robot.UR.control
         public void SubmitScript(string script)
         {
             mRobot.SendScript(mScript);
-            Thread.Sleep(3000);
             Close();
         }
 
         public Pose GetRobotLocation()
         {
-            mRobot.Connect();
-            Pose pose = mRobot.GetData().GetRobotPose().Get();
+            Thread.Sleep(2000);
+            RobotSystem poseUpdate = new RobotSystem(mAddress);
+            poseUpdate.Connect();
+            Pose pose = poseUpdate.GetData().GetRobotPose().Get();
             Console.WriteLine("robot location retrieved : {0}", pose);
+
             return pose;
         }
 
@@ -83,6 +86,7 @@ namespace hkrita_robot.UR.control
             SixJointAngles jointAngles = mRobot.GetData().GetJointAngles().Get();
             return jointAngles.ToAngles(); 
         }
+
         public void SetTCP(Pose tcpOffset)
         {
             Console.WriteLine("Setting tcp offset for robot {0}", tcpOffset);

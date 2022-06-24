@@ -7,6 +7,8 @@ namespace hkrita_robot.Network
 {
     public class URLauncher
     {
+        private static string robot_1 = "192.168.56.101";
+        private static string robot_2 = "192.168.76.3";
         private Pose pose = new Pose(-0.02, 0.01, 0, 0, 0, 0.03);
         Pose scannerTcp = new Pose(-0.02, 0.01, 0.176, 0, 0, 0.03);
         private Pose mStartPose = new Pose(-0.15, -0.412, 0.150, 0, 2.564, 0);
@@ -17,61 +19,60 @@ namespace hkrita_robot.Network
         private SixJointAngles mJoints = new SixJointAngles(-2.35414463678469, - 2.38869373003115, - 0.47816068330874,
             - 2.18282062212099, 2.28414177894592, 0.117019392549992);
 
-        private RobotController mRobot = new RobotController();
-
+        private RobotController robot1 = new RobotController(robot_1);
+        private RobotController robot2 = new RobotController(robot_2);
         // the current robot arm control uses primary secondary interface 30001 30002 port
         // streaming data port using 30003/30013 (old version pre 3.5)
         public URLauncher()
-        {   
-            //mRobot.SubmitScript(s =>
-            //{
-            //    Console.WriteLine(s);
-            //});
-            while (true)
-            {
-                mRobot.MoveLocation(mStartPose);
-                //mRobot.GetRobotLocation();
-                GetNewPose();
-                Thread.Sleep(500);
-                mRobot.MoveLocation(mTargetPose2);
-                GetNewPose();
-                //mRobot.GetRobotLocation();
-                Thread.Sleep(500);
-                mRobot.Stop();
-            }
-            //CloseRobotApp();
+        {
+
+
+
+            robot1.MoveLocation(mStartPose);
+            //mRobot.GetRobotLocation();
+            robot1.GetRobotLocation();
+            Thread.Sleep(1000);
+            robot1.MoveLocation(mTargetPose2);
+            robot1.GetRobotLocation();
+            //mRobot.GetRobotLocation();
+            Thread.Sleep(1000);
+
+            //RobotLaunch(mRobot);
+
+            robot2.MoveLocation(mStartPose);
+            //mRobot.GetRobotLocation();
+            robot2.GetRobotLocation();
+            Thread.Sleep(1000);
+            robot2.MoveLocation(mTargetPose2);
+            robot2.GetRobotLocation();
+            //mRobot.GetRobotLocation();
+            Thread.Sleep(1000);
+
         }
 
         public void RobotLaunch(RobotController robot)
         {
             robot.MoveLocation(mStartPose);
-            Pose startPt = robot.GetRobotLocation();
+            Pose startPt = robot1.GetRobotLocation();
             Matrix3D rot = startPt.GetRotation().ToRotationMatrix();
             Vector3D zRotate = new Vector3D(0, 0, 1.57);
             rot.Multiply(zRotate);
-            
 
-            Pose pose2 = robot.GetRobotLocation();
+            Pose pose2 = robot1.GetRobotLocation();
             Pose moveAlongZ = pose2.MoveAlong(0.1, Pose.Direction.Z);
             robot.MoveLocation(moveAlongZ);
             Pose moveAlongX = moveAlongZ.MoveAlong(0.1, Pose.Direction.Y);
             robot.MoveLocation(moveAlongX);
 
             robot.MoveLocation(mTargetPose4);
-          
-            //Pose finalLocation = robot.GetRobotLocation();
+
+            Pose finalLocation = robot1.GetRobotLocation();
             //if (moveAlongZ != finalLocation) Console.WriteLine("no match!!");
 
             //robot.MoveJoint(mJoints);
             Console.WriteLine("");
         }
 
-        public Pose GetNewPose()
-        {
-            // TODO : update GetRobotLocation code by adding internal pose update 
-            RobotController robot = new RobotController();
-            return robot.GetRobotLocation();
-        }
         public void CloseRobotApp()
         {
             Console.WriteLine("[INFO] Press Q to exit:");
@@ -104,7 +105,7 @@ namespace hkrita_robot.Network
             Vector3D vec = RotationTransform.ToEuler(final);
             Pose newPose = new Pose(currentPose.GetPosition().x, currentPose.GetPosition().y,
                 currentPose.GetPosition().z, vec.x, vec.y, vec.z);
-            mRobot.MoveLocation(newPose);
+            robot1.MoveLocation(newPose);
         }
         
     }

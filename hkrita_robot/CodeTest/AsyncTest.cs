@@ -134,7 +134,7 @@ namespace hkrita_robot.CodeTest
          
             
         }
-        public static async Task<int> Method1()
+        public static async Task<string> Method1()
         {
             await Task.Run(() =>
             {
@@ -144,7 +144,7 @@ namespace hkrita_robot.CodeTest
                     Task.Delay(100).Wait();
                 }
             });
-            return 0;
+            return "Method 1 complete!";
         }
         public static void Method2()
         {
@@ -152,16 +152,15 @@ namespace hkrita_robot.CodeTest
             {
                 Console.WriteLine("Method 2");
                 Task.Delay(100).Wait();
-
             }
         }
 
 
 
-        public static async Task<int> CallMethods()
+        public static async Task<object> CallMethods()
         {
 
-            Task<int> task = Method1();
+            Task<string> task = Method1();
             Method2();
 
             Console.WriteLine("task result: "+ task.Result);

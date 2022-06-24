@@ -13,12 +13,12 @@ namespace hkrita_robot
 {
     public class Program
     {
-        Action<string> mAction;
-
 
         public static void Main(string[] args)
         {
             URLauncher launcher = new URLauncher();
+            //AsyncTest.ActionMethod();
+            //AsyncTest.CallMethods();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace hkrita_robot.UR
     {
         private readonly static int NORMAL_PORT = 30002;
         private readonly static int STREAM_PORT = 30003;
-        private readonly string mAddress = "192.168.56.101";
+        private readonly string mAddress;
         private Thread mThread;
         private Boolean mExitThread;
         private Boolean mClosed; 
@@ -26,7 +26,6 @@ namespace hkrita_robot.UR
         private bool mStreamData = false;
         private InternalRobotData mData = new InternalRobotData();
         private InternalUpdateRobotDataListener mUpdater;
-        private List<byte[]> mByteStream = new List<byte[]>();
         public RobotSystem()
         {
             mNetworkClient = new NetworkClient(mAddress, NORMAL_PORT);
@@ -37,9 +36,10 @@ namespace hkrita_robot.UR
 
         public RobotSystem(string address)
         {
-            mNetworkClient = new NetworkClient(address, NORMAL_PORT);
-            mReadDataClient = new ReadDataClient(address);
-            mNormalClient = new NormalClient(address, STREAM_PORT);
+            mAddress = address;
+            mNetworkClient = new NetworkClient(mAddress, NORMAL_PORT);
+            mReadDataClient = new ReadDataClient(mAddress);
+            mNormalClient = new NormalClient(mAddress, STREAM_PORT);
             mUpdater = new InternalUpdateRobotDataListener(mData);
         }
 
@@ -56,7 +56,14 @@ namespace hkrita_robot.UR
         {
             try
             {
-                InternalSendScript(script);
+                mThread = new Thread(() =>
+                {
+                    Console.WriteLine("Robot Connection {0} is established: ", mAddress);
+                    InternalSendScript(script);
+                });
+                mClosed = false;
+                mThread.IsBackground = true;
+                mThread.Start();
             }
             catch(Exception e)
             {
@@ -65,16 +72,8 @@ namespace hkrita_robot.UR
             }
         }
 
-
-        public void Close()
-        {
-            CloseThread();
-        }
-
-        public void Disconnect()
-        {
-            mNetworkClient.Disconnect();
-        }
+        public void Close() { CloseThread(); }
+        public void Disconnect() { mNetworkClient.Disconnect(); }
 
         private bool InternalConnect()
         {
@@ -91,7 +90,6 @@ namespace hkrita_robot.UR
                 bool dataSuccess = mNormalClient.GetMessage(s =>
                 {
                     byte[] data = (byte[]) s;
-                    mByteStream.Add(data); 
                     if (BufferedData.CheckByteStream(data) == true) Console.WriteLine("Empty stream");
                     Pair<Pose, SixJointAngles> pair = (Pair<Pose, SixJointAngles>) streamData.ReadCartesianInput(data, BufferedData.firstPacketSize, BufferedData.streamOffset);
                     mData.robotPose.Set(pair.GetFirst());
@@ -100,24 +98,13 @@ namespace hkrita_robot.UR
             } 
             catch (Exception e)
             {
-                Console.WriteLine("The robot connection {0} has exception and will be closed", mAddress);
+                //Console.WriteLine("The robot connection {0} has exception and will be closed", mAddress);
                 Disconnect();
             }
             
             return true;
         }
-        private void InternalSendScript(string script)
-        {
-            // start new thread 
-            mThread = new Thread(() =>
-            {
-                Console.WriteLine("Robot Connection {0} is established: ", mAddress);
-                mNetworkClient.Connect(mStreamData, script);
-            });
-            mClosed = false;
-            mThread.IsBackground = true;
-            mThread.Start();
-        }
+        private void InternalSendScript(string script) { mNetworkClient.Connect(mStreamData, script); }
 
         private void CloseThread()
         {
@@ -132,10 +119,5 @@ namespace hkrita_robot.UR
             catch (Exception ex) { }
             mThread = null;
         }
-
-
-
-
-        
     }
 }
