@@ -148,7 +148,7 @@ namespace hkrita_robot.Maths
             }
             return this;
         }
-        public Matrix3D multiply(Matrix3D matrix)
+        public Matrix3D Multiply(Matrix3D matrix)
         {
             Matrix3D mat = new Matrix3D();
             for (int i = 0; i < 3; i++)
@@ -158,14 +158,14 @@ namespace hkrita_robot.Maths
                     mat.mData[3 * i + j] = 0.0;
                     for (int k = 0; k < 3; k++)
                     {
-                        mat.mData[3 * i + j] += mData[k * 3 + j] * matrix.mData[i * 3 + k];
+                        mat.mData[3*i+j] += mData[k*3+j] * matrix.mData[i*3+k];
                     }
                 }
             }
             return mat;
         }
 
-        public Matrix3D AssignMultiply(Matrix3D matrix) { return Set(multiply(matrix)); }
+        public Matrix3D AssignMultiply(Matrix3D matrix) { return Set(Multiply(matrix)); }
 
         public Point3D Multiply(Coordinate3D vec)
         {
@@ -189,7 +189,7 @@ namespace hkrita_robot.Maths
 
         public static Matrix3D Identity() { return new Matrix3D().SetIdentity(); }
         public object Clone() { return new Matrix3D(this); }
-        public String toString()
+        public String ToString()
         {
             return StringHelper.Format("\n{0} {1} {2}\n{3} {4} {5}\n{6} {7} {8}\n",
                 mData[0], mData[3], mData[6],
@@ -197,9 +197,8 @@ namespace hkrita_robot.Maths
                 mData[2], mData[5], mData[8]);
         }
 
-        public Matrix3D Inverse() { return new InverseWorkspace(mData).inverse(); }
+        public Matrix3D Inverse() { return new InverseWorkspace(mData).Inverse(); }
         public InverseWorkspace GetInverseWorkspace() { return new InverseWorkspace(mData); }
-
 
         public class InverseWorkspace
         {
@@ -256,7 +255,7 @@ namespace hkrita_robot.Maths
 
                 mDeterminant = data[0] * (tmp[0] - tmp[1]) - data[3] * (tmp[2] - tmp[3]) + data[6] * (tmp[4] - tmp[5]);
             }
-            public Matrix3D inverse()
+            public Matrix3D Inverse()
             {
                 double factor = 1.0f / mDeterminant;
                 Matrix3D ret = new Matrix3D();

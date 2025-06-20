@@ -30,6 +30,15 @@ namespace hkrita_robot.Extension
             }
         }
 
+        public static void Fill(byte[] a)
+        {
+            for (int i = 0, len = a.Length; i < len; i++)
+            {
+                a[i] = 0;
+            }
+        }
+        
+
         public static void Swap<T>(T[] original, int pos1, int pos2)
         {
             T tmp = original[pos1];

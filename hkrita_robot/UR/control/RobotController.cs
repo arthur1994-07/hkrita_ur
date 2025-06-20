@@ -1,62 +1,123 @@
 ﻿using hkrita_robot.Extension;
 using hkrita_robot.Maths;
+using hkrita_robot.Network;
+using hkrita_robot.Network.script;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace hkrita_robot.UR.control
 {
+    //  limitation of robotController : it requires to initialise a new object when the user retreieves stream data from the UR such as joint and pose data
     public class RobotController : IRobotInterface, ICloneable
     {
+        private readonly double robot_movel_acc = 0.5;
+        private readonly double robot_movel_velo = 0.8;
+        private readonly double robot_movej_acc = (Math.PI / 180) * 80;
+        private readonly double robot_movej_velo = (Math.PI / 180) * 60;
 
 
-        private double robot_movel_acc;
-        private double robot_movel_velo;
-        private double robot_movej_acc;
-        private double robot_movej_velo;
-        public double K_ROBOT_MOVEL_ACC { get => robot_movel_acc; set => robot_movel_acc = 0.5; }
-        public double K_ROBOT_MOVEL_VEC { get => robot_movel_velo; set => robot_movel_velo = 1.2; }
-        public double K_ROBOT_MOVEJ_ACC { get => robot_movej_acc; set => robot_movej_acc = 0.3; }
-        public double K_ROBOT_MOVEJ_VEC { get => robot_movej_velo; set => robot_movej_velo = 1.2; }
+        private RobotSystem mRobot;
+        private string mScript;
+        private string mAddress;
+        public RobotController()
+        {
+            mRobot = new RobotSystem();
+        }
 
+        public RobotController(string address)
+        {
+            mAddress = address;
+            mRobot = new RobotSystem(address);
+        }
 
-
+        public void MoveJoint(SixJointAngles newAngles)
+        {
+            MoveJoint(newAngles, robot_movej_acc, robot_movej_velo);
+        }
+        public void MoveJoint(SixJointAngles newAngles, double acceleration, double speed)
+        {
+            IAbstractScript script = new JointAngleScript(newAngles, acceleration, speed);
+            mScript = script.GetScript() + "\n";
+            SubmitScript(mScript); 
+        }
+        public void MoveLocation(Pose newLocation)
+        {
+            MoveLocation(newLocation, robot_movel_acc, robot_movel_velo);
+        }
 
         public void MoveLocation(Pose newLocation, double acceleration, double speed)
         {
-            StringHelper writer = new StringHelper();
-            throw new NotImplementedException();
+            IAbstractScript script = new MoveScript(newLocation, MoveScript.Type.L, acceleration, speed);
+            mScript = script.GetScript() + "\n";
+            SubmitScript(mScript);
         }
 
-
-
-        public void MoveJoint()
+        public void Stop()
         {
-            throw new NotImplementedException();
-        }
-
-
-
-        public void SetTCP(Pose tcpOffset)
-        {
-            throw new NotImplementedException();
+            IAbstractScript script = new StopScript();
+            mScript = script.GetScript() + "\n";
+            SubmitScript(mScript);
         }
 
         public void SubmitScript(string script)
         {
-            throw new NotImplementedException();
+            mRobot.SendScript(mScript);
+            Close();
         }
 
-        public void SubmitScript()
+        public Pose GetRobotLocation()
         {
-            throw new NotImplementedException();
+            Thread.Sleep(2000);
+            RobotSystem poseUpdate = new RobotSystem(mAddress);
+            poseUpdate.Connect();
+            Pose pose = poseUpdate.GetData().GetRobotPose().Get();
+            Console.WriteLine("robot location retrieved : {0}", pose);
+
+            return pose;
         }
+
+        public SixJointAngles GetRobotJointAngle()
+        {
+            mRobot.Connect();
+            SixJointAngles jointAngles = mRobot.GetData().GetJointAngles().Get();
+            return jointAngles.ToAngles(); 
+        }
+
+        public void SetTCP(Pose tcpOffset)
+        {
+            Console.WriteLine("Setting tcp offset for robot {0}", tcpOffset);
+            mRobot.GetData().GetTCPPose().Set(tcpOffset);
+            IAbstractScript script = new SetTCPScript(tcpOffset);
+            mScript = script.GetScript();
+            SubmitScript(mScript);
+        }  
+
+        public Pose GetTcp()
+        {
+            Pose pose = mRobot.GetData().GetTCPPose().Get();
+            if (pose == null) return null;
+            return pose;
+        }
+
+        public void SubmitScript(Action<object> action)
+        {
+            if (mScript == null)
+            {
+                Console.WriteLine("null");
+                return;
+            }
+            ActionHelper.SetAction(action, mScript);
+        }
+
+        
+        public void Close() { mRobot.Close(); }
         public object Clone()
         {
             throw new NotImplementedException();
         }
-
     }
 }

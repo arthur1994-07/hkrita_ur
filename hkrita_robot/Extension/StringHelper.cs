@@ -1,5 +1,7 @@
-﻿using System;
+﻿using hkrita_robot.Maths;
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,12 +19,6 @@ namespace hkrita_robot.Extension
             Console.WriteLine("Enter string input: ");
             return Console.ReadLine();
         }
-
-        public void WriteInputToScript()
-        {
-
-        }
-
 
         public static Boolean IsNullOrEmtpy(String value)
         {
@@ -52,6 +48,11 @@ namespace hkrita_robot.Extension
         {
             String Next();
         }
+        public static string MySubString(string input, int startIndex, int endIndex)
+        {
+            return input.Substring(startIndex, endIndex - startIndex);
+        }
+
 
         public static string GenerateUniqueName(string given, Request requester)
         {
@@ -78,6 +79,11 @@ namespace hkrita_robot.Extension
             }
         }
 
+        public object ExtractString(string text)
+        {
+            return null;
+        }
+
         public static string Format(String formatMsg, params Object[] param)
         {
             StringBuilder builder = new StringBuilder();
@@ -86,7 +92,7 @@ namespace hkrita_robot.Extension
             {
                 int start = formatMsg.IndexOf('{', offset);
                 if (start < 0) break;
-                int end = formatMsg.IndexOf('{', start + 1);
+                int end = formatMsg.IndexOf('}', start + 1);
                 if (end < 0) break;
                 int next = formatMsg.IndexOf('{', start + 1);
                 if (next >= 0 && next < end)
@@ -95,32 +101,50 @@ namespace hkrita_robot.Extension
                     offset = next;
                     continue;
                 }
-                string arg = formatMsg.Substring(start + 1, end);
-                string value = GetArgNumber(arg, param);
+                string arg = MySubString(formatMsg, start + 1, end);
+                string value = GetArgIndex(arg, param);
                 if (value == null)
                 {
-                    builder.Append(formatMsg.Substring(offset, end + 1));
+                    builder.Append(MySubString(formatMsg, offset, end + 1));
                 }
                 else
                 {
-                    builder.Append(formatMsg.Substring(offset, start));
+                    builder.Append(MySubString(formatMsg, offset, start));
                     builder.Append(value);
                 }
                 offset = end + 1;
             }
             if (offset < formatMsg.Length)
             {
-                builder.Append(formatMsg.Substring(offset));
+                string last = formatMsg.Substring(offset);
+                builder.Append(last);
             }
             return builder.ToString();
         }
 
-        private static string GetArgNumber(string arg, params Object[] param)
+        public static String[] FormatPoseString(String input)
+        {
+            int offset = 0;
+
+            int startIndex = input.IndexOf('p') + 1;
+            input.Substring(startIndex);
+
+            int brackStart = input.IndexOf('[') + 1;
+            input.Substring(brackStart);
+
+            int brackEnd = input.IndexOf(']');
+            input = MySubString(input, brackStart, brackEnd);
+
+            return input.Split(','); // string array containing coordinate strings
+        }
+
+
+        private static string GetArgIndex(string arg, params Object[] param)
         {
             int argNumber;
             try
             {
-                argNumber = Int32.Parse(arg);
+                argNumber = Convert.ToInt32(arg);
             }
             catch (FormatException e)
             {
@@ -131,10 +155,13 @@ namespace hkrita_robot.Extension
 
         private static string ObjectToString(Object obj)
         {
-            if (obj == null) return "null";
+            obj.GetType();
+            if (obj == null) return "<null>";
             if (obj.GetType().IsArray) return ListToString((Object[])obj);
+            
             return obj.ToString();
         }
+
 
     }
 }

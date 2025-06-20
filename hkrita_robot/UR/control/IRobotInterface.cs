@@ -9,17 +9,13 @@ namespace hkrita_robot.UR.control
 {
     public interface IRobotInterface
     {
-        double MOVEL_ACCELERATION { get; set; }
-        double MOVEL_VELOCITY { get; set; }
-        double MOVEJ_ACCELERATION { get; set; }
-        double MOVEJ_VELOCITY { get; set; }
-
 
         void MoveLocation(Pose newLocation, double acceleration, double speed);
-        void MoveJoint();
+        void MoveJoint(SixJointAngles newAngle, double acceleration, double speed);
         void SetTCP(Pose tcpOffset);
-        void SubmitScript(String script);
-        void SubmitScript();
-
+        Pose GetTcp();
+        Pose GetRobotLocation();
+        SixJointAngles GetRobotJointAngle();
+        //void MoveLocation(Pose newLocation) { MoveLocation(newLocation, 0.5, 0.5); }
     }
 }

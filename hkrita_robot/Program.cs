@@ -1,4 +1,8 @@
-﻿using hkrita_robot.Network;
+﻿using hkrita_robot.CodeTest;
+using hkrita_robot.Extension;
+using hkrita_robot.Maths;
+using hkrita_robot.Network;
+using hkrita_robot.UR.control;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +13,10 @@ namespace hkrita_robot
 {
     public class Program
     {
-        static void Main(string[] args)
         {
-            SocketClient client = new SocketClient("192.168.56.101", 30001);
-            // continuously send bytes to UR from client..
-            while (true)
-            {
-                client.ConnectClient();
-            }
+            URLauncher launcher = new URLauncher();
+            //AsyncTest.ActionMethod();
+            //AsyncTest.CallMethods();
         }
     }
 }
